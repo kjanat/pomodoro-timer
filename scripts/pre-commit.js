@@ -1,12 +1,28 @@
 #!/usr/bin/env node
 const { execSync } = require('child_process')
 
-let pnpmCmd = 'pnpm'
+let hasPnpm = true
 try {
-  execSync(`${pnpmCmd} -v`, { stdio: 'ignore', shell: true })
+  execSync('pnpm -v', { stdio: 'ignore', shell: true })
 } catch (_) {
-  pnpmCmd = 'npx --yes pnpm'
-  console.warn('pnpm not found, using npx pnpm')
+  hasPnpm = false
+  console.warn('pnpm not found, falling back to npm')
+}
+
+function runExec (cmd) {
+  if (hasPnpm) {
+    run(`pnpm exec ${cmd}`)
+  } else {
+    run(`npx ${cmd}`)
+  }
+}
+
+function runScript (script) {
+  if (hasPnpm) {
+    run(`pnpm ${script}`)
+  } else {
+    run(`npm run ${script}`)
+  }
 }
 
 function run (command) {
@@ -25,13 +41,13 @@ if (files.length) {
   const all = files.join(' ')
   const js = files.filter(f => f.endsWith('.js')).join(' ')
 
-  run(`${pnpmCmd} exec prettier --write ${all}`)
+  runExec(`prettier --write ${all}`)
   if (js) {
-    run(`${pnpmCmd} exec standard --fix ${js}`)
-    run(`${pnpmCmd} exec standard ${js}`)
+    runExec(`standard --fix ${js}`)
+    runExec(`standard ${js}`)
   }
 } else {
-  run(`${pnpmCmd} format`)
-  run(`${pnpmCmd} lint:fix`)
-  run(`${pnpmCmd} lint`)
+  runScript('format')
+  runScript('lint:fix')
+  runScript('lint')
 }
