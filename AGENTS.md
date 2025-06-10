@@ -373,6 +373,19 @@ The project uses a comprehensive code quality setup:
   - Service Worker globals: Configured for PWA APIs (self, caches)
   - **Note**: Use `pnpm lint:fix` after `pnpm format` to resolve style conflicts between Prettier and StandardJS
 
+### Pre-commit Hooks
+
+To streamline code quality checks, the repository uses [pre-commit](https://pre-commit.com).
+The local hook `scripts/pre-commit.sh` runs formatting and linting commands automatically.
+Install the hooks with:
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+The same hooks run on every Pull Request via [pre-commit.ci](https://pre-commit.ci/).
+
 ### Development Workflow
 
 ```bash

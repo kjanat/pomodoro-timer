@@ -57,8 +57,10 @@ git clone https://github.com/kjanat/pomodoro-timer.git
 # Navigate to the project directory
 cd pomodoro-timer
 
-# Install dependencies (optional, for development server)
+# Install dependencies and pre-commit hooks
 pnpm install
+pip install pre-commit
+pre-commit install
 
 # Start development server
 pnpm start
@@ -130,6 +132,7 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
    pip install pre-commit
    pre-commit install
    ```
+   pre-commit.ci will run the same checks on every Pull Request.
 4. Make your changes
 5. Commit your changes (`git commit -m 'Add some amazing feature'`)
 6. Push to the branch (`git push origin feature/amazing-feature`)
