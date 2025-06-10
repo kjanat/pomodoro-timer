@@ -37,7 +37,7 @@ jobs:
         run: pnpm install
 
       - name: Format code
-        run: pnpm format
+        run: pnpm format && pnpm lint:fix
 
       - name: Lint code
         run: pnpm lint
