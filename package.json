@@ -1,0 +1,31 @@
+{
+  "name": "pomodoro-timer",
+  "version": "1.0.0",
+  "description": "An impressive Pomodoro timer application to enhance productivity.",
+  "main": "src/js/app.js",
+  "scripts": {
+    "start": "live-server src",
+    "dev": "live-server src",
+    "build": "cp -r src dist",
+    "preview": "live-server dist"
+  },
+  "keywords": [
+    "pomodoro",
+    "timer",
+    "productivity",
+    "focus",
+    "time-management"
+  ],
+  "author": "Kaj Kowalski",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kjanat/pomodoro-timer.git"
+  },
+  "homepage": "https://kjanat.github.io/pomodoro-timer",
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  },
+  "packageManager": "pnpm@8.15.0"
+}
