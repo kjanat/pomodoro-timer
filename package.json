@@ -7,7 +7,8 @@
     "start": "http-server src -p 3000 -o",
     "dev": "http-server src -p 3000 -o",
     "build": "cp -r src dist",
-    "preview": "http-server dist -p 3000 -o"
+    "preview": "http-server dist -p 3000 -o",
+    "format": "prettier --write \"src/**/*.{js,html,css,json}\" \"*.{js,json,md}\" --ignore-path .gitignore"
   },
   "keywords": [
     "pomodoro",
@@ -25,6 +26,7 @@
   "homepage": "https://kjanat.github.io/pomodoro-timer",
   "packageManager": "pnpm@8.15.0",
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "prettier": "^3.3.3"
   }
 }
