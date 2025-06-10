@@ -341,6 +341,7 @@ body {
   border-radius: var(--border-radius);
   font-size: 1rem;
   background: var(--surface);
+  color: var(--text-primary);
   transition: var(--transition);
 }
 
