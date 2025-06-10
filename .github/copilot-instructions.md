@@ -19,7 +19,7 @@ Add a Prettier "format" script to the `package.json` file with the command: `"fo
 
 ## WORKFLOW & RELEASE RULES
 
-When creating new projects, initialize git, publish the repository publicly to GitHub under the user `kjanat`. The repository name should be `pomodoro-timer`. Create a new branch for development and add a GitHub Pages workflow action. Use `pnpm` as the package manager. Automatic review assignment is handled via a CODEOWNERS file.
+When creating new projects, initialize git, publish the repository publicly to GitHub under the user `kjanat`. The repository name should be `pomodoro-timer`. Create a new branch for development and add a GitHub Pages workflow action. Use `pnpm` as the package manager. Automatic review assignment is handled via a CODEOWNERS file. When deploying to GitHub Pages, update relevant files (e.g., `README.md`, `package.json`) to reflect any custom domains used.
 
 ## DEBUGGING
 
