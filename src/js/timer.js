@@ -1,5 +1,5 @@
 class PomodoroTimer {
-  constructor () {
+  constructor (options = {}) {
     this.state = {
       mode: 'focus', // 'focus', 'shortBreak', 'longBreak'
       isRunning: false,
@@ -25,7 +25,9 @@ class PomodoroTimer {
     this.progressRing = null
     this.circumference = 0
 
-    this.init()
+    if (!options.skipInit) {
+      this.init()
+    }
   }
 
   init () {
@@ -428,12 +430,18 @@ class PomodoroTimer {
   }
 }
 
-// Initialize timer when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  window.pomodoroTimer = new PomodoroTimer()
+// Initialize timer when DOM is loaded (browser only)
+if (typeof document !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    window.pomodoroTimer = new PomodoroTimer()
 
-  // Request notification permission
-  if ('Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission()
-  }
-})
+    // Request notification permission
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission()
+    }
+  })
+}
+
+if (typeof module !== 'undefined') {
+  module.exports = PomodoroTimer
+}
