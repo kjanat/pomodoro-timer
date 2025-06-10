@@ -61,6 +61,7 @@ cd pomodoro-timer
 pnpm install
 pip install pre-commit
 pre-commit install
+# Pre-commit will run scripts/pre-commit.js to format and lint your code
 
 # Start development server
 pnpm start
@@ -131,6 +132,7 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
    pnpm install
    pip install pre-commit
    pre-commit install
+   # hooks will run scripts/pre-commit.js for formatting and linting
    ```
    pre-commit.ci will run the same checks on every Pull Request.
 4. Make your changes

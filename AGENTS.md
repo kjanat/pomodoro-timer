@@ -376,7 +376,7 @@ The project uses a comprehensive code quality setup:
 ### Pre-commit Hooks
 
 To streamline code quality checks, the repository uses [pre-commit](https://pre-commit.com).
-The local hook `scripts/pre-commit.sh` runs formatting and linting commands automatically.
+The local hook `scripts/pre-commit.js` runs formatting and linting commands automatically using Node for cross-platform compatibility.
 Install the hooks with:
 
 ```bash

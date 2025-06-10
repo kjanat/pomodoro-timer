@@ -3,6 +3,6 @@ repos:
     hooks:
       - id: format-and-lint
         name: Format and Lint
-        entry: ./scripts/pre-commit.sh
-        language: system
+        entry: ./scripts/pre-commit.js
+        language: node
         pass_filenames: false
