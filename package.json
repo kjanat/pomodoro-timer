@@ -23,7 +23,7 @@
     "type": "git",
     "url": "https://github.com/kjanat/pomodoro-timer.git"
   },
-  "homepage": "https://kjanat.github.io/pomodoro-timer",
+  "homepage": "https://pomodoro.kajkowalski.nl",
   "packageManager": "pnpm@8.15.0",
   "devDependencies": {
     "http-server": "^14.1.1",

@@ -4,7 +4,7 @@
 
 **Project Name**: Focus Timer - Pomodoro Technique  
 **Repository**: `kjanat/pomodoro-timer`  
-**Live URL**: <https://kjanat.github.io/pomodoro-timer/>  
+**Live URL**: <https://pomodoro.kajkowalski.nl>  
 **Type**: Progressive Web Application (PWA)  
 **Technology Stack**: Vanilla JavaScript, HTML5, CSS3  
 **Deployment**: GitHub Pages with GitHub Actions CI/CD
@@ -401,7 +401,7 @@ pnpm start  # Serves on http://localhost:3000
 
 **Repository**: <https://github.com/kjanat/pomodoro-timer>  
 **Issues**: <https://github.com/kjanat/pomodoro-timer/issues>  
-**Live Demo**: <https://kjanat.github.io/pomodoro-timer/>  
+**Live Demo**: <https://pomodoro.kajkowalski.nl>  
 **Author**: Kaj Kowalski (@kjanat)
 
 ---

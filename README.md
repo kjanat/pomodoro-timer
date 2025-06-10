@@ -38,7 +38,7 @@ An impressive, modern Pomodoro timer web application built with vanilla JavaScri
 
 ## 🚀 Live Demo
 
-Visit the live application: [https://kjanat.github.io/pomodoro-timer/](https://kjanat.github.io/pomodoro-timer/)
+Visit the live application: [https://pomodoro.kajkowalski.nl](https://pomodoro.kajkowalski.nl)
 
 ## 📱 Installation
 
