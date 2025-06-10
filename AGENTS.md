@@ -46,8 +46,13 @@ pomodoro-timer/
 - **Styling**: CSS3 with custom properties, flexbox, and grid
 - **PWA**: Service Worker + Web App Manifest
 - **Build Tool**: GitHub Actions for CI/CD
+- **Development Server**: http-server (secure, no vulnerabilities)
 - **Package Manager**: pnpm
 - **Hosting**: GitHub Pages (static hosting)
+
+## Security Notes
+
+**Recent Security Fix (June 2025)**: Replaced `live-server` with `http-server` to resolve CVE-2024-4068 (High severity vulnerability in transitive dependency `braces`). The new setup provides the same functionality without security risks.
 
 ## Core Components
 
@@ -196,7 +201,7 @@ cd pomodoro-timer
 pnpm install
 
 # Start development server
-pnpm start  # Serves on http://localhost:8080
+pnpm start  # Serves on http://localhost:3000
 ```
 
 ### Deployment Process
