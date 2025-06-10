@@ -4,10 +4,10 @@
   "description": "An impressive Pomodoro timer application to enhance productivity.",
   "main": "src/js/app.js",
   "scripts": {
-    "start": "live-server src",
-    "dev": "live-server src",
+    "start": "http-server src -p 3000 -o",
+    "dev": "http-server src -p 3000 -o",
     "build": "cp -r src dist",
-    "preview": "live-server dist"
+    "preview": "http-server dist -p 3000 -o"
   },
   "keywords": [
     "pomodoro",
@@ -23,9 +23,8 @@
     "url": "https://github.com/kjanat/pomodoro-timer.git"
   },
   "homepage": "https://kjanat.github.io/pomodoro-timer",
-  "dependencies": {},
+  "packageManager": "pnpm@8.15.0",
   "devDependencies": {
-    "live-server": "^1.2.1"
-  },
-  "packageManager": "pnpm@8.15.0"
+    "http-server": "^14.1.1"
+  }
 }
