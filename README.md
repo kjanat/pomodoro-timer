@@ -57,11 +57,9 @@ git clone https://github.com/kjanat/pomodoro-timer.git
 # Navigate to the project directory
 cd pomodoro-timer
 
-# Install dependencies and pre-commit hooks
+# Install dependencies
 pnpm install
-pip install pre-commit
-pre-commit install
-# Pre-commit will run scripts/pre-commit.js to format and lint your code
+# See the Development Setup section below to install pre-commit hooks
 
 # Start development server
 pnpm start
