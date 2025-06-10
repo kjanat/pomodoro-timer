@@ -240,4 +240,4 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('Keyboard shortcuts:', window.keyboardShortcuts.shortcuts)
 })
 
-// updateDisplay is called automatically by the timer initialization
+// Removed `updateDisplay()` as `updateDisplay` is called automatically by the timer initialization.
