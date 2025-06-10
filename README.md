@@ -66,7 +66,7 @@ pnpm start
 
 ## 🏗️ Project Structure
 
-```
+```sh
 pomodoro-timer/
 ├── src/                           # Source files
 │   ├── index.html                 # Main HTML document

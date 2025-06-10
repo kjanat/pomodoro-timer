@@ -17,7 +17,7 @@ This is a modern, feature-rich Pomodoro timer web application designed to boost 
 
 ### File Structure
 
-```
+```sh
 pomodoro-timer/
 ├── src/                           # Source code directory
 │   ├── index.html                 # Main HTML document with PWA meta tags
@@ -35,9 +35,9 @@ pomodoro-timer/
 ├── .github/
 │   ├── workflows/
 │   │   └── deploy.yml             # GitHub Actions deployment workflow
-│   └── dependabot.yml            # Dependabot configuration for automated dependency updates
+│   └── dependabot.yml             # Dependabot configuration for automated dependency updates
 ├── package.json                   # Project configuration and dependencies
-├── pnpm-lock.yaml                # pnpm lock file
+├── pnpm-lock.yaml                 # pnpm lock file
 └── README.md                      # Comprehensive project documentation
 ```
 
