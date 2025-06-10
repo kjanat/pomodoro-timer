@@ -5,6 +5,7 @@ An impressive, modern Pomodoro timer web application built with vanilla JavaScri
 ## ✨ Features
 
 ### ⏱️ Timer Functionality
+
 - **Full Pomodoro Cycle**: Work sessions, short breaks, and long breaks
 - **Customizable Durations**: Adjust work and break periods to your needs
 - **Auto-progression**: Automatically advance between sessions (optional)
@@ -12,12 +13,14 @@ An impressive, modern Pomodoro timer web application built with vanilla JavaScri
 - **Session Tracking**: Keep track of completed Pomodoro sessions
 
 ### 🎨 Beautiful Interface
+
 - **Modern Design**: Clean, minimalist interface with smooth animations
 - **Responsive Layout**: Works perfectly on desktop, tablet, and mobile
 - **Dark Mode Support**: Automatic theme switching based on system preference
 - **Accessibility**: Keyboard navigation and screen reader friendly
 
 ### 🔧 Advanced Features
+
 - **PWA Support**: Install as a native app on your device
 - **Offline Capability**: Works without internet connection
 - **Sound Notifications**: Audio alerts for session starts and ends
@@ -27,6 +30,7 @@ An impressive, modern Pomodoro timer web application built with vanilla JavaScri
 - **Daily Statistics**: Track your productivity progress
 
 ### ⌨️ Keyboard Shortcuts
+
 - `Space` - Start/Pause timer
 - `R` - Reset timer
 - `S` - Toggle settings panel
@@ -39,11 +43,13 @@ Visit the live application: [https://kjanat.github.io/pomodoro-timer/](https://k
 ## 📱 Installation
 
 ### As a Web App (PWA)
+
 1. Visit the live demo link
 2. Click the "Install" button in your browser
 3. The app will be installed on your device like a native app
 
 ### For Development
+
 ```bash
 # Clone the repository
 git clone https://github.com/kjanat/pomodoro-timer.git

@@ -9,6 +9,8 @@ globs: *
 
 ## PROJECT DOCUMENTATION & CONTEXT SYSTEM
 
+Always create an `AGENTS.md` file with project details to aid autonomous agents in understanding the project.
+
 ## CODING STANDARDS
 
 ## WORKFLOW & RELEASE RULES
