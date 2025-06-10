@@ -36,6 +36,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Format code
+        run: pnpm format
+
+      - name: Lint code
+        run: pnpm lint
+
+      - name: Run tests
+        run: pnpm test
+
       - name: Build project
         run: |
           # Since this is a static site, just copy src to dist
