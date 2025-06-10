@@ -1,0 +1,65 @@
+# Dependabot configuration for automated dependency updates
+# This configuration helps maintain security and keeps dependencies up-to-date
+# See: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Monitor npm dependencies (package.json)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    # Group all non-security updates into a single PR to reduce noise
+    groups:
+      production-dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "*eslint*"
+          - "*prettier*"
+          - "*jest*"
+          - "*test*"
+      development-dependencies:
+        patterns:
+          - "*eslint*"
+          - "*prettier*"
+          - "*jest*"
+          - "*test*"
+          - "*dev*"
+    # Security updates are always created immediately, regardless of schedule
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+      include: "scope"
+    # Only target supported Node.js versions
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "automated"
+
+  # Monitor GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    target-branch: "development"
+    labels:
+      - "github-actions"
+      - "ci/cd"
+      - "automated"
+# Additional security considerations:
+# - Dependabot will automatically create PRs for security updates regardless of schedule
+# - All updates target the 'development' branch for review before merging to 'master'
+# - Pull requests are limited to prevent overwhelming the maintainer
+# - Automatic review assignment is handled via CODEOWNERS file
