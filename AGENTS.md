@@ -353,6 +353,42 @@ pnpm start  # Serves on http://localhost:3000
 - CSS transitions for smooth animations
 - Debounced settings updates
 
+## Code Quality & Development Tools
+
+### Linting & Formatting
+
+The project uses a comprehensive code quality setup:
+
+- **Prettier** (`^3.5.3`): Code formatting for JavaScript, HTML, CSS, JSON, and Markdown
+
+  - Command: `pnpm format`
+  - Configuration: Uses default Prettier settings without config files
+  - Scope: `src/**/*.{js,html,css,json}` and root `*.{js,json,md}` files
+
+- **StandardJS** (`^17.1.2`): JavaScript linting for code quality and consistency
+  - Command: `pnpm lint` (check) or `pnpm lint:fix` (auto-fix)
+  - Style: Enforces JavaScript Standard Style guidelines
+  - Features: No semicolons, single quotes, 2-space indentation
+  - Browser globals: Configured for browser APIs (localStorage, Notification, Audio)
+  - Service Worker globals: Configured for PWA APIs (self, caches)
+  - **Note**: Use `pnpm lint:fix` after `pnpm format` to resolve style conflicts between Prettier and StandardJS
+
+### Development Workflow
+
+```bash
+# Format all code
+pnpm format
+
+# Fix linting issues (run after formatting to resolve style conflicts)
+pnpm lint:fix
+
+# Check for remaining linting issues
+pnpm lint
+
+# Run development server
+pnpm start
+```
+
 ## Troubleshooting Common Issues
 
 ### Timer Not Starting

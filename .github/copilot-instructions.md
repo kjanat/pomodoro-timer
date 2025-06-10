@@ -7,19 +7,19 @@ globs: *
 
 ## TECH STACK
 
-When selecting a development server, prefer actively maintained options without known vulnerabilities. For static sites, `http-server` is preferred over `live-server` due to security concerns.
+When selecting a development server, prefer actively maintained options without known vulnerabilities. For static sites, `http-server` is preferred over `live-server` due to security concerns (CVE-2024-4068). Prettier version `^3.5.3` should be used for code formatting. StandardJS version `^17.1.2` should be used for JavaScript linting.
 
 ## PROJECT DOCUMENTATION & CONTEXT SYSTEM
 
-Always create an `AGENTS.md` file with project details to aid autonomous agents in understanding the project. This file should include project overview, technology stack, architecture details, file structure, implementation details, development information, customization options, troubleshooting tips, and any security considerations or fixes applied. Document any security fixes applied, like replacing `live-server` with `http-server` due to CVE-2024-4068. Document the Dependabot configuration for automated dependency management and security monitoring.
+Always create an `AGENTS.md` file with project details to aid autonomous agents in understanding the project. This file should include project overview, technology stack, architecture details, file structure, implementation details, development information, customization options, troubleshooting tips, and any security considerations or fixes applied. Document any security fixes applied, like replacing `live-server` with `http-server` due to CVE-2024-4068. Document the Dependabot configuration for automated dependency management and security monitoring. If a custom domain is added to the GitHub Pages project, update all relevant files (e.g., `README.md`, `package.json`, `AGENTS.md`, `index.html`) to reflect the new domain.
 
 ## CODING STANDARDS
 
-Add a Prettier "format" script to the `package.json` file with the command: `"format": "prettier --write \"src/**/*.{js,html,css,json}\" \"*.{js,json,md}\" --ignore-path .gitignore"`. This formats JavaScript, HTML, CSS, and JSON files in the `src` directory, and JSON and Markdown files in the root directory, using `.gitignore` to automatically ignore files that shouldn't be formatted. Use Prettier's default configuration, without creating Prettier config files.
+Add a Prettier "format" script to the `package.json` file with the command: `"format": "prettier --write \"src/**/*.{js,html,css,json}\" \"*.{js,json,md}\" --ignore-path .gitignore"`. This formats JavaScript, HTML, CSS, and JSON files in the `src` directory, and JSON and Markdown files in the root directory, using `.gitignore` to automatically ignore files that shouldn't be formatted. Use Prettier's default configuration, without creating Prettier config files. Ensure that the `pnpm-lock.yaml` file is up to date with `package.json`. When styling input fields, ensure the `color` property is explicitly set to `var(--text-primary)` to ensure proper contrast in both light and dark modes. Use StandardJS for JavaScript linting alongside Prettier for formatting. Add the following linting scripts to `package.json`: `"lint": "standard"` and `"lint:fix": "standard --fix"`. Configure StandardJS to recognize browser and service worker globals.
 
 ## WORKFLOW & RELEASE RULES
 
-When creating new projects, initialize git, publish the repository publicly to GitHub under the user `kjanat`. The repository name should be `pomodoro-timer`. Create a new branch for development and add a GitHub Pages workflow action. Use `pnpm` as the package manager. Automatic review assignment is handled via a CODEOWNERS file. When deploying to GitHub Pages, update relevant files (e.g., `README.md`, `package.json`) to reflect any custom domains used.
+When creating new projects, initialize git, publish the repository publicly to GitHub under the user `kjanat`. The repository name should be `pomodoro-timer`. Create a new branch for development and add a GitHub Pages workflow action. Use `pnpm` as the package manager. Automatic review assignment is handled via a CODEOWNERS file. When deploying to GitHub Pages, update relevant files (e.g., `README.md`, `package.json`) to reflect any custom domains used. Also ensure a `CNAME` file exists in the repository's root. Update any Open Graph or Twitter meta tags in the HTML.
 
 ## DEBUGGING
 
