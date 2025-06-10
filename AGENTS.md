@@ -375,10 +375,54 @@ The project uses a comprehensive code quality setup:
 
 ### Pre-commit Hooks
 
-To streamline code quality checks, the repository uses [pre-commit](https://pre-commit.com).
-The local hook `scripts/pre-commit.js` runs formatting and linting commands automatically using Node for cross-platform compatibility.
-For installation instructions see the **Development Setup** section of the [README](README.md).
-The same hooks run on every Pull Request via [pre-commit.ci](https://pre-commit.ci/).
+The project uses [pre-commit](https://pre-commit.com) framework for automated code quality checks before commits. The setup includes both local installation and cloud-based checks.
+
+#### Local Pre-commit Setup
+
+1. **Installation**: Install pre-commit framework globally or locally:
+
+   ```bash
+   pip install pre-commit
+   # or
+   pipx install pre-commit
+   ```
+
+2. **Hook Installation**: Install git hooks locally:
+
+   ```bash
+   pre-commit install
+   ```
+
+3. **Manual Execution**: Run hooks against all files:
+
+   ```bash
+   pre-commit run --all-files
+   ```
+
+#### Hook Configuration
+
+- **Configuration File**: `.pre-commit-config.yaml` defines the hook setup
+- **Custom Script**: `scripts/pre-commit.js` provides cross-platform Node.js implementation
+- **Smart Filtering**: Only processes files that Prettier can handle (`.js`, `.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`)
+- **Exclusions**: Automatically excludes `pnpm-lock.yaml` from formatting to prevent conflicts
+- **Package Manager Detection**: Automatically detects and uses pnpm or falls back to npm
+
+#### Hook Workflow
+
+The pre-commit hook follows this sequence:
+
+1. **File Filtering**: Identifies supported file types and excludes problematic files
+2. **Prettier Formatting**: Formats all supported files (`prettier --write`)
+3. **StandardJS Auto-fix**: Fixes JavaScript linting issues (`standard --fix`)
+4. **StandardJS Check**: Validates final JavaScript code quality (`standard`)
+
+#### Cloud Integration
+
+- **pre-commit.ci**: Automatically runs the same checks on every Pull Request
+- **Consistency**: Ensures all code follows the same formatting and linting standards
+- **Automation**: No manual intervention required for code quality checks
+
+For detailed installation instructions, see the **Development Setup** section of the [README](README.md).
 
 ### Development Workflow
 
@@ -397,6 +441,41 @@ pnpm start
 ```
 
 ## Troubleshooting Common Issues
+
+### Code Quality and Formatting Issues
+
+#### Pre-commit Hook Failures
+
+If pre-commit hooks fail or you need to manually run code quality checks:
+
+```bash
+# Run all hooks against all files in the project
+pre-commit run --all-files
+
+# Run specific formatting and linting manually
+pnpm format     # Format all supported files with Prettier
+pnpm lint:fix   # Auto-fix JavaScript linting issues
+pnpm lint       # Check for remaining linting issues
+```
+
+**Common Issues**:
+
+- **Files modified by hook**: This is expected behavior when formatting is applied
+- **Parser errors**: The pre-commit script automatically filters out unsupported file types
+- **pnpm-lock.yaml conflicts**: This file is automatically excluded from formatting
+
+#### Development Workflow Commands
+
+```bash
+# Install pre-commit hooks locally (one-time setup)
+pip install pre-commit && pre-commit install
+
+# Before committing (optional, hooks run automatically)
+pre-commit run --all-files
+
+# Manual code quality checks
+pnpm format && pnpm lint:fix && pnpm lint
+```
 
 ### Timer Not Starting
 

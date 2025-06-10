@@ -1,8 +1,10 @@
+# default_language_version:
+#   node: "22"
 repos:
   - repo: local
     hooks:
       - id: format-and-lint
         name: Format and Lint
-        entry: ./scripts/pre-commit.js
-        language: node
+        entry: node ./scripts/pre-commit.js
+        language: system
         pass_filenames: true

@@ -38,13 +38,29 @@ function run (command) {
 const files = process.argv.slice(2)
 
 if (files.length) {
-  const all = files.join(' ')
-  const js = files.filter(f => f.endsWith('.js')).join(' ')
+  // Filter files to only those that Prettier can handle
+  const prettierExtensions = [
+    '.js',
+    '.json',
+    '.md',
+    '.html',
+    '.css',
+    '.yml',
+    '.yaml'
+  ]
+  const prettierFiles = files.filter(
+    (f) =>
+      prettierExtensions.some((ext) => f.endsWith(ext)) &&
+      !f.includes('pnpm-lock.yaml')
+  )
+  const js = files.filter((f) => f.endsWith('.js'))
 
-  runExec(`prettier --write ${all}`)
-  if (js) {
-    runExec(`standard --fix ${js}`)
-    runExec(`standard ${js}`)
+  if (prettierFiles.length) {
+    runExec(`prettier --write ${prettierFiles.join(' ')}`)
+  }
+  if (js.length) {
+    runExec(`standard --fix ${js.join(' ')}`)
+    runExec(`standard ${js.join(' ')}`)
   }
 } else {
   runScript('format')

@@ -59,7 +59,13 @@ cd pomodoro-timer
 
 # Install dependencies
 pnpm install
-# See the Development Setup section below to install pre-commit hooks
+
+# Install pre-commit hooks (recommended for contributors)
+pip install pre-commit
+pre-commit install
+
+# Optional: Run pre-commit hooks on all files to verify setup
+pre-commit run --all-files
 
 # Start development server
 pnpm start
@@ -125,14 +131,33 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Install dependencies and set up the hooks
+3. Install dependencies and set up pre-commit hooks:
+
    ```bash
+   # Install project dependencies
    pnpm install
+
+   # Install pre-commit framework (choose one method)
    pip install pre-commit
+   # or
+   pipx install pre-commit
+
+   # Install git hooks locally
    pre-commit install
-   # hooks will run scripts/pre-commit.js for formatting and linting
+
+   # Optional: Run hooks against all files to verify setup
+   pre-commit run --all-files
    ```
-   pre-commit.ci will run the same checks on every Pull Request.
+
+   **About pre-commit hooks**: The hooks automatically run `scripts/pre-commit.js` which handles:
+
+   - Code formatting with Prettier for supported file types (`.js`, `.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`)
+   - JavaScript linting and auto-fixing with StandardJS
+   - Smart file filtering (excludes `pnpm-lock.yaml` and unsupported file types)
+   - Cross-platform compatibility (detects pnpm/npm automatically)
+
+   The same checks run automatically on Pull Requests via [pre-commit.ci](https://pre-commit.ci/)
+
 4. Make your changes
 5. Commit your changes (`git commit -m 'Add some amazing feature'`)
 6. Push to the branch (`git push origin feature/amazing-feature`)
