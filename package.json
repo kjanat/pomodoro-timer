@@ -8,7 +8,9 @@
     "dev": "http-server src -p 3000 -o",
     "build": "cp -r src dist",
     "preview": "http-server dist -p 3000 -o",
-    "format": "prettier --write \"src/**/*.{js,html,css,json}\" \"*.{js,json,md}\" --ignore-path .gitignore"
+    "format": "prettier --write \"src/**/*.{js,html,css,json}\" \"*.{js,json,md}\" --ignore-path .gitignore",
+    "lint": "standard",
+    "lint:fix": "standard --fix"
   },
   "keywords": [
     "pomodoro",
@@ -27,6 +29,7 @@
   "packageManager": "pnpm@8.15.0",
   "devDependencies": {
     "http-server": "^14.1.1",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "standard": "^17.1.2"
   }
 }
