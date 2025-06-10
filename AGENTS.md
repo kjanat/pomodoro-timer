@@ -401,20 +401,20 @@ The project uses [pre-commit](https://pre-commit.com) framework for automated co
 
 #### Hook Configuration
 
-- **Configuration File**: `.pre-commit-config.yaml` defines the hook setup
-- **Custom Script**: `scripts/pre-commit.js` provides cross-platform Node.js implementation
+- **Configuration File**: `.pre-commit-config.yaml` defines the hook setup using remote repositories
+- **Remote Hooks**: Uses mirrors-prettier and standard repositories for better pre-commit.ci compatibility
 - **Smart Filtering**: Only processes files that Prettier can handle (`.js`, `.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`)
 - **Exclusions**: Automatically excludes `pnpm-lock.yaml` from formatting to prevent conflicts
-- **Package Manager Detection**: Automatically detects and uses pnpm or falls back to npm
+- **Legacy Script**: `scripts/pre-commit.js` (retained for backward compatibility with local development)
 
 #### Hook Workflow
 
-The pre-commit hook follows this sequence:
+The pre-commit hooks follow this sequence:
 
-1. **File Filtering**: Identifies supported file types and excludes problematic files
-2. **Prettier Formatting**: Formats all supported files (`prettier --write`)
-3. **StandardJS Auto-fix**: Fixes JavaScript linting issues (`standard --fix`)
-4. **StandardJS Check**: Validates final JavaScript code quality (`standard`)
+1. **Prettier Formatting**: Formats supported files using the mirrors-prettier hook
+2. **StandardJS Validation**: Checks and fixes JavaScript code using the standard hook
+3. **Automatic Fixes**: Both hooks can automatically fix issues where possible
+4. **Cross-platform Compatibility**: Works in both local development and pre-commit.ci environments
 
 #### Cloud Integration
 
@@ -463,6 +463,11 @@ pnpm lint       # Check for remaining linting issues
 - **Files modified by hook**: This is expected behavior when formatting is applied
 - **Parser errors**: The pre-commit script automatically filters out unsupported file types
 - **pnpm-lock.yaml conflicts**: This file is automatically excluded from formatting
+- **pre-commit.ci Node.js errors**: Fixed by using remote hooks instead of local hooks that depend on Node.js availability
+
+**Recent Fixes Applied**:
+
+- **2025-06-10**: Replaced local Node.js hook with remote mirrors-prettier and standard hooks to fix pre-commit.ci "Executable `node` not found" error
 
 #### Development Workflow Commands
 
