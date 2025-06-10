@@ -28,6 +28,7 @@ An impressive, modern Pomodoro timer web application built with vanilla JavaScri
 - **Keyboard Shortcuts**: Control timer with spacebar and other shortcuts
 - **Settings Persistence**: Your preferences are saved locally
 - **Daily Statistics**: Track your productivity progress
+- **Session Persistence**: Running timers survive page refreshes
 
 ### ⌨️ Keyboard Shortcuts
 
