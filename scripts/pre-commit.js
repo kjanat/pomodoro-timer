@@ -1,6 +1,14 @@
 #!/usr/bin/env node
 const { execSync } = require('child_process')
 
+let pnpmCmd = 'pnpm'
+try {
+  execSync(`${pnpmCmd} -v`, { stdio: 'ignore', shell: true })
+} catch (_) {
+  pnpmCmd = 'npx --yes pnpm'
+  console.warn('pnpm not found, using npx pnpm')
+}
+
 function run (command) {
   try {
     execSync(command, { stdio: 'inherit', shell: true })
@@ -17,13 +25,13 @@ if (files.length) {
   const all = files.join(' ')
   const js = files.filter(f => f.endsWith('.js')).join(' ')
 
-  run(`pnpm exec prettier --write ${all}`)
+  run(`${pnpmCmd} exec prettier --write ${all}`)
   if (js) {
-    run(`pnpm exec standard --fix ${js}`)
-    run(`pnpm exec standard ${js}`)
+    run(`${pnpmCmd} exec standard --fix ${js}`)
+    run(`${pnpmCmd} exec standard ${js}`)
   }
 } else {
-  run('pnpm format')
-  run('pnpm lint:fix')
-  run('pnpm lint')
+  run(`${pnpmCmd} format`)
+  run(`${pnpmCmd} lint:fix`)
+  run(`${pnpmCmd} lint`)
 }
