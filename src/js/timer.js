@@ -31,9 +31,12 @@ class PomodoroTimer {
   init () {
     this.setupProgressRing()
     this.loadSettings()
-    this.loadStats()
+    const resume = this.loadStats()
     this.updateUI()
     this.bindEvents()
+    if (resume) {
+      this.start()
+    }
   }
 
   setupProgressRing () {
@@ -140,6 +143,7 @@ class PomodoroTimer {
 
     this.state.isRunning = true
     this.state.isPaused = false
+    this.saveStats()
 
     if (this.settings.soundEnabled) {
       this.playSound('start')
@@ -158,6 +162,7 @@ class PomodoroTimer {
     this.state.isRunning = false
     this.state.isPaused = true
     clearInterval(this.intervalId)
+    this.saveStats()
     this.updateUI()
   }
 
@@ -171,6 +176,7 @@ class PomodoroTimer {
     this.state.remainingTime = duration * 60
     this.state.totalTime = duration * 60
 
+    this.saveStats()
     this.updateUI()
   }
 
@@ -178,6 +184,7 @@ class PomodoroTimer {
     this.state.remainingTime--
     this.updateProgress()
     this.updateDisplay()
+    this.saveStats()
 
     if (this.state.remainingTime <= 0) {
       this.complete()
@@ -237,6 +244,7 @@ class PomodoroTimer {
     const duration = this.getModeDuration(mode)
     this.state.remainingTime = duration * 60
     this.state.totalTime = duration * 60
+    this.saveStats()
     this.updateUI()
   }
 
@@ -407,14 +415,40 @@ class PomodoroTimer {
   loadStats () {
     const today = new Date().toDateString()
     const saved = localStorage.getItem('pomodoro-stats')
+    let resume = false
 
     if (saved) {
       const stats = JSON.parse(saved)
       if (stats.date === today) {
         this.state.completedSessions = stats.completedSessions || 0
         this.state.totalFocusTime = stats.totalFocusTime || 0
+        this.state.sessionCount = stats.sessionCount || this.state.sessionCount
+        this.state.mode = stats.mode || this.state.mode
+
+        if (typeof stats.remainingTime === 'number') {
+          this.state.remainingTime = stats.remainingTime
+        }
+        if (typeof stats.totalTime === 'number') {
+          this.state.totalTime = stats.totalTime
+        }
+
+        this.state.isRunning = stats.isRunning || false
+        this.state.isPaused = stats.isPaused || false
+
+        if (stats.lastUpdated && this.state.isRunning && !this.state.isPaused) {
+          const elapsed = Math.floor((Date.now() - stats.lastUpdated) / 1000)
+          this.state.remainingTime -= elapsed
+          if (this.state.remainingTime <= 0) {
+            this.state.remainingTime = 0
+            this.complete()
+          } else {
+            resume = true
+          }
+        }
       }
     }
+
+    return resume
   }
 
   saveStats () {
@@ -422,8 +456,16 @@ class PomodoroTimer {
     const stats = {
       date: today,
       completedSessions: this.state.completedSessions,
-      totalFocusTime: this.state.totalFocusTime
+      totalFocusTime: this.state.totalFocusTime,
+      sessionCount: this.state.sessionCount,
+      mode: this.state.mode,
+      remainingTime: this.state.remainingTime,
+      totalTime: this.state.totalTime,
+      isRunning: this.state.isRunning,
+      isPaused: this.state.isPaused,
+      lastUpdated: Date.now()
     }
+
     localStorage.setItem('pomodoro-stats', JSON.stringify(stats))
   }
 }
