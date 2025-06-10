@@ -1,6 +1,30 @@
 #!/usr/bin/env node
 const { execSync } = require('child_process')
 
+let hasPnpm = true
+try {
+  execSync('pnpm -v', { stdio: 'ignore', shell: true })
+} catch (_) {
+  hasPnpm = false
+  console.warn('pnpm not found, falling back to npm')
+}
+
+function runExec (cmd) {
+  if (hasPnpm) {
+    run(`pnpm exec ${cmd}`)
+  } else {
+    run(`npx ${cmd}`)
+  }
+}
+
+function runScript (script) {
+  if (hasPnpm) {
+    run(`pnpm ${script}`)
+  } else {
+    run(`npm run ${script}`)
+  }
+}
+
 function run (command) {
   try {
     execSync(command, { stdio: 'inherit', shell: true })
@@ -14,16 +38,32 @@ function run (command) {
 const files = process.argv.slice(2)
 
 if (files.length) {
-  const all = files.join(' ')
-  const js = files.filter(f => f.endsWith('.js')).join(' ')
+  // Filter files to only those that Prettier can handle
+  const prettierExtensions = [
+    '.js',
+    '.json',
+    '.md',
+    '.html',
+    '.css',
+    '.yml',
+    '.yaml'
+  ]
+  const prettierFiles = files.filter(
+    (f) =>
+      prettierExtensions.some((ext) => f.endsWith(ext)) &&
+      !f.includes('pnpm-lock.yaml')
+  )
+  const js = files.filter((f) => f.endsWith('.js'))
 
-  run(`pnpm exec prettier --write ${all}`)
-  if (js) {
-    run(`pnpm exec standard --fix ${js}`)
-    run(`pnpm exec standard ${js}`)
+  if (prettierFiles.length) {
+    runExec(`prettier --write ${prettierFiles.join(' ')}`)
+  }
+  if (js.length) {
+    runExec(`standard --fix ${js.join(' ')}`)
+    runExec(`standard ${js.join(' ')}`)
   }
 } else {
-  run('pnpm format')
-  run('pnpm lint:fix')
-  run('pnpm lint')
+  runScript('format')
+  runScript('lint:fix')
+  runScript('lint')
 }
