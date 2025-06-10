@@ -26,7 +26,7 @@
     "url": "https://github.com/kjanat/pomodoro-timer.git"
   },
   "homepage": "https://pomodoro.kajkowalski.nl",
-  "packageManager": "pnpm@8.15.0",
+  "packageManager": "pnpm@10.12.1",
   "standard": {
     "env": [
       "browser",
