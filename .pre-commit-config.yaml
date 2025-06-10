@@ -1,5 +1,5 @@
-# default_language_version:
-#   node: "22"
+default_language_version:
+  node: "22"
 repos:
   - repo: local
     hooks:
