@@ -33,8 +33,9 @@ pomodoro-timer/
 │           ├── start.mp3          # Timer start sound
 │           └── finish.mp3         # Timer completion sound
 ├── .github/
-│   └── workflows/
-│       └── deploy.yml             # GitHub Actions deployment workflow
+│   ├── workflows/
+│   │   └── deploy.yml             # GitHub Actions deployment workflow
+│   └── dependabot.yml            # Dependabot configuration for automated dependency updates
 ├── package.json                   # Project configuration and dependencies
 ├── pnpm-lock.yaml                # pnpm lock file
 └── README.md                      # Comprehensive project documentation
@@ -219,6 +220,13 @@ pnpm start  # Serves on http://localhost:3000
 - **Deployment**: Deploy to GitHub Pages
 - **Dependencies**: Node.js 18, pnpm 8
 
+### Dependency Management
+
+- **Package Manager**: pnpm for secure, fast dependency management
+- **Automated Updates**: Dependabot configuration for weekly dependency updates
+- **Security Scanning**: Automatic security vulnerability detection and patching
+- **Development Workflow**: Updates applied to `development` branch first for review
+
 ## User Interactions
 
 ### Keyboard Shortcuts
@@ -301,6 +309,20 @@ pnpm start  # Serves on http://localhost:3000
 - Audio notifications may not work in all contexts
 
 ## Security Considerations
+
+### Automated Dependency Management
+
+- **Dependabot Configuration**: Automated weekly updates for npm packages and GitHub Actions
+- **Security Monitoring**: Immediate updates for security vulnerabilities regardless of schedule
+- **Update Strategy**: All updates target `development` branch for review before merging
+- **Grouping**: Production and development dependencies grouped separately
+- **Review Process**: Automatic assignment to maintainer with proper labeling
+
+### Recent Security Fixes
+
+- **CVE-2024-4068**: Resolved by replacing `live-server` with `http-server`
+- **Vulnerable Dependency**: `braces 2.3.2` (transitive dependency) removed
+- **Current Status**: Zero known vulnerabilities (`pnpm audit` clean)
 
 ### Data Privacy
 

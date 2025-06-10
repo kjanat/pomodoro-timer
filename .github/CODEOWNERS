@@ -1,0 +1,24 @@
+# CODEOWNERS file for automatic code review assignment
+# This file defines who owns and should review different parts of the codebase
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global ownership - kjanat owns everything by default
+* @kjanat
+
+# Specific ownership for different parts of the project
+# Source code
+/src/ @kjanat
+
+# Configuration files
+/package.json @kjanat
+/pnpm-lock.yaml @kjanat
+/.github/ @kjanat
+
+# Documentation
+/README.md @kjanat
+/AGENTS.md @kjanat
+
+# Dependencies and security-related files
+/package.json @kjanat
+/.github/dependabot.yml @kjanat
+/.github/workflows/ @kjanat
