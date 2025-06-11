@@ -1,7 +1,14 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import PomodoroTimer from '../src/js/timer.js'
 
 describe('PomodoroTimer core logic', () => {
+  beforeEach(() => {
+    global.localStorage = {
+      setItem: vi.fn(),
+      getItem: vi.fn()
+    }
+  })
+
   it('returns correct duration for each mode', () => {
     const timer = new PomodoroTimer({ skipInit: true })
     timer.settings.focusDuration = 30
