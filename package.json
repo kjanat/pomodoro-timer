@@ -6,7 +6,7 @@
   "scripts": {
     "start": "pnpm run build && http-server dist -p 3000 -o",
     "dev": "pnpm run build && http-server dist -p 3000 -o",
-    "build": "rm -rf dist && cp -r src dist && tsc && rm -rf dist/ts",
+    "build": "rimraf dist && tsc && cp src/index.html dist/index.html && cp src/manifest.json dist/manifest.json && cp src/sw.js dist/sw.js && cp src/CNAME dist/CNAME && cp -r src/css dist/css",
     "preview": "http-server dist -p 3000 -o",
     "format": "prettier --write \"src/**/*.{js,html,css,json}\" \"*.{js,json,md}\" --ignore-path .gitignore",
     "lint": "standard",
@@ -46,6 +46,7 @@
     "jsdom": "^26.1.0",
     "prettier": "~3",
     "prettier-config-standard": "*",
+    "rimraf": "^6.0.1",
     "standard": "*",
     "typescript": "^5.8.3",
     "vitest": "~3"
