@@ -13,9 +13,10 @@ function setupDOM () {
     <div id="completed-sessions"></div>
     <div id="total-focus-time"></div>
   `
+  const origQuerySelector = document.querySelector.bind(document)
   vi.spyOn(document, 'querySelector').mockImplementation((sel) => {
     if (sel === '.progress-ring__progress') return ring
-    return document.body.querySelector(sel)
+    return origQuerySelector(sel)
   })
   return ring
 }
