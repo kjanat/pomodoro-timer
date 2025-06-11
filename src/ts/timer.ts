@@ -364,9 +364,14 @@ class PomodoroTimer {
   }
 
   updateButtons () {
-    const startBtn = document.getElementById('start-button') as HTMLButtonElement
-    const pauseBtn = document.getElementById('pause-button') as HTMLButtonElement
-    const resetBtn = document.getElementById('reset-button') as HTMLButtonElement
+    const startBtn = document.getElementById('start-button') as HTMLButtonElement | null
+    const pauseBtn = document.getElementById('pause-button') as HTMLButtonElement | null
+    const resetBtn = document.getElementById('reset-button') as HTMLButtonElement | null
+
+    if (!startBtn || !pauseBtn || !resetBtn) {
+      console.error('One or more button elements are missing from the DOM.')
+      return
+    }
 
     if (this.state.isRunning) {
       startBtn.style.display = 'none'
@@ -403,13 +408,17 @@ class PomodoroTimer {
   }
 
   updateStats () {
-    document.getElementById('completed-sessions').textContent =
-      String(this.state.completedSessions)
+    const completedEl = document.getElementById('completed-sessions')
+    if (completedEl) {
+      completedEl.textContent = String(this.state.completedSessions)
+    }
 
     const hours = Math.floor(this.state.totalFocusTime / 60)
     const minutes = this.state.totalFocusTime % 60
-    document.getElementById('total-focus-time').textContent =
-      `${hours}h ${minutes}m`
+    const totalEl = document.getElementById('total-focus-time')
+    if (totalEl) {
+      totalEl.textContent = `${hours}h ${minutes}m`
+    }
   }
 
   scheduleSaveStats () {

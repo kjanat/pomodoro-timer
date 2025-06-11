@@ -1,4 +1,4 @@
-import type PomodoroTimer from './timer.js'
+import PomodoroTimer from './timer.js'
 
 // Main application initialization and utility functions
 
