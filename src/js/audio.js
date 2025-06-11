@@ -8,8 +8,10 @@ function playTone (frequency, duration = 0.3) {
   const ctx = playTone.ctx
   if (ctx.state === 'suspended' && typeof ctx.resume === 'function') {
     try {
-      ctx.resume()
-    } catch {}
+      await ctx.resume()
+    } catch (error) {
+      console.error('Error resuming AudioContext:', error)
+    }
   }
   const oscillator = ctx.createOscillator()
   const gain = ctx.createGain()
