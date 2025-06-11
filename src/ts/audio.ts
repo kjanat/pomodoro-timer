@@ -1,12 +1,26 @@
-// @ts-nocheck
-function playTone (frequency, duration = 0.3) {
+let audioContext: AudioContext | null
+
+export interface PlayToneFn {
+  (frequency: number, duration?: number): void
+  ctx?: AudioContext | null
+}
+
+export const playTone: PlayToneFn = function playTone(
+  frequency: number,
+  duration = 0.3
+) {
   if (typeof window === 'undefined') return
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext
-  if (!AudioContextClass) return
-  if (!playTone.ctx) {
-    playTone.ctx = new AudioContextClass()
+  if ((playTone as PlayToneFn).ctx === undefined) {
+    audioContext = null
   }
-  const ctx = playTone.ctx
+  const AudioContextClass =
+    window.AudioContext || (window as any).webkitAudioContext
+  if (!AudioContextClass) return
+  if (!audioContext) {
+    audioContext = new AudioContextClass()
+  }
+  const ctx = audioContext
+  ;(playTone as PlayToneFn).ctx = ctx
   if (ctx.state === 'suspended' && typeof ctx.resume === 'function') {
     try {
       ctx.resume()
@@ -27,12 +41,8 @@ function playTone (frequency, duration = 0.3) {
     oscillator.disconnect()
     gain.disconnect()
   }
-}
+} as PlayToneFn
 
 if (typeof window !== 'undefined') {
-  window.playTone = playTone
-}
-
-if (typeof module !== 'undefined') {
-  module.exports = { playTone }
+  ;(window as any).playTone = playTone
 }

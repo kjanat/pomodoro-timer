@@ -1,7 +1,15 @@
-// @ts-nocheck
 /* global playTone */
+import { playTone } from './audio.js'
+
 class PomodoroTimer {
-  constructor (options = {}) {
+  state: any
+  settings: any
+  intervalId: ReturnType<typeof setInterval> | null
+  progressRing: SVGCircleElement | null
+  circumference: number
+  saveTimeout: ReturnType<typeof setTimeout> | null
+  beforeUnloadHandler: ((e: BeforeUnloadEvent) => void) | null
+  constructor (options: { skipInit?: boolean } = {}) {
     this.state = {
       mode: 'focus', // 'focus', 'shortBreak', 'longBreak'
       isRunning: false,
@@ -46,19 +54,19 @@ class PomodoroTimer {
   }
 
   setupProgressRing () {
-    this.progressRing = document.querySelector('.progress-ring__progress')
+    this.progressRing = document.querySelector('.progress-ring__progress')!
     const radius = this.progressRing.r.baseVal.value
     this.circumference = radius * 2 * Math.PI
 
     this.progressRing.style.strokeDasharray = `${this.circumference} ${this.circumference}`
-    this.progressRing.style.strokeDashoffset = this.circumference
+    this.progressRing.style.strokeDashoffset = String(this.circumference)
   }
 
   updateProgress () {
     const progress =
       (this.state.totalTime - this.state.remainingTime) / this.state.totalTime
     const offset = this.circumference - progress * this.circumference
-    this.progressRing.style.strokeDashoffset = offset
+    this.progressRing.style.strokeDashoffset = String(offset)
   }
 
   bindEvents () {
@@ -83,8 +91,9 @@ class PomodoroTimer {
     // Settings inputs
     document
       .getElementById('focus-duration')
-      .addEventListener('change', (e) => {
-        this.settings.focusDuration = parseInt(e.target.value)
+        .addEventListener('change', (e: Event) => {
+          const target = e.target as HTMLInputElement
+          this.settings.focusDuration = parseInt(target.value)
         this.saveSettings()
         if (this.state.mode === 'focus' && !this.state.isRunning) {
           this.setMode('focus')
@@ -93,43 +102,49 @@ class PomodoroTimer {
 
     document
       .getElementById('short-break-duration')
-      .addEventListener('change', (e) => {
-        this.settings.shortBreakDuration = parseInt(e.target.value)
+        .addEventListener('change', (e: Event) => {
+          const target = e.target as HTMLInputElement
+          this.settings.shortBreakDuration = parseInt(target.value)
         this.saveSettings()
       })
 
     document
       .getElementById('long-break-duration')
-      .addEventListener('change', (e) => {
-        this.settings.longBreakDuration = parseInt(e.target.value)
+        .addEventListener('change', (e: Event) => {
+          const target = e.target as HTMLInputElement
+          this.settings.longBreakDuration = parseInt(target.value)
         this.saveSettings()
       })
 
     document
       .getElementById('long-break-interval')
-      .addEventListener('change', (e) => {
-        this.settings.longBreakInterval = parseInt(e.target.value)
+        .addEventListener('change', (e: Event) => {
+          const target = e.target as HTMLInputElement
+          this.settings.longBreakInterval = parseInt(target.value)
         this.saveSettings()
       })
 
     document
       .getElementById('auto-start-breaks')
-      .addEventListener('change', (e) => {
-        this.settings.autoStartBreaks = e.target.checked
+        .addEventListener('change', (e: Event) => {
+          const target = e.target as HTMLInputElement
+          this.settings.autoStartBreaks = target.checked
         this.saveSettings()
       })
 
     document
       .getElementById('auto-start-focus')
-      .addEventListener('change', (e) => {
-        this.settings.autoStartFocus = e.target.checked
+        .addEventListener('change', (e: Event) => {
+          const target = e.target as HTMLInputElement
+          this.settings.autoStartFocus = target.checked
         this.saveSettings()
       })
 
-    document.getElementById('sound-enabled').addEventListener('change', (e) => {
-      this.settings.soundEnabled = e.target.checked
-      this.saveSettings()
-    })
+      document.getElementById('sound-enabled')!.addEventListener('change', (e: Event) => {
+        const target = e.target as HTMLInputElement
+        this.settings.soundEnabled = target.checked
+        this.saveSettings()
+      })
 
     if (typeof window !== 'undefined') {
       if (this.beforeUnloadHandler) {
@@ -142,8 +157,9 @@ class PomodoroTimer {
     }
 
     // Keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-      if (e.code === 'Space' && !e.target.matches('input')) {
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      const target = e.target as Element
+      if (e.code === 'Space' && !target.matches('input')) {
         e.preventDefault()
         if (this.state.isRunning) {
           this.pause()
@@ -325,9 +341,9 @@ class PomodoroTimer {
   }
 
   updateButtons () {
-    const startBtn = document.getElementById('start-button')
-    const pauseBtn = document.getElementById('pause-button')
-    const resetBtn = document.getElementById('reset-button')
+    const startBtn = document.getElementById('start-button') as HTMLElement
+    const pauseBtn = document.getElementById('pause-button') as HTMLElement
+    const resetBtn = document.getElementById('reset-button') as HTMLButtonElement
 
     if (this.state.isRunning) {
       startBtn.style.display = 'none'
@@ -418,19 +434,19 @@ class PomodoroTimer {
     }
 
     // Update UI inputs
-    document.getElementById('focus-duration').value =
-      this.settings.focusDuration
-    document.getElementById('short-break-duration').value =
-      this.settings.shortBreakDuration
-    document.getElementById('long-break-duration').value =
-      this.settings.longBreakDuration
-    document.getElementById('long-break-interval').value =
-      this.settings.longBreakInterval
-    document.getElementById('auto-start-breaks').checked =
+    ;(document.getElementById('focus-duration') as HTMLInputElement).value =
+      String(this.settings.focusDuration)
+    ;(document.getElementById('short-break-duration') as HTMLInputElement).value =
+      String(this.settings.shortBreakDuration)
+    ;(document.getElementById('long-break-duration') as HTMLInputElement).value =
+      String(this.settings.longBreakDuration)
+    ;(document.getElementById('long-break-interval') as HTMLInputElement).value =
+      String(this.settings.longBreakInterval)
+    ;(document.getElementById('auto-start-breaks') as HTMLInputElement).checked =
       this.settings.autoStartBreaks
-    document.getElementById('auto-start-focus').checked =
+    ;(document.getElementById('auto-start-focus') as HTMLInputElement).checked =
       this.settings.autoStartFocus
-    document.getElementById('sound-enabled').checked =
+    ;(document.getElementById('sound-enabled') as HTMLInputElement).checked =
       this.settings.soundEnabled
 
     // Apply current settings
@@ -517,6 +533,4 @@ if (typeof document !== 'undefined') {
   })
 }
 
-if (typeof module !== 'undefined') {
-  module.exports = PomodoroTimer
-}
+export default PomodoroTimer

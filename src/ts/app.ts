@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Main application initialization and utility functions
 
 // PWA Service Worker Registration
@@ -17,6 +16,7 @@ if ('serviceWorker' in navigator) {
 
 // Theme management
 class ThemeManager {
+  currentTheme: string
   constructor () {
     this.currentTheme = localStorage.getItem('theme') || 'auto'
     this.init()
@@ -58,7 +58,7 @@ class ThemeManager {
       })
   }
 
-  setTheme (theme) {
+  setTheme (theme: string) {
     this.currentTheme = theme
     localStorage.setItem('theme', theme)
     this.applyTheme()
@@ -67,6 +67,7 @@ class ThemeManager {
 
 // Keyboard shortcuts helper
 class KeyboardShortcuts {
+  shortcuts: Record<string, string>
   constructor () {
     this.shortcuts = {
       Space: 'Toggle timer (Start/Pause)',
@@ -79,9 +80,10 @@ class KeyboardShortcuts {
   }
 
   init () {
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      const target = e.target as Element
       // Don't trigger shortcuts when typing in inputs
-      if (e.target.matches('input, textarea, select')) {
+      if (target.matches('input, textarea, select')) {
         return
       }
 
@@ -108,24 +110,26 @@ class KeyboardShortcuts {
   }
 
   toggleSettings () {
-    const settingsPanel = document.getElementById('settings-panel')
+    const settingsPanel = document.getElementById('settings-panel')!
     settingsPanel.classList.toggle('active')
   }
 
   closeSettings () {
-    const settingsPanel = document.getElementById('settings-panel')
+    const settingsPanel = document.getElementById('settings-panel')!
     settingsPanel.classList.remove('active')
   }
 }
 
 // Analytics helper (privacy-focused)
 class Analytics {
+  sessionStart: number
+  events: Array<{ event: string; data: any; timestamp: number }>
   constructor () {
     this.sessionStart = Date.now()
     this.events = []
   }
 
-  track (event, data = {}) {
+  track (event: string, data: Record<string, any> = {}) {
     this.events.push({
       event,
       data,
@@ -153,7 +157,7 @@ class Analytics {
 // Utility functions
 const utils = {
   // Format time in human readable format
-  formatTime (seconds) {
+  formatTime (seconds: number) {
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
     const secs = seconds % 60
@@ -168,7 +172,7 @@ const utils = {
   },
 
   // Show toast notification
-  showToast (message, type = 'info') {
+  showToast (message: string, type = 'info') {
     const toast = document.createElement('div')
     toast.className = `toast toast-${type}`
     toast.textContent = message
@@ -209,9 +213,9 @@ const utils = {
   },
 
   // Debounce function for performance
-  debounce (func, wait) {
-    let timeout
-    return function executedFunction (...args) {
+  debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
+    let timeout: ReturnType<typeof setTimeout>
+    return function executedFunction (...args: Parameters<T>) {
       const later = () => {
         clearTimeout(timeout)
         func(...args)
@@ -219,6 +223,16 @@ const utils = {
       clearTimeout(timeout)
       timeout = setTimeout(later, wait)
     }
+  }
+}
+
+declare global {
+  interface Window {
+    pomodoroTimer?: any
+    themeManager?: ThemeManager
+    keyboardShortcuts?: KeyboardShortcuts
+    analytics?: Analytics
+    utils?: typeof utils
   }
 }
 
@@ -242,3 +256,5 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 // Removed `updateDisplay()` as `updateDisplay` is called automatically by the timer initialization.
+
+export {}
