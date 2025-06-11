@@ -364,8 +364,8 @@ class PomodoroTimer {
   }
 
   updateButtons () {
-    const startBtn = document.getElementById('start-button') as HTMLElement
-    const pauseBtn = document.getElementById('pause-button') as HTMLElement
+    const startBtn = document.getElementById('start-button') as HTMLButtonElement
+    const pauseBtn = document.getElementById('pause-button') as HTMLButtonElement
     const resetBtn = document.getElementById('reset-button') as HTMLButtonElement
 
     if (this.state.isRunning) {
