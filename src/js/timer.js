@@ -25,6 +25,7 @@ class PomodoroTimer {
     this.intervalId = null
     this.progressRing = null
     this.circumference = 0
+    this.saveTimeout = null
 
     if (!options.skipInit) {
       this.init()
@@ -187,7 +188,7 @@ class PomodoroTimer {
     this.state.remainingTime--
     this.updateProgress()
     this.updateDisplay()
-    this.saveStats()
+    this.scheduleSaveStats()
 
     if (this.state.remainingTime <= 0) {
       this.complete()
@@ -351,6 +352,17 @@ class PomodoroTimer {
     const minutes = this.state.totalFocusTime % 60
     document.getElementById('total-focus-time').textContent =
       `${hours}h ${minutes}m`
+  }
+
+  scheduleSaveStats () {
+    if (this.saveTimeout) {
+      return
+    }
+
+    this.saveTimeout = setTimeout(() => {
+      this.saveStats()
+      this.saveTimeout = null
+    }, 5000)
   }
 
   showNotification () {
