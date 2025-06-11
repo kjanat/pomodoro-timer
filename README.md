@@ -154,6 +154,7 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 
 - Code formatting with Prettier for supported file types (`.js`, `.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`)
 - Uses the `prettier-config-standard` shareable config defined in `package.json`
+  (the hook installs this dependency automatically)
 - JavaScript linting and auto-fixing with StandardJS
 - Automatic fixes for simple issues
 - Works locally, on GitHub Actions, and on [pre-commit.ci](https://pre-commit.ci/)
