@@ -150,14 +150,12 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
    pre-commit run --all-files
    ```
 
-   **About pre-commit hooks**: The hooks automatically run `scripts/pre-commit.js` which handles:
+   **About pre-commit hooks**: The hooks use remote Prettier and StandardJS integrations for a Node-free setup:
 
-   - Code formatting with Prettier for supported file types (`.js`, `.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`)
-   - JavaScript linting and auto-fixing with StandardJS
-   - Smart file filtering (excludes `pnpm-lock.yaml` and unsupported file types)
-   - Cross-platform compatibility (detects pnpm/npm automatically)
-
-   The same checks run automatically on Pull Requests via [pre-commit.ci](https://pre-commit.ci/)
+- Code formatting with Prettier for supported file types (`.js`, `.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`)
+- JavaScript linting and auto-fixing with StandardJS
+- Automatic fixes for simple issues
+- Works locally and on [pre-commit.ci](https://pre-commit.ci/)
 
 4. Make your changes
 5. Commit your changes (`git commit -m 'Add some amazing feature'`)

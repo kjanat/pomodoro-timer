@@ -405,7 +405,7 @@ The project uses [pre-commit](https://pre-commit.com) framework for automated co
 - **Remote Hooks**: Uses mirrors-prettier and standard repositories for better pre-commit.ci compatibility
 - **Smart Filtering**: Only processes files that Prettier can handle (`.js`, `.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`)
 - **Exclusions**: Automatically excludes `pnpm-lock.yaml` from formatting to prevent conflicts
-- **Legacy Script**: `scripts/pre-commit.js` (retained for backward compatibility with local development)
+- **Legacy Script**: `scripts/pre-commit.js` (optional helper for local development; the CI uses remote hooks and doesn't depend on Node.js)
 
 #### Hook Workflow
 
