@@ -8,7 +8,7 @@ function playTone (frequency, duration = 0.3) {
   const ctx = playTone.ctx
   if (ctx.state === 'suspended' && typeof ctx.resume === 'function') {
     try {
-      await ctx.resume()
+      ctx.resume()
     } catch (error) {
       console.error('Error resuming AudioContext:', error)
     }
