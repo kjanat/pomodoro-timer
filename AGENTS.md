@@ -62,15 +62,15 @@ pomodoro-timer/
 
 ```javascript
 this.state = {
-  mode: "focus", // Current timer mode
+  mode: 'focus', // Current timer mode
   isRunning: false, // Timer running state
   isPaused: false, // Timer paused state
   remainingTime: 25 * 60, // Seconds remaining
   totalTime: 25 * 60, // Total session time
   sessionCount: 1, // Current session number
   completedSessions: 0, // Completed sessions today
-  totalFocusTime: 0, // Total focus time today (minutes)
-};
+  totalFocusTime: 0 // Total focus time today (minutes)
+}
 
 this.settings = {
   focusDuration: 25, // Focus session duration (minutes)
@@ -79,8 +79,8 @@ this.settings = {
   longBreakInterval: 4, // Sessions before long break
   autoStartBreaks: true, // Auto-start break sessions
   autoStartFocus: true, // Auto-start focus sessions
-  soundEnabled: true, // Enable audio notifications
-};
+  soundEnabled: true // Enable audio notifications
+}
 ```
 
 **Key Methods**:
@@ -400,9 +400,11 @@ The project uses [pre-commit](https://pre-commit.com) framework for automated co
 
 - **Configuration File**: `.pre-commit-config.yaml` defines the hook setup using remote repositories
 - **Remote Hooks**: Uses mirrors-prettier and standard repositories for better pre-commit.ci compatibility
-- **Smart Filtering**: Only processes files that Prettier can handle (`.js`, `.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`)
+- **Smart Filtering**: Prettier formats only non-JavaScript files (`.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`)
+- **Formatting Style**: Prettier is configured via the `prettier-config-standard` package declared in `package.json`
+  and installed automatically via `additional_dependencies` in the pre-commit config
 - **Exclusions**: Automatically excludes `pnpm-lock.yaml` from formatting to prevent conflicts
-- **Legacy Script**: `scripts/pre-commit.js` (optional helper for local development; the CI uses remote hooks and doesn't depend on Node.js)
+- **Legacy Script**: `scripts/pre-commit.js` (optional helper for local development; the CI uses remote hooks with their own Node environment)
 
 #### Hook Workflow
 

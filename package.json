@@ -29,6 +29,7 @@
   },
   "homepage": "https://pomodoro.kajkowalski.nl",
   "packageManager": "pnpm@10.11.0",
+  "prettier": "prettier-config-standard",
   "standard": {
     "env": [
       "browser",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "http-server": "~14",
     "prettier": "~3",
+    "prettier-config-standard": "*",
     "standard": "*",
     "vitest": "~3"
   }
