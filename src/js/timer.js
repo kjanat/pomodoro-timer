@@ -1,20 +1,4 @@
-function playTone (frequency, duration = 0.3) {
-  if (typeof window === 'undefined') return
-  const AudioCtx = window.AudioContext || window.webkitAudioContext
-  if (!AudioCtx) return
-  const ctx = new AudioCtx()
-  const oscillator = ctx.createOscillator()
-  const gain = ctx.createGain()
-  oscillator.type = 'sine'
-  oscillator.frequency.value = frequency
-  gain.gain.value = 0.2
-  oscillator.connect(gain)
-  gain.connect(ctx.destination)
-  oscillator.start()
-  oscillator.stop(ctx.currentTime + duration)
-  oscillator.onended = () => ctx.close()
-}
-
+/* global playTone */
 class PomodoroTimer {
   constructor (options = {}) {
     this.state = {

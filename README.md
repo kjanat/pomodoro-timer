@@ -84,6 +84,7 @@ pomodoro-timer/
 │   │   └── styles.css             # Modern CSS with variables and animations
 │   ├── js/
 │   │   ├── app.js                 # Application initialization and utilities
+│   │   ├── audio.js               # Tone playback helper
 │   │   └── timer.js               # Core timer logic and UI management
 ├── .github/
 │   └── workflows/
@@ -111,6 +112,14 @@ This technique helps maintain focus and prevents burnout while maximizing produc
 - **Build**: GitHub Actions for CI/CD
 - **Deployment**: GitHub Pages
 - **Package Manager**: pnpm
+
+## 🔊 Sound Notifications
+
+The timer uses a tiny Web Audio API helper to beep when sessions start and finish. `playTone(frequency, duration)` lives in `src/js/audio.js` and keeps a single `AudioContext` instance for efficient playback.
+
+- **Start beep**: 440&nbsp;Hz
+- **Finish beep**: 880&nbsp;Hz
+- Toggle with the "Sound notifications" checkbox in settings.
 
 ## 🌟 Key Highlights
 
