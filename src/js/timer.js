@@ -26,6 +26,7 @@ class PomodoroTimer {
     this.progressRing = null
     this.circumference = 0
     this.saveTimeout = null
+    this.beforeUnloadHandler = null
 
     if (!options.skipInit) {
       this.init()
@@ -128,6 +129,16 @@ class PomodoroTimer {
       this.settings.soundEnabled = e.target.checked
       this.saveSettings()
     })
+
+    if (typeof window !== 'undefined') {
+      if (this.beforeUnloadHandler) {
+        window.removeEventListener('beforeunload', this.beforeUnloadHandler)
+      }
+      this.beforeUnloadHandler = () => {
+        this.saveStats()
+      }
+      window.addEventListener('beforeunload', this.beforeUnloadHandler)
+    }
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
@@ -452,12 +463,16 @@ class PomodoroTimer {
         this.state.isRunning = stats.isRunning || false
         this.state.isPaused = stats.isPaused || false
 
-        if (stats.lastUpdated && this.state.isRunning && !this.state.isPaused) {
-          const elapsed = Math.floor((Date.now() - stats.lastUpdated) / 1000)
-          this.state.remainingTime -= elapsed
-          if (this.state.remainingTime <= 0) {
-            this.state.remainingTime = 0
-            this.complete()
+        if (this.state.isRunning && !this.state.isPaused) {
+          if (stats.lastUpdated) {
+            const elapsed = Math.floor((Date.now() - stats.lastUpdated) / 1000)
+            this.state.remainingTime -= elapsed
+            if (this.state.remainingTime <= 0) {
+              this.state.remainingTime = 0
+              this.complete()
+            } else {
+              resume = true
+            }
           } else {
             resume = true
           }
