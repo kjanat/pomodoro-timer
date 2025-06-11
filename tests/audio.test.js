@@ -10,6 +10,7 @@ describe('playTone helper', () => {
 
   afterEach(() => {
     global.window = originalWindow
+    // ensure a fresh AudioContext for each test
     delete playTone.ctx
   })
 
@@ -37,7 +38,7 @@ describe('playTone helper', () => {
       destination: {},
       currentTime: 0
     }))
-    global.window = { AudioContext: AudioContextMock }
+    global.window = { ...global.window, AudioContext: AudioContextMock }
     expect(() => playTone(330, 0.1)).not.toThrow()
     expect(createOscillator).toHaveBeenCalled()
     expect(oscStart).toHaveBeenCalled()
