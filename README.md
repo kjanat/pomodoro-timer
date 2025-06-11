@@ -85,10 +85,6 @@ pomodoro-timer/
 │   ├── js/
 │   │   ├── app.js                 # Application initialization and utilities
 │   │   └── timer.js               # Core timer logic and UI management
-│   └── assets/
-│       └── sounds/                # Audio files for notifications
-│           ├── start.mp3
-│           └── finish.mp3
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml             # GitHub Actions for automatic deployment

@@ -29,9 +29,6 @@ pomodoro-timer/
 │   │   ├── timer.js               # Core PomodoroTimer class and logic
 │   │   └── app.js                 # Application utilities, PWA, and initialization
 │   └── assets/
-│       └── sounds/                # Audio notification files
-│           ├── start.mp3          # Timer start sound
-│           └── finish.mp3         # Timer completion sound
 ├── .github/
 │   ├── workflows/
 │   │   └── deploy.yml             # GitHub Actions deployment workflow
