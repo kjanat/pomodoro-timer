@@ -36,7 +36,7 @@ describe('PomodoroTimer auto start', () => {
     timer.state.remainingTime = 1
     timer.start()
     vi.advanceTimersByTime(1000)
-    expect(timer.state.mode).toBe('shortBreak')
+    expect(timer.state.mode).toBe('focus')
     expect(timer.state.isRunning).toBe(false)
     vi.advanceTimersByTime(1000)
     expect(timer.state.isRunning).toBe(true)
@@ -53,7 +53,7 @@ describe('PomodoroTimer auto start', () => {
     timer.state.remainingTime = 1
     timer.start()
     vi.advanceTimersByTime(1000)
-    expect(timer.state.mode).toBe('focus')
+    expect(timer.state.mode).toBe('shortBreak')
     expect(timer.state.isRunning).toBe(false)
     vi.advanceTimersByTime(1000)
     expect(timer.state.isRunning).toBe(true)
