@@ -5,59 +5,59 @@
 version: 2
 updates:
   # Monitor npm dependencies (package.json)
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Europe/Amsterdam"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'Europe/Amsterdam'
     # Group all non-security updates into a single PR to reduce noise
     groups:
       production-dependencies:
         patterns:
-          - "*"
+          - '*'
         exclude-patterns:
-          - "*eslint*"
-          - "*prettier*"
-          - "*jest*"
-          - "*test*"
+          - '*eslint*'
+          - '*prettier*'
+          - '*jest*'
+          - '*test*'
       development-dependencies:
         patterns:
-          - "*eslint*"
-          - "*prettier*"
-          - "*jest*"
-          - "*test*"
-          - "*dev*"
+          - '*eslint*'
+          - '*prettier*'
+          - '*jest*'
+          - '*test*'
+          - '*dev*'
     # Security updates are always created immediately, regardless of schedule
     open-pull-requests-limit: 5
     commit-message:
-      prefix: "deps"
-      prefix-development: "deps-dev"
-      include: "scope"
+      prefix: 'deps'
+      prefix-development: 'deps-dev'
+      include: 'scope'
     # Only target supported Node.js versions
-    target-branch: "development"
+    target-branch: 'development'
     labels:
-      - "dependencies"
-      - "automated"
+      - 'dependencies'
+      - 'automated'
 
   # Monitor GitHub Actions dependencies
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Europe/Amsterdam"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'Europe/Amsterdam'
     open-pull-requests-limit: 3
     commit-message:
-      prefix: "ci"
-      include: "scope"
-    target-branch: "development"
+      prefix: 'ci'
+      include: 'scope'
+    target-branch: 'development'
     labels:
-      - "github-actions"
-      - "ci/cd"
-      - "automated"
+      - 'github-actions'
+      - 'ci/cd'
+      - 'automated'
 # Additional security considerations:
 # - Dependabot will automatically create PRs for security updates regardless of schedule
 # - All updates target the 'development' branch for review before merging to 'master'
