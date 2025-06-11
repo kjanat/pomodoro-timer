@@ -11,7 +11,8 @@
     "format": "prettier --write \"src/**/*.{js,html,css,json}\" \"*.{js,json,md}\" --ignore-path .gitignore",
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test": "node --test"
+    "test": "vitest run",
+    "test:node": "node --test"
   },
   "keywords": [
     "pomodoro",
@@ -40,6 +41,7 @@
   "devDependencies": {
     "http-server": "~14",
     "prettier": "~3",
-    "standard": "*"
+    "standard": "*",
+    "vitest": "~3"
   }
 }
