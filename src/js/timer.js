@@ -228,8 +228,10 @@ class PomodoroTimer {
     // Show notification
     this.showNotification()
 
-    // Auto-advance to next mode
-    this.advanceMode()
+    // Auto-advance to next mode after short delay
+    setTimeout(() => {
+      this.advanceMode()
+    }, 1000)
   }
 
   advanceMode () {
@@ -245,7 +247,7 @@ class PomodoroTimer {
       }
 
       if (this.settings.autoStartBreaks) {
-        setTimeout(() => this.start(), 1000)
+        this.start()
       }
     } else {
       // Coming back from any break
@@ -253,7 +255,7 @@ class PomodoroTimer {
       this.setMode('focus')
 
       if (this.settings.autoStartFocus) {
-        setTimeout(() => this.start(), 1000)
+        this.start()
       }
     }
   }
