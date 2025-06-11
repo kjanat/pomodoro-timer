@@ -6,6 +6,11 @@ function playTone (frequency, duration = 0.3) {
     playTone.ctx = new AudioContextClass()
   }
   const ctx = playTone.ctx
+  if (ctx.state === 'suspended' && typeof ctx.resume === 'function') {
+    try {
+      ctx.resume()
+    } catch {}
+  }
   const oscillator = ctx.createOscillator()
   const gain = ctx.createGain()
   oscillator.type = 'sine'
