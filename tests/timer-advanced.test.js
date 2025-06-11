@@ -4,6 +4,7 @@ import PomodoroTimer from '../src/js/timer.js'
 describe('PomodoroTimer advanced', () => {
   beforeEach(() => {
     global.localStorage = { setItem: vi.fn(), getItem: vi.fn() }
+    global.playTone = vi.fn()
   })
 
   it('advanceMode cycles correctly', () => {
