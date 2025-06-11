@@ -1,6 +1,6 @@
 /* global playTone */
 class PomodoroTimer {
-  constructor (options = {}) {
+  constructor(options = {}) {
     this.state = {
       mode: 'focus', // 'focus', 'shortBreak', 'longBreak'
       isRunning: false,
@@ -31,7 +31,7 @@ class PomodoroTimer {
     }
   }
 
-  init () {
+  init() {
     this.setupProgressRing()
     this.loadSettings()
     const resume = this.loadStats()
@@ -42,7 +42,7 @@ class PomodoroTimer {
     }
   }
 
-  setupProgressRing () {
+  setupProgressRing() {
     this.progressRing = document.querySelector('.progress-ring__progress')
     const radius = this.progressRing.r.baseVal.value
     this.circumference = radius * 2 * Math.PI
@@ -51,14 +51,14 @@ class PomodoroTimer {
     this.progressRing.style.strokeDashoffset = this.circumference
   }
 
-  updateProgress () {
+  updateProgress() {
     const progress =
       (this.state.totalTime - this.state.remainingTime) / this.state.totalTime
     const offset = this.circumference - progress * this.circumference
     this.progressRing.style.strokeDashoffset = offset
   }
 
-  bindEvents () {
+  bindEvents() {
     document
       .getElementById('start-button')
       .addEventListener('click', () => this.start())
@@ -141,7 +141,7 @@ class PomodoroTimer {
     })
   }
 
-  start () {
+  start() {
     if (this.state.isRunning) return
 
     this.state.isRunning = true
@@ -159,7 +159,7 @@ class PomodoroTimer {
     this.updateUI()
   }
 
-  pause () {
+  pause() {
     if (!this.state.isRunning) return
 
     this.state.isRunning = false
@@ -169,7 +169,7 @@ class PomodoroTimer {
     this.updateUI()
   }
 
-  reset () {
+  reset() {
     this.state.isRunning = false
     this.state.isPaused = false
     clearInterval(this.intervalId)
@@ -183,7 +183,7 @@ class PomodoroTimer {
     this.updateUI()
   }
 
-  tick () {
+  tick() {
     this.state.remainingTime--
     this.updateProgress()
     this.updateDisplay()
@@ -194,7 +194,7 @@ class PomodoroTimer {
     }
   }
 
-  complete () {
+  complete() {
     this.state.isRunning = false
     clearInterval(this.intervalId)
 
@@ -216,7 +216,7 @@ class PomodoroTimer {
     this.advanceMode()
   }
 
-  advanceMode () {
+  advanceMode() {
     if (this.state.mode === 'focus') {
       // Check if it's time for a long break
       if (
@@ -242,7 +242,7 @@ class PomodoroTimer {
     }
   }
 
-  setMode (mode) {
+  setMode(mode) {
     this.state.mode = mode
     const duration = this.getModeDuration(mode)
     this.state.remainingTime = duration * 60
@@ -251,7 +251,7 @@ class PomodoroTimer {
     this.updateUI()
   }
 
-  getModeDuration (mode) {
+  getModeDuration(mode) {
     switch (mode) {
       case 'focus':
         return this.settings.focusDuration
@@ -264,7 +264,7 @@ class PomodoroTimer {
     }
   }
 
-  updateUI () {
+  updateUI() {
     this.updateDisplay()
     this.updateModeText()
     this.updateButtons()
@@ -273,7 +273,7 @@ class PomodoroTimer {
     this.updateProgressRingColor()
   }
 
-  updateDisplay () {
+  updateDisplay() {
     const minutes = Math.floor(this.state.remainingTime / 60)
     const seconds = this.state.remainingTime % 60
     const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
@@ -283,7 +283,7 @@ class PomodoroTimer {
     document.title = `${display} - ${this.getModeText()} | 🍅 Focus Timer`
   }
 
-  updateModeText () {
+  updateModeText() {
     const modeElement = document.getElementById('current-mode')
     const sessionElement = document.getElementById('session-count')
 
@@ -291,7 +291,7 @@ class PomodoroTimer {
     sessionElement.textContent = `Session ${this.state.sessionCount}`
   }
 
-  getModeText () {
+  getModeText() {
     switch (this.state.mode) {
       case 'focus':
         return 'Focus Time'
@@ -304,7 +304,7 @@ class PomodoroTimer {
     }
   }
 
-  updateButtons () {
+  updateButtons() {
     const startBtn = document.getElementById('start-button')
     const pauseBtn = document.getElementById('pause-button')
     const resetBtn = document.getElementById('reset-button')
@@ -328,7 +328,7 @@ class PomodoroTimer {
     }
   }
 
-  updateProgressRingColor () {
+  updateProgressRingColor() {
     const ring = this.progressRing
     switch (this.state.mode) {
       case 'focus':
@@ -343,7 +343,7 @@ class PomodoroTimer {
     }
   }
 
-  updateStats () {
+  updateStats() {
     document.getElementById('completed-sessions').textContent =
       this.state.completedSessions
 
@@ -353,7 +353,7 @@ class PomodoroTimer {
       `${hours}h ${minutes}m`
   }
 
-  showNotification () {
+  showNotification() {
     if ('Notification' in window) {
       if (Notification.permission === 'granted') {
         const modeText = this.getModeText()
@@ -373,7 +373,7 @@ class PomodoroTimer {
     }
   }
 
-  loadSettings () {
+  loadSettings() {
     const saved = localStorage.getItem('pomodoro-settings')
     if (saved) {
       this.settings = { ...this.settings, ...JSON.parse(saved) }
@@ -401,11 +401,11 @@ class PomodoroTimer {
     this.state.totalTime = duration * 60
   }
 
-  saveSettings () {
+  saveSettings() {
     localStorage.setItem('pomodoro-settings', JSON.stringify(this.settings))
   }
 
-  loadStats () {
+  loadStats() {
     const today = new Date().toDateString()
     const saved = localStorage.getItem('pomodoro-stats')
     let resume = false
@@ -444,7 +444,7 @@ class PomodoroTimer {
     return resume
   }
 
-  saveStats () {
+  saveStats() {
     const today = new Date().toDateString()
     const stats = {
       date: today,

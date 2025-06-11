@@ -16,17 +16,17 @@ if ('serviceWorker' in navigator) {
 
 // Theme management
 class ThemeManager {
-  constructor () {
+  constructor() {
     this.currentTheme = localStorage.getItem('theme') || 'auto'
     this.init()
   }
 
-  init () {
+  init() {
     this.applyTheme()
     this.setupThemeToggle()
   }
 
-  applyTheme () {
+  applyTheme() {
     const root = document.documentElement
 
     if (this.currentTheme === 'dark') {
@@ -46,7 +46,7 @@ class ThemeManager {
     }
   }
 
-  setupThemeToggle () {
+  setupThemeToggle() {
     // Listen for system theme changes
     window
       .matchMedia('(prefers-color-scheme: dark)')
@@ -57,7 +57,7 @@ class ThemeManager {
       })
   }
 
-  setTheme (theme) {
+  setTheme(theme) {
     this.currentTheme = theme
     localStorage.setItem('theme', theme)
     this.applyTheme()
@@ -66,7 +66,7 @@ class ThemeManager {
 
 // Keyboard shortcuts helper
 class KeyboardShortcuts {
-  constructor () {
+  constructor() {
     this.shortcuts = {
       Space: 'Toggle timer (Start/Pause)',
       KeyR: 'Reset timer',
@@ -77,7 +77,7 @@ class KeyboardShortcuts {
     this.init()
   }
 
-  init () {
+  init() {
     document.addEventListener('keydown', (e) => {
       // Don't trigger shortcuts when typing in inputs
       if (e.target.matches('input, textarea, select')) {
@@ -106,12 +106,12 @@ class KeyboardShortcuts {
     })
   }
 
-  toggleSettings () {
+  toggleSettings() {
     const settingsPanel = document.getElementById('settings-panel')
     settingsPanel.classList.toggle('active')
   }
 
-  closeSettings () {
+  closeSettings() {
     const settingsPanel = document.getElementById('settings-panel')
     settingsPanel.classList.remove('active')
   }
@@ -119,12 +119,12 @@ class KeyboardShortcuts {
 
 // Analytics helper (privacy-focused)
 class Analytics {
-  constructor () {
+  constructor() {
     this.sessionStart = Date.now()
     this.events = []
   }
 
-  track (event, data = {}) {
+  track(event, data = {}) {
     this.events.push({
       event,
       data,
@@ -137,7 +137,7 @@ class Analytics {
     }
   }
 
-  getSessionSummary () {
+  getSessionSummary() {
     const sessionDuration = Date.now() - this.sessionStart
     const timerEvents = this.events.filter((e) => e.event.includes('timer'))
 
@@ -152,7 +152,7 @@ class Analytics {
 // Utility functions
 const utils = {
   // Format time in human readable format
-  formatTime (seconds) {
+  formatTime(seconds) {
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
     const secs = seconds % 60
@@ -167,7 +167,7 @@ const utils = {
   },
 
   // Show toast notification
-  showToast (message, type = 'info') {
+  showToast(message, type = 'info') {
     const toast = document.createElement('div')
     toast.className = `toast toast-${type}`
     toast.textContent = message
@@ -208,9 +208,9 @@ const utils = {
   },
 
   // Debounce function for performance
-  debounce (func, wait) {
+  debounce(func, wait) {
     let timeout
-    return function executedFunction (...args) {
+    return function executedFunction(...args) {
       const later = () => {
         clearTimeout(timeout)
         func(...args)
