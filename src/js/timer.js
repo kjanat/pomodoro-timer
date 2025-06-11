@@ -147,6 +147,7 @@ class PomodoroTimer {
 
     this.state.isRunning = true
     this.state.isPaused = false
+    this.clearScheduledSave()
     this.saveStats()
 
     if (this.settings.soundEnabled) {
@@ -166,6 +167,7 @@ class PomodoroTimer {
     this.state.isRunning = false
     this.state.isPaused = true
     clearInterval(this.intervalId)
+    this.clearScheduledSave()
     this.saveStats()
     this.updateUI()
   }
@@ -174,6 +176,7 @@ class PomodoroTimer {
     this.state.isRunning = false
     this.state.isPaused = false
     clearInterval(this.intervalId)
+    this.clearScheduledSave()
 
     // Reset to current mode's duration
     const duration = this.getModeDuration(this.state.mode)
@@ -207,6 +210,7 @@ class PomodoroTimer {
     if (this.state.mode === 'focus') {
       this.state.completedSessions++
       this.state.totalFocusTime += this.settings.focusDuration
+      this.clearScheduledSave()
       this.saveStats()
     }
 
@@ -248,6 +252,7 @@ class PomodoroTimer {
     const duration = this.getModeDuration(mode)
     this.state.remainingTime = duration * 60
     this.state.totalTime = duration * 60
+    this.clearScheduledSave()
     this.saveStats()
     this.updateUI()
   }
@@ -363,6 +368,13 @@ class PomodoroTimer {
       this.saveStats()
       this.saveTimeout = null
     }, 5000)
+  }
+
+  clearScheduledSave () {
+    if (this.saveTimeout) {
+      clearTimeout(this.saveTimeout)
+      this.saveTimeout = null
+    }
   }
 
   showNotification () {
