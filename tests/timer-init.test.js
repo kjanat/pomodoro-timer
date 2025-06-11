@@ -1,5 +1,5 @@
 import { describe, it, beforeEach, expect, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.js'
+import PomodoroTimer from '../dist/js/timer.js'
 
 function setupFullDOM () {
   const ring = { style: {}, r: { baseVal: { value: 50 } } }

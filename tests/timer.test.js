@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.js'
-import { playTone } from '../src/js/audio.js'
+import PomodoroTimer from '../dist/js/timer.js'
+import { playTone } from '../dist/js/audio.js'
 
 describe('PomodoroTimer core logic', () => {
   let originalWindow
