@@ -29,9 +29,6 @@ pomodoro-timer/
 │   │   ├── timer.js               # Core PomodoroTimer class and logic
 │   │   └── app.js                 # Application utilities, PWA, and initialization
 │   └── assets/
-│       └── sounds/                # Audio notification files
-│           ├── start.mp3          # Timer start sound
-│           └── finish.mp3         # Timer completion sound
 ├── .github/
 │   ├── workflows/
 │   │   └── deploy.yml             # GitHub Actions deployment workflow
@@ -146,7 +143,7 @@ this.settings = {
 
 - **Duration Controls**: Customizable timer durations
 - **Behavior Options**: Auto-start toggles
-- **Sound Settings**: Enable/disable audio notifications
+- **Sound Settings**: Enable/disable beep notifications
 - **Collapsible Interface**: Hidden by default, toggleable
 
 ### Statistics Section
@@ -498,7 +495,7 @@ pnpm format && pnpm lint:fix && pnpm lint
 
 - Verify sound settings enabled
 - Check browser audio permissions
-- Confirm audio files are accessible
+- Confirm Web Audio API support
 
 ## Future Enhancement Opportunities
 

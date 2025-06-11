@@ -1,3 +1,4 @@
+/* global playTone */
 class PomodoroTimer {
   constructor (options = {}) {
     this.state = {
@@ -148,7 +149,7 @@ class PomodoroTimer {
     this.saveStats()
 
     if (this.settings.soundEnabled) {
-      this.playSound('start')
+      playTone(440)
     }
 
     this.intervalId = setInterval(() => {
@@ -198,7 +199,7 @@ class PomodoroTimer {
     clearInterval(this.intervalId)
 
     if (this.settings.soundEnabled) {
-      this.playSound('finish')
+      playTone(880)
     }
 
     // Update stats
@@ -350,16 +351,6 @@ class PomodoroTimer {
     const minutes = this.state.totalFocusTime % 60
     document.getElementById('total-focus-time').textContent =
       `${hours}h ${minutes}m`
-  }
-
-  playSound (type) {
-    try {
-      const audio = new Audio(`assets/sounds/${type}.mp3`)
-      audio.volume = 0.5
-      audio.play().catch((e) => console.log('Could not play sound:', e))
-    } catch (e) {
-      console.log('Sound not available:', e)
-    }
   }
 
   showNotification () {
