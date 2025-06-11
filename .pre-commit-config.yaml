@@ -5,10 +5,12 @@ repos:
     rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
+        language_version: system
         types_or: [javascript, json, markdown, html, css, yaml]
         exclude: pnpm-lock.yaml
   - repo: https://github.com/standard/standard
     rev: v17.1.2
     hooks:
       - id: standard
+        language_version: system
         types: [javascript]
