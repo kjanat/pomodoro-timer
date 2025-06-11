@@ -1,6 +1,5 @@
-const assert = require('node:assert/strict')
-const test = require('node:test')
+import { test, expect } from 'vitest'
 
 test('basic arithmetic', () => {
-  assert.strictEqual(1 + 1, 2)
+  expect(1 + 1).toBe(2)
 })
