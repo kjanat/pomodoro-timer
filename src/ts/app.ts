@@ -1,3 +1,5 @@
+import type PomodoroTimer from './timer.js'
+
 // Main application initialization and utility functions
 
 // PWA Service Worker Registration
@@ -123,13 +125,13 @@ class KeyboardShortcuts {
 // Analytics helper (privacy-focused)
 class Analytics {
   sessionStart: number
-  events: Array<{ event: string; data: any; timestamp: number }>
+  events: Array<{ event: string; data: Record<string, unknown>; timestamp: number }>
   constructor () {
     this.sessionStart = Date.now()
     this.events = []
   }
 
-  track (event: string, data: Record<string, any> = {}) {
+  track (event: string, data: Record<string, unknown> = {}) {
     this.events.push({
       event,
       data,
@@ -213,7 +215,7 @@ const utils = {
   },
 
   // Debounce function for performance
-  debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
+  debounce<T extends (...args: unknown[]) => void>(func: T, wait: number) {
     let timeout: ReturnType<typeof setTimeout>
     return function executedFunction (...args: Parameters<T>) {
       const later = () => {
@@ -228,7 +230,7 @@ const utils = {
 
 declare global {
   interface Window {
-    pomodoroTimer?: any
+    pomodoroTimer?: PomodoroTimer
     themeManager?: ThemeManager
     keyboardShortcuts?: KeyboardShortcuts
     analytics?: Analytics

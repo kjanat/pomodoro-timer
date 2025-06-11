@@ -13,8 +13,11 @@ export const playTone: PlayToneFn = function playTone(
   if ((playTone as PlayToneFn).ctx === undefined) {
     audioContext = null
   }
+  interface WebKitWindow extends Window {
+    webkitAudioContext?: typeof AudioContext
+  }
   const AudioContextClass =
-    window.AudioContext || (window as any).webkitAudioContext
+    window.AudioContext || (window as WebKitWindow).webkitAudioContext
   if (!AudioContextClass) return
   if (!audioContext) {
     audioContext = new AudioContextClass()
@@ -44,5 +47,8 @@ export const playTone: PlayToneFn = function playTone(
 } as PlayToneFn
 
 if (typeof window !== 'undefined') {
-  ;(window as any).playTone = playTone
+  interface ToneWindow extends Window {
+    playTone?: PlayToneFn
+  }
+  ;(window as ToneWindow).playTone = playTone
 }

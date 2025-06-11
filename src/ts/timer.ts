@@ -1,9 +1,32 @@
 /* global playTone */
 import { playTone } from './audio.js'
 
+type TimerMode = 'focus' | 'shortBreak' | 'longBreak'
+
+interface TimerState {
+  mode: TimerMode
+  isRunning: boolean
+  isPaused: boolean
+  remainingTime: number
+  totalTime: number
+  sessionCount: number
+  completedSessions: number
+  totalFocusTime: number
+}
+
+interface TimerSettings {
+  focusDuration: number
+  shortBreakDuration: number
+  longBreakDuration: number
+  longBreakInterval: number
+  autoStartBreaks: boolean
+  autoStartFocus: boolean
+  soundEnabled: boolean
+}
+
 class PomodoroTimer {
-  state: any
-  settings: any
+  state: TimerState
+  settings: TimerSettings
   intervalId: ReturnType<typeof setInterval> | null
   progressRing: SVGCircleElement | null
   circumference: number
@@ -381,7 +404,7 @@ class PomodoroTimer {
 
   updateStats () {
     document.getElementById('completed-sessions').textContent =
-      this.state.completedSessions
+      String(this.state.completedSessions)
 
     const hours = Math.floor(this.state.totalFocusTime / 60)
     const minutes = this.state.totalFocusTime % 60
