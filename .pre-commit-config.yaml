@@ -7,7 +7,8 @@ repos:
         files: \.(json|md|html|css|ya?ml)$
         exclude: pnpm-lock.yaml
         additional_dependencies:
-          - prettier-config-standard
+          - prettier@latest
+          - prettier-config-standard@latest
   - repo: https://github.com/standard/standard
     rev: v17.1.2
     hooks:
