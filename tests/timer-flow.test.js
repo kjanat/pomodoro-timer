@@ -1,6 +1,5 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
 import PomodoroTimer from '../src/js/timer.js'
-import { playTone } from '../src/js/audio.js'
 
 function setupDOM () {
   document.body.innerHTML = `
