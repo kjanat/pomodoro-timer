@@ -16,9 +16,9 @@ function playTone (frequency, duration = 0.3) {
   oscillator.start()
   oscillator.stop(ctx.currentTime + duration)
   oscillator.onended = () => {
-    oscillator.disconnect();
-    gain.disconnect();
-  };
+    oscillator.disconnect()
+    gain.disconnect()
+  }
 }
 
 if (typeof window !== 'undefined') {
