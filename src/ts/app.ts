@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Main application initialization and utility functions
 
 // PWA Service Worker Registration

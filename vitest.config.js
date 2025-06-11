@@ -6,7 +6,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html'],
       all: true,
-      include: ['src/js/**/*.js']
+      include: ['dist/js/**/*.js']
     }
   }
 })

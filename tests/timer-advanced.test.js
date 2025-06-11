@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import PomodoroTimer from '../src/js/timer.js'
+import PomodoroTimer from '../dist/js/timer.js'
 
 describe('PomodoroTimer advanced', () => {
   beforeEach(() => {

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { playTone } from '../src/js/audio.js'
+import { playTone } from '../dist/js/audio.js'
 
 describe('playTone helper', () => {
   let originalWindow

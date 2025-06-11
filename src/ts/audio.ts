@@ -1,3 +1,4 @@
+// @ts-nocheck
 function playTone (frequency, duration = 0.3) {
   if (typeof window === 'undefined') return
   const AudioContextClass = window.AudioContext || window.webkitAudioContext

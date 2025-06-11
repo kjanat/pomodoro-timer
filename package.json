@@ -2,16 +2,16 @@
   "name": "pomodoro-timer",
   "version": "1.0.0",
   "description": "An impressive Pomodoro timer application to enhance productivity.",
-  "main": "src/js/app.js",
+  "main": "dist/js/app.js",
   "scripts": {
-    "start": "http-server src -p 3000 -o",
-    "dev": "http-server src -p 3000 -o",
-    "build": "cp -r src dist",
+    "start": "pnpm run build && http-server dist -p 3000 -o",
+    "dev": "pnpm run build && http-server dist -p 3000 -o",
+    "build": "rm -rf dist && cp -r src dist && tsc && rm -rf dist/ts",
     "preview": "http-server dist -p 3000 -o",
     "format": "prettier --write \"src/**/*.{js,html,css,json}\" \"*.{js,json,md}\" --ignore-path .gitignore",
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test": "vitest run",
+    "test": "pnpm run build && vitest run",
     "test:node": "node --test"
   },
   "keywords": [
@@ -47,6 +47,7 @@
     "prettier": "~3",
     "prettier-config-standard": "*",
     "standard": "*",
+    "typescript": "^5.8.3",
     "vitest": "~3"
   }
 }

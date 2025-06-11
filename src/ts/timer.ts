@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* global playTone */
 class PomodoroTimer {
   constructor (options = {}) {
