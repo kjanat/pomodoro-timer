@@ -26,15 +26,28 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "22"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 10
 
       - name: Install dependencies
         run: pnpm install
+
+      - name: Check code formatting
+        run: pnpm format
+
+      - name: Lint (fix) code
+        run: pnpm lint:fix
+        continue-on-error: true
+
+      - name: Lint code
+        run: pnpm lint
+
+      - name: Run tests
+        run: pnpm test
 
       - name: Build project
         run: |

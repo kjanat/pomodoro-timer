@@ -28,6 +28,7 @@ An impressive, modern Pomodoro timer web application built with vanilla JavaScri
 - **Keyboard Shortcuts**: Control timer with spacebar and other shortcuts
 - **Settings Persistence**: Your preferences are saved locally
 - **Daily Statistics**: Track your productivity progress
+- **Session Persistence**: Running timers survive page refreshes
 
 ### ⌨️ Keyboard Shortcuts
 
@@ -57,8 +58,15 @@ git clone https://github.com/kjanat/pomodoro-timer.git
 # Navigate to the project directory
 cd pomodoro-timer
 
-# Install dependencies (optional, for development server)
+# Install dependencies
 pnpm install
+
+# Install pre-commit hooks (recommended for contributors)
+pip install pre-commit
+pre-commit install
+
+# Optional: Run pre-commit hooks on all files to verify setup
+pre-commit run --all-files
 
 # Start development server
 pnpm start
@@ -124,10 +132,37 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Commit your changes (`git commit -m 'Add some amazing feature'`)
-5. Push to the branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request
+3. Install dependencies and set up pre-commit hooks:
+
+   ```bash
+   # Install project dependencies
+   pnpm install
+
+   # Install pre-commit framework (choose one method)
+   pip install pre-commit
+   # or
+   pipx install pre-commit
+
+   # Install git hooks locally
+   pre-commit install
+
+   # Optional: Run hooks against all files to verify setup
+   pre-commit run --all-files
+   ```
+
+   **About pre-commit hooks**: The hooks automatically run `scripts/pre-commit.js` which handles:
+
+   - Code formatting with Prettier for supported file types (`.js`, `.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`)
+   - JavaScript linting and auto-fixing with StandardJS
+   - Smart file filtering (excludes `pnpm-lock.yaml` and unsupported file types)
+   - Cross-platform compatibility (detects pnpm/npm automatically)
+
+   The same checks run automatically on Pull Requests via [pre-commit.ci](https://pre-commit.ci/)
+
+4. Make your changes
+5. Commit your changes (`git commit -m 'Add some amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
 ## 📄 License
 
