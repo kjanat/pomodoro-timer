@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, expect, vi } from 'vitest'
+import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
 import PomodoroTimer from '../src/js/timer.js'
 
 function setupDOM () {
@@ -10,6 +10,8 @@ function setupDOM () {
     <button id="start-button"><span class="btn-text"></span><span class="btn-icon"></span></button>
     <button id="pause-button"></button>
     <button id="reset-button"></button>
+    <button id="settings-toggle-btn"></button>
+    <div id="settings-panel"></div>
     <div id="completed-sessions"></div>
     <div id="total-focus-time"></div>
     <input id="focus-duration" />
@@ -27,8 +29,10 @@ function setupDOM () {
 }
 
 describe('PomodoroTimer resume on reload', () => {
+  let origQuerySelector
   beforeEach(() => {
     setupDOM()
+    origQuerySelector = document.querySelector
     const today = new Date().toDateString()
     global.localStorage = {
       setItem: vi.fn(),
@@ -44,10 +48,22 @@ describe('PomodoroTimer resume on reload', () => {
     }
     global.playTone = vi.fn()
   })
+  afterEach(() => {
+    vi.restoreAllMocks()
+    document.querySelector = origQuerySelector
+  })
 
   it('returns true to resume when lastUpdated is missing', () => {
     const timer = new PomodoroTimer({ skipInit: true })
     const resume = timer.loadStats()
     expect(resume).toBe(true)
+  })
+
+  it('calls saveStats on beforeunload', () => {
+    const timer = new PomodoroTimer({ skipInit: true })
+    timer.bindEvents()
+    vi.spyOn(timer, 'saveStats')
+    window.dispatchEvent(new Event('beforeunload'))
+    expect(timer.saveStats).toHaveBeenCalled()
   })
 })
