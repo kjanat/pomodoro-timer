@@ -11,7 +11,8 @@
     "format": "prettier --write \"src/**/*.{js,html,css,json}\" \"*.{js,json,md}\" --ignore-path .gitignore",
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:node": "node --test"
   },
   "keywords": [
     "pomodoro",
@@ -27,7 +28,7 @@
     "url": "https://github.com/kjanat/pomodoro-timer.git"
   },
   "homepage": "https://pomodoro.kajkowalski.nl",
-  "packageManager": "pnpm@8.15.0",
+  "packageManager": "pnpm@10.11.0",
   "standard": {
     "env": [
       "browser",
@@ -38,9 +39,9 @@
     ]
   },
   "devDependencies": {
-    "http-server": "^14.1.1",
-    "prettier": "^3.5.3",
-    "standard": "^17.1.2",
-    "vitest": "^3.2.3"
+    "http-server": "~14",
+    "prettier": "~3",
+    "standard": "*",
+    "vitest": "~3"
   }
 }
