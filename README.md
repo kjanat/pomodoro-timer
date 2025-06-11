@@ -150,14 +150,12 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
    pre-commit run --all-files
    ```
 
-- **About pre-commit hooks**: The hooks use remote Prettier and StandardJS integrations and rely on the system Node runtime provided by the CI environment:
+- **About pre-commit hooks**: The hooks use remote Prettier and StandardJS integrations with their own Node environments:
 
-- Code formatting with Prettier for supported file types (`.js`, `.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`)
-- Uses the `prettier-config-standard` shareable config defined in `package.json`
-  (the hook installs this dependency automatically)
-- JavaScript linting and auto-fixing with StandardJS
-- Automatic fixes for simple issues
-- Works locally, on GitHub Actions, and on [pre-commit.ci](https://pre-commit.ci/)
+- Prettier formats supported non-JavaScript files (`.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`) using the `prettier-config-standard` shareable config
+- JavaScript files are linted and fixed with StandardJS
+- Automatic fixes are applied where possible
+- Runs locally, on GitHub Actions, and on [pre-commit.ci](https://pre-commit.ci/)
 
 4. Make your changes
 5. Commit your changes (`git commit -m 'Add some amazing feature'`)
