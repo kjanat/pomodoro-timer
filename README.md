@@ -52,6 +52,8 @@ Visit the live application: [https://pomodoro.kajkowalski.nl](https://pomodoro.k
 ### For Development
 
 ```bash
+# Ensure Node.js (v22 or later) is installed
+
 # Clone the repository
 git clone https://github.com/kjanat/pomodoro-timer.git
 
@@ -140,6 +142,8 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 3. Install dependencies and set up pre-commit hooks:
 
    ```bash
+   # Ensure Node.js (v22 or later) is installed
+
    # Install project dependencies
    pnpm install
 
