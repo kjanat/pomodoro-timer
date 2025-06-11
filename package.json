@@ -10,7 +10,8 @@
     "preview": "http-server dist -p 3000 -o",
     "format": "prettier --write \"src/**/*.{js,html,css,json}\" \"*.{js,json,md}\" --ignore-path .gitignore",
     "lint": "standard",
-    "lint:fix": "standard --fix"
+    "lint:fix": "standard --fix",
+    "test": "node --test"
   },
   "keywords": [
     "pomodoro",
