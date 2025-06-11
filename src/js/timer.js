@@ -1,5 +1,4 @@
 /* global playTone */
-let beforeUnloadHandler = null
 class PomodoroTimer {
   constructor (options = {}) {
     this.state = {
@@ -27,6 +26,7 @@ class PomodoroTimer {
     this.progressRing = null
     this.circumference = 0
     this.saveTimeout = null
+    this.beforeUnloadHandler = null
 
     if (!options.skipInit) {
       this.init()
@@ -131,13 +131,13 @@ class PomodoroTimer {
     })
 
     if (typeof window !== 'undefined') {
-      if (beforeUnloadHandler) {
-        window.removeEventListener('beforeunload', beforeUnloadHandler)
+      if (this.beforeUnloadHandler) {
+        window.removeEventListener('beforeunload', this.beforeUnloadHandler)
       }
-      beforeUnloadHandler = () => {
+      this.beforeUnloadHandler = () => {
         this.saveStats()
       }
-      window.addEventListener('beforeunload', beforeUnloadHandler)
+      window.addEventListener('beforeunload', this.beforeUnloadHandler)
     }
 
     // Keyboard shortcuts

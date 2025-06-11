@@ -31,21 +31,9 @@ function setupDOM () {
 describe('PomodoroTimer resume on reload', () => {
   let origQuerySelector
   beforeEach(() => {
+    origQuerySelector = document.querySelector.bind(document)
     setupDOM()
-    origQuerySelector = document.querySelector
-    const today = new Date().toDateString()
-    global.localStorage = {
-      setItem: vi.fn(),
-      getItem: vi.fn(() =>
-        JSON.stringify({
-          date: today,
-          remainingTime: 1500,
-          totalTime: 1500,
-          isRunning: true,
-          isPaused: false
-        })
-      )
-    }
+    global.localStorage = { setItem: vi.fn(), getItem: vi.fn() }
     global.playTone = vi.fn()
   })
   afterEach(() => {
@@ -54,9 +42,58 @@ describe('PomodoroTimer resume on reload', () => {
   })
 
   it('returns true to resume when lastUpdated is missing', () => {
+    const today = new Date().toDateString()
+    global.localStorage.getItem.mockReturnValueOnce(
+      JSON.stringify({
+        date: today,
+        remainingTime: 1500,
+        totalTime: 1500,
+        isRunning: true,
+        isPaused: false
+      })
+    )
     const timer = new PomodoroTimer({ skipInit: true })
+    timer.setupProgressRing()
     const resume = timer.loadStats()
     expect(resume).toBe(true)
+  })
+
+  it('returns true when elapsed time is less than remainingTime', () => {
+    const today = new Date().toDateString()
+    global.localStorage.getItem.mockReturnValueOnce(
+      JSON.stringify({
+        date: today,
+        remainingTime: 1500,
+        totalTime: 1500,
+        isRunning: true,
+        isPaused: false,
+        lastUpdated: Date.now() - 1000
+      })
+    )
+    const timer = new PomodoroTimer({ skipInit: true })
+    timer.setupProgressRing()
+    const resume = timer.loadStats()
+    expect(resume).toBe(true)
+    expect(timer.state.remainingTime).toBe(1499)
+  })
+
+  it('returns false when elapsed time exceeds remainingTime', () => {
+    const today = new Date().toDateString()
+    global.localStorage.getItem.mockReturnValueOnce(
+      JSON.stringify({
+        date: today,
+        remainingTime: 1500,
+        totalTime: 1500,
+        isRunning: true,
+        isPaused: false,
+        lastUpdated: Date.now() - 1600 * 1000
+      })
+    )
+    const timer = new PomodoroTimer({ skipInit: true })
+    timer.setupProgressRing()
+    const resume = timer.loadStats()
+    expect(resume).toBe(false)
+    expect(timer.state.isRunning).toBe(false)
   })
 
   it('calls saveStats on beforeunload', () => {
