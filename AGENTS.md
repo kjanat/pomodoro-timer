@@ -423,6 +423,16 @@ The pre-commit hooks follow this sequence:
 
 For detailed installation instructions, see the **Development Setup** section of the [README](README.md).
 
+## Testing
+
+All unit tests are located in the `tests/` directory. Run them with:
+
+```bash
+pnpm test -- --coverage
+```
+
+Current test coverage exceeds **80%** of the JavaScript codebase.
+
 ### Development Workflow
 
 ```bash
