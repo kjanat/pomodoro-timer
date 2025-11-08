@@ -30,7 +30,7 @@ describe('PomodoroTimer additional methods', () => {
   beforeEach(() => {
     setupDOM()
     const today = new Date().toDateString()
-    global.localStorage = {
+    globalThis.localStorage = {
       setItem: vi.fn(),
       getItem: vi.fn((key) => {
         if (key === 'pomodoro-settings')
@@ -39,9 +39,9 @@ describe('PomodoroTimer additional methods', () => {
         return null
       })
     } as any
-    ;(global as any).Notification = function () {} as any
-    ;(global as any).Notification.permission = 'granted'
-    ;(global as any).playTone = vi.fn()
+    ;(globalThis as any).Notification = function () {} as any
+    ;(globalThis as any).Notification.permission = 'granted'
+    ;(globalThis as any).playTone = vi.fn()
   })
 
   it('executes miscellaneous methods without error', () => {
@@ -57,6 +57,6 @@ describe('PomodoroTimer additional methods', () => {
     timer.loadSettings()
     timer.saveStats()
     timer.loadStats()
-    expect(global.localStorage.setItem).toHaveBeenCalled()
+    expect(globalThis.localStorage.setItem).toHaveBeenCalled()
   })
 })

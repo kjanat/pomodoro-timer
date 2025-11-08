@@ -18,9 +18,9 @@ function setupDOM() {
 describe('PomodoroTimer auto start', () => {
   beforeEach(() => {
     setupDOM()
-    global.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
+    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
     vi.useFakeTimers()
-    ;(global as any).playTone = vi.fn()
+    ;(globalThis as any).playTone = vi.fn()
   })
 
   afterEach(() => {

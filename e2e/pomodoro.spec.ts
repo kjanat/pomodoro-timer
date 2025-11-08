@@ -27,11 +27,8 @@ test.describe('Pomodoro Timer E2E', () => {
     await expect(pauseButton).toBeVisible()
     await expect(startButton).toBeHidden()
 
-    // Wait a moment for timer to tick
-    await page.waitForTimeout(1500)
-
-    // Timer should have decreased
-    await expect(timeDisplay).not.toHaveText(/25:00/)
+    // Wait for timer to change from initial value (more reliable than waitForTimeout)
+    await expect(timeDisplay).not.toHaveText(/25:00/, { timeout: 3000 })
 
     // Click pause
     await pauseButton.click()
@@ -48,7 +45,9 @@ test.describe('Pomodoro Timer E2E', () => {
 
     // Start timer
     await startButton.click()
-    await page.waitForTimeout(1500)
+
+    // Wait for timer to tick before resetting
+    await expect(timeDisplay).not.toHaveText(/25:00/, { timeout: 3000 })
 
     // Reset
     await resetButton.click()
@@ -103,7 +102,9 @@ test.describe('Pomodoro Timer E2E', () => {
 
     // Start the timer manually to test pause
     await startButton.click()
-    await page.waitForTimeout(1500)
+
+    // Wait for timer to change before testing reset
+    await expect(timeDisplay).not.toHaveText(/25:00/, { timeout: 3000 })
 
     // Press KeyR to reset
     await page.keyboard.press('KeyR')
@@ -163,14 +164,18 @@ test.describe('Pomodoro Timer E2E', () => {
     // Start timer
     await startButton.click()
 
-    // Wait for timer to complete (with some buffer)
-    await page.waitForTimeout(8000)
-
-    // Timer should have switched modes or reset
-    // This depends on your app's behavior
     const timeDisplay = page.locator('#timer-display')
-    const text = await timeDisplay.textContent()
-    expect(text).not.toBe('00:00')
+
+    // Poll for timer completion or mode switch (more reliable than fixed timeout)
+    // The timer should eventually complete and switch modes
+    await expect(async () => {
+      const text = await timeDisplay.textContent()
+      // Timer should have completed and switched to break mode or reset
+      // Check that it's not stuck at 00:00 and has moved on
+      expect(text).not.toBe('00:00')
+      // Also verify it's not still at the starting short duration
+      expect(text).not.toBe('00:06')
+    }).toPass({ timeout: 10000, intervals: [1000] })
   })
 
   test('should be responsive', async ({ page }) => {

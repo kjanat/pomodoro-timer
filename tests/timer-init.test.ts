@@ -32,10 +32,10 @@ function setupFullDOM() {
 describe('PomodoroTimer init', () => {
   beforeEach(() => {
     setupFullDOM()
-    global.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    ;(global as any).Notification = function () {} as any
-    ;(global as any).Notification.permission = 'granted'
-    ;(global as any).playTone = vi.fn()
+    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
+    ;(globalThis as any).Notification = function () {} as any
+    ;(globalThis as any).Notification.permission = 'granted'
+    ;(globalThis as any).playTone = vi.fn()
     vi.useFakeTimers()
   })
 

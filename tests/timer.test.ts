@@ -3,17 +3,17 @@ import PomodoroTimer from '../src/js/timer.ts'
 import { playTone } from '../src/js/audio.ts'
 
 describe('PomodoroTimer core logic', () => {
-  let originalWindow: typeof global.window
+  let originalWindow: typeof globalThis.window
   beforeEach(() => {
-    originalWindow = global.window
-    global.localStorage = {
+    originalWindow = globalThis.window
+    globalThis.localStorage = {
       setItem: vi.fn(),
       getItem: vi.fn()
     } as any
   })
 
   afterEach(() => {
-    global.window = originalWindow
+    globalThis.window = originalWindow
     // clear cached AudioContext so each test starts fresh
     playTone.ctx = undefined
   })
@@ -61,7 +61,7 @@ describe('PomodoroTimer core logic', () => {
       destination = {}
       currentTime = 0
     }
-    ;(global.window as any).AudioContext = AudioContextMock
+    ;(globalThis.window as any).AudioContext = AudioContextMock
     expect(() => playTone(440, 0.1)).not.toThrow()
     expect(createOscillator).toHaveBeenCalled()
     expect(oscStart).toHaveBeenCalled()

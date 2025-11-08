@@ -3,8 +3,8 @@ import PomodoroTimer from '../src/js/timer.ts'
 
 describe('PomodoroTimer advanced', () => {
   beforeEach(() => {
-    global.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    ;(global as any).playTone = vi.fn()
+    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
+    ;(globalThis as any).playTone = vi.fn()
   })
 
   it('advanceMode cycles correctly', () => {
@@ -30,9 +30,9 @@ describe('PomodoroTimer advanced', () => {
     timer.state.completedSessions = 2
     timer.saveStats()
     const saved = JSON.parse(
-      (global.localStorage.setItem as any).mock.calls[0][1]
+      (globalThis.localStorage.setItem as any).mock.calls[0][1]
     )
-    global.localStorage.getItem = vi.fn(() => JSON.stringify(saved)) as any
+    globalThis.localStorage.getItem = vi.fn(() => JSON.stringify(saved)) as any
 
     const timer2 = new PomodoroTimer({ skipInit: true })
     timer2.loadStats()

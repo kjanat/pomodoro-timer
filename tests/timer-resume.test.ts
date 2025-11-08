@@ -33,8 +33,8 @@ describe('PomodoroTimer resume on reload', () => {
   beforeEach(() => {
     origQuerySelector = document.querySelector.bind(document)
     setupDOM()
-    global.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    ;(global as any).playTone = vi.fn()
+    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
+    ;(globalThis as any).playTone = vi.fn()
   })
   afterEach(() => {
     vi.restoreAllMocks()
@@ -43,7 +43,7 @@ describe('PomodoroTimer resume on reload', () => {
 
   it('returns true to resume when lastUpdated is missing', () => {
     const today = new Date().toDateString()
-    ;(global.localStorage.getItem as any).mockReturnValueOnce(
+    ;(globalThis.localStorage.getItem as any).mockReturnValueOnce(
       JSON.stringify({
         date: today,
         remainingTime: 1500,
@@ -60,7 +60,7 @@ describe('PomodoroTimer resume on reload', () => {
 
   it('returns true when elapsed time is less than remainingTime', () => {
     const today = new Date().toDateString()
-    ;(global.localStorage.getItem as any).mockReturnValueOnce(
+    ;(globalThis.localStorage.getItem as any).mockReturnValueOnce(
       JSON.stringify({
         date: today,
         remainingTime: 1500,
@@ -79,7 +79,7 @@ describe('PomodoroTimer resume on reload', () => {
 
   it('returns false when elapsed time exceeds remainingTime', () => {
     const today = new Date().toDateString()
-    ;(global.localStorage.getItem as any).mockReturnValueOnce(
+    ;(globalThis.localStorage.getItem as any).mockReturnValueOnce(
       JSON.stringify({
         date: today,
         remainingTime: 1500,

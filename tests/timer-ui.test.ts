@@ -24,8 +24,8 @@ function setupDOM() {
 describe('PomodoroTimer UI updates', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
-    global.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    ;(global as any).Notification = { permission: 'granted' } as any
+    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
+    ;(globalThis as any).Notification = { permission: 'granted' } as any
     setupDOM()
   })
   afterEach(() => {
