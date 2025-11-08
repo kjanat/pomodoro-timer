@@ -33,14 +33,16 @@ describe('playTone helper', () => {
     const gain = { connect: vi.fn(), gain: { value: 0 } }
     const createOscillator = vi.fn(() => oscillator)
     const createGain = vi.fn(() => gain)
-    const AudioContextMock = vi.fn(() => ({
-      createOscillator,
-      createGain,
-      destination: {},
-      currentTime: 0,
-      state: 'running',
-      resume: vi.fn()
-    })) as any
+
+    // Use a proper function constructor instead of arrow function with vi.fn
+    class AudioContextMock {
+      createOscillator = createOscillator
+      createGain = createGain
+      destination = {}
+      currentTime = 0
+      state = 'running'
+      resume = vi.fn()
+    }
     ;(global.window as any).AudioContext = AudioContextMock
     expect(() => playTone(330, 0.1)).not.toThrow()
     expect(createOscillator).toHaveBeenCalled()
@@ -60,14 +62,16 @@ describe('playTone helper', () => {
     const gain = { connect: vi.fn(), gain: { value: 0 } }
     const createOscillator = vi.fn(() => oscillator)
     const createGain = vi.fn(() => gain)
-    const AudioContextMock = vi.fn(() => ({
-      createOscillator,
-      createGain,
-      destination: {},
-      currentTime: 0,
-      state: 'suspended',
-      resume
-    })) as any
+
+    // Use a proper function constructor instead of arrow function with vi.fn
+    class AudioContextMock {
+      createOscillator = createOscillator
+      createGain = createGain
+      destination = {}
+      currentTime = 0
+      state = 'suspended'
+      resume = resume
+    }
     ;(global.window as any).AudioContext = AudioContextMock
     playTone(440)
     expect(resume).toHaveBeenCalled()

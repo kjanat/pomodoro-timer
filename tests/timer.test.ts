@@ -53,12 +53,14 @@ describe('PomodoroTimer core logic', () => {
     const gain = { connect: vi.fn(), gain: { value: 0 } }
     const createOscillator = vi.fn(() => oscillator)
     const createGain = vi.fn(() => gain)
-    const AudioContextMock = vi.fn(() => ({
-      createOscillator,
-      createGain,
-      destination: {},
-      currentTime: 0
-    })) as any
+
+    // Use a proper function constructor instead of arrow function with vi.fn
+    class AudioContextMock {
+      createOscillator = createOscillator
+      createGain = createGain
+      destination = {}
+      currentTime = 0
+    }
     ;(global.window as any).AudioContext = AudioContextMock
     expect(() => playTone(440, 0.1)).not.toThrow()
     expect(createOscillator).toHaveBeenCalled()
