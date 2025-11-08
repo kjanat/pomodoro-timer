@@ -8,7 +8,7 @@ Optimized GitHub Actions workflow for the Pomodoro Timer application with parall
 
 ### Jobs Pipeline
 
-```text
+<!-- ```text
 ┌─────────────────────────────────────────────┐
 │     Pull Request or Push to main/master     │
 └─────────────────────────────────────────────┘
@@ -32,6 +32,17 @@ Optimized GitHub Actions workflow for the Pomodoro Timer application with parall
          ┌──────────────────┐
          │ Deploy (if main) │
          └──────────────────┘
+``` -->
+
+```mermaid
+graph TD
+    A[Pull Request or Push to main/master] --> B[Quality Checks]
+    A --> C[Unit Tests]
+    A --> D[E2E Tests]
+    B --> E[Build]
+    C --> E
+    D --> E
+    E --> F[Deploy - if main]
 ```
 
 ## Job Details

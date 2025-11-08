@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { setTimerMode } from './helpers'
 
 test.describe('Auto-start feature E2E', () => {
   test.beforeEach(async ({ page }) => {
@@ -111,15 +112,8 @@ test.describe('Auto-start feature E2E', () => {
     // Close settings
     await settingsButton.click()
 
-    // Manually switch to short break mode by evaluating JavaScript
-    await page.evaluate(() => {
-      const timer = (
-        window as Window & {
-          pomodoroTimer: { setMode: (mode: string) => void }
-        }
-      ).pomodoroTimer
-      timer.setMode('shortBreak')
-    })
+    // Manually switch to short break mode
+    await setTimerMode(page, 'shortBreak')
 
     // Verify we're in break mode
     await expect(currentMode).toContainText(/break/i)
