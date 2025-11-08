@@ -1,8 +1,15 @@
-import { describe, it, beforeEach, expect, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.ts'
+import PomodoroTimer from '@js/timer.ts'
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest'
+import { createMockLocalStorage } from './setup'
 
 function setupFullDOM() {
-  const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
+  const ring = {
+    style: {},
+    r: { baseVal: { value: 50 } },
+  } as SVGCircleElement & {
+    style: Record<string, unknown>
+    r: { baseVal: { value: number } }
+  }
   document.body.innerHTML = `
     <svg><circle class="progress-ring__progress" r="50"></circle></svg>
     <div id="timer-display"></div>
@@ -26,25 +33,28 @@ function setupFullDOM() {
   vi.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
     if (sel === '.progress-ring__progress') return ring
     return document.body.querySelector(sel)
-  }) as any)
+  }) as typeof document.querySelector)
 }
 
 describe('PomodoroTimer init', () => {
   beforeEach(() => {
     setupFullDOM()
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    ;(globalThis as any).Notification = function () {} as any
-    ;(globalThis as any).Notification.permission = 'granted'
-    ;(globalThis as any).playTone = vi.fn()
+    globalThis.localStorage = createMockLocalStorage() as unknown as Storage
+    const MockNotification = (() => {}) as unknown as typeof Notification
+    ;(MockNotification as { permission: string }).permission = 'granted'
+    ;(
+      globalThis as typeof globalThis & { Notification: typeof Notification }
+    ).Notification = MockNotification
+    ;(globalThis as typeof globalThis & { playTone: Mock }).playTone = vi.fn()
     vi.useFakeTimers()
   })
 
   it('initializes and handles clicks', () => {
     const timer = new PomodoroTimer()
-    document.getElementById('start-button')!.dispatchEvent(new Event('click'))
+    document.getElementById('start-button')?.dispatchEvent(new Event('click'))
     vi.advanceTimersByTime(1000)
-    document.getElementById('pause-button')!.dispatchEvent(new Event('click'))
-    document.getElementById('reset-button')!.dispatchEvent(new Event('click'))
+    document.getElementById('pause-button')?.dispatchEvent(new Event('click'))
+    document.getElementById('reset-button')?.dispatchEvent(new Event('click'))
     expect(timer.state.isRunning).toBe(false)
   })
 })

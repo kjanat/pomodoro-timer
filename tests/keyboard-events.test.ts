@@ -1,16 +1,18 @@
-import { describe, it, beforeEach, beforeAll, expect, vi } from 'vitest'
-import { KeyboardShortcuts } from '../src/js/app.ts'
+import { KeyboardShortcuts } from '@js/app.ts'
+import type PomodoroTimer from '@js/timer'
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('KeyboardShortcuts event handling', () => {
   let shortcuts: KeyboardShortcuts
-  let mockTimer: any
+  let mockTimer: { reset: ReturnType<typeof vi.fn> }
 
   beforeAll(() => {
     // Create the instance once to set up event listeners
     mockTimer = {
-      reset: vi.fn()
+      reset: vi.fn(),
     }
-    ;(window as any).pomodoroTimer = mockTimer
+    // Type assertion to bypass strict typing for test mock
+    window.pomodoroTimer = mockTimer as unknown as PomodoroTimer
   })
 
   beforeEach(() => {
@@ -24,14 +26,14 @@ describe('KeyboardShortcuts event handling', () => {
     const event = new KeyboardEvent('keydown', {
       code: 'KeyR',
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     })
     // Mock the matches method on the event target
     Object.defineProperty(event, 'target', {
       value: {
-        matches: () => false
+        matches: () => false,
       },
-      writable: false
+      writable: false,
     })
     document.dispatchEvent(event)
 
@@ -43,11 +45,11 @@ describe('KeyboardShortcuts event handling', () => {
       code: 'KeyR',
       ctrlKey: true,
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     })
     Object.defineProperty(event, 'target', {
       value: { matches: () => false },
-      writable: false
+      writable: false,
     })
     document.dispatchEvent(event)
 
@@ -59,11 +61,11 @@ describe('KeyboardShortcuts event handling', () => {
       code: 'KeyR',
       metaKey: true,
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     })
     Object.defineProperty(event, 'target', {
       value: { matches: () => false },
-      writable: false
+      writable: false,
     })
     document.dispatchEvent(event)
 
@@ -71,24 +73,26 @@ describe('KeyboardShortcuts event handling', () => {
   })
 
   it('toggles settings when KeyS is pressed', () => {
-    const settingsPanel = document.getElementById('settings-panel')!
+    const settingsPanel = document.getElementById('settings-panel')
+    expect(settingsPanel).toBeTruthy()
 
     // Test the method directly
     shortcuts.toggleSettings()
-    expect(settingsPanel.classList.contains('active')).toBe(true)
+    expect(settingsPanel?.classList.contains('active')).toBe(true)
 
     // Toggle again
     shortcuts.toggleSettings()
-    expect(settingsPanel.classList.contains('active')).toBe(false)
+    expect(settingsPanel?.classList.contains('active')).toBe(false)
   })
 
   it('closes settings when Escape is pressed', () => {
-    const settingsPanel = document.getElementById('settings-panel')!
-    settingsPanel.classList.add('active')
+    const settingsPanel = document.getElementById('settings-panel')
+    expect(settingsPanel).toBeTruthy()
+    settingsPanel?.classList.add('active')
 
     // Test the method directly
     shortcuts.closeSettings()
-    expect(settingsPanel.classList.contains('active')).toBe(false)
+    expect(settingsPanel?.classList.contains('active')).toBe(false)
   })
 
   it('ignores shortcuts when typing in input fields', () => {
@@ -99,11 +103,11 @@ describe('KeyboardShortcuts event handling', () => {
     const event = new KeyboardEvent('keydown', {
       code: 'KeyR',
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     })
     Object.defineProperty(event, 'target', {
       value: input,
-      enumerable: true
+      enumerable: true,
     })
 
     document.dispatchEvent(event)
@@ -120,18 +124,18 @@ describe('KeyboardShortcuts event handling', () => {
     const event = new KeyboardEvent('keydown', {
       code: 'KeyS',
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     })
     Object.defineProperty(event, 'target', {
       value: textarea,
-      enumerable: true
+      enumerable: true,
     })
 
     document.dispatchEvent(event)
 
     // Settings should not toggle when typing in textarea
-    const settingsPanel = document.getElementById('settings-panel')!
-    expect(settingsPanel.classList.contains('active')).toBe(false)
+    const settingsPanel = document.getElementById('settings-panel')
+    expect(settingsPanel?.classList.contains('active')).toBe(false)
   })
 
   it('ignores shortcuts when typing in select', () => {
@@ -142,20 +146,21 @@ describe('KeyboardShortcuts event handling', () => {
     const event = new KeyboardEvent('keydown', {
       code: 'Escape',
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     })
     Object.defineProperty(event, 'target', {
       value: select,
-      enumerable: true
+      enumerable: true,
     })
 
-    const settingsPanel = document.getElementById('settings-panel')!
-    settingsPanel.classList.add('active')
+    const settingsPanel = document.getElementById('settings-panel')
+    expect(settingsPanel).toBeTruthy()
+    settingsPanel?.classList.add('active')
 
     document.dispatchEvent(event)
 
     // Settings should still be active since shortcut was ignored
-    expect(settingsPanel.classList.contains('active')).toBe(true)
+    expect(settingsPanel?.classList.contains('active')).toBe(true)
   })
 
   it('handles missing settings panel gracefully', () => {
@@ -164,21 +169,21 @@ describe('KeyboardShortcuts event handling', () => {
     const eventS = new KeyboardEvent('keydown', {
       code: 'KeyS',
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     })
     Object.defineProperty(eventS, 'target', {
       value: { matches: () => false },
-      writable: false
+      writable: false,
     })
 
     const eventEsc = new KeyboardEvent('keydown', {
       code: 'Escape',
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     })
     Object.defineProperty(eventEsc, 'target', {
       value: { matches: () => false },
-      writable: false
+      writable: false,
     })
 
     expect(() => {
@@ -188,16 +193,16 @@ describe('KeyboardShortcuts event handling', () => {
   })
 
   it('handles missing timer gracefully', () => {
-    ;(window as any).pomodoroTimer = undefined
+    window.pomodoroTimer = undefined
 
     const event = new KeyboardEvent('keydown', {
       code: 'KeyR',
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     })
     Object.defineProperty(event, 'target', {
       value: { matches: () => false },
-      writable: false
+      writable: false,
     })
 
     expect(() => {

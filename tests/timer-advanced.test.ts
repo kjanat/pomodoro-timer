@@ -1,10 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import PomodoroTimer from '../src/js/timer.ts'
+import PomodoroTimer from '@js/timer.ts'
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest'
+import { createMockLocalStorage } from './setup'
 
 describe('PomodoroTimer advanced', () => {
   beforeEach(() => {
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    ;(globalThis as any).playTone = vi.fn()
+    globalThis.localStorage = createMockLocalStorage() as unknown as Storage
+    ;(globalThis as typeof globalThis & { playTone: Mock }).playTone = vi.fn()
   })
 
   it('advanceMode cycles correctly', () => {
@@ -30,9 +31,9 @@ describe('PomodoroTimer advanced', () => {
     timer.state.completedSessions = 2
     timer.saveStats()
     const saved = JSON.parse(
-      (globalThis.localStorage.setItem as any).mock.calls[0][1]
+      (globalThis.localStorage.setItem as unknown as Mock).mock.calls[0][1],
     )
-    globalThis.localStorage.getItem = vi.fn(() => JSON.stringify(saved)) as any
+    globalThis.localStorage.getItem = vi.fn(() => JSON.stringify(saved))
 
     const timer2 = new PomodoroTimer({ skipInit: true })
     timer2.loadStats()

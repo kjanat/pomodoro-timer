@@ -1,8 +1,15 @@
-import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.ts'
+import PomodoroTimer from '@js/timer.ts'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { createMockLocalStorage } from './setup'
 
 function setupDOM() {
-  const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
+  const ring = {
+    style: {},
+    r: { baseVal: { value: 50 } },
+  } as SVGCircleElement & {
+    style: Record<string, unknown>
+    r: { baseVal: { value: number } }
+  }
   document.body.innerHTML = `
     <div id="timer-display"></div>
     <div id="current-mode"></div>
@@ -17,15 +24,19 @@ function setupDOM() {
   vi.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
     if (sel === '.progress-ring__progress') return ring
     return origQuerySelector(sel)
-  }) as any)
+  }) as typeof document.querySelector)
   return ring
 }
 
 describe('PomodoroTimer UI updates', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    ;(globalThis as any).Notification = { permission: 'granted' } as any
+    globalThis.localStorage = createMockLocalStorage() as unknown as Storage
+    ;(
+      globalThis as unknown as typeof globalThis & {
+        Notification: typeof Notification
+      }
+    ).Notification = { permission: 'granted' } as unknown as typeof Notification
     setupDOM()
   })
   afterEach(() => {
@@ -36,8 +47,8 @@ describe('PomodoroTimer UI updates', () => {
     const timer = new PomodoroTimer({ skipInit: true })
     timer.setupProgressRing()
     timer.updateUI()
-    expect(document.getElementById('current-mode')!.textContent).toBe(
-      'Focus Time'
+    expect(document.getElementById('current-mode')?.textContent).toBe(
+      'Focus Time',
     )
   })
 })

@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { Analytics } from '../src/js/app.ts'
+import { Analytics } from '@js/app.ts'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 describe('Analytics', () => {
   let analytics: Analytics
@@ -23,7 +23,7 @@ describe('Analytics', () => {
     expect(analytics.events[0]).toMatchObject({
       event,
       data,
-      timestamp: expect.any(Number)
+      timestamp: expect.any(Number),
     })
   })
 
@@ -34,7 +34,7 @@ describe('Analytics', () => {
     expect(analytics.events[0]).toMatchObject({
       event: 'simple_event',
       data: {},
-      timestamp: expect.any(Number)
+      timestamp: expect.any(Number),
     })
   })
 

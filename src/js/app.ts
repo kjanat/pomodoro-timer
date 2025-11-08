@@ -1,5 +1,7 @@
 // Main application initialization and utility functions
 
+import type { PomodoroTimer } from './timer'
+
 type Theme = 'dark' | 'light' | 'auto'
 type ShortcutKey = 'Space' | 'KeyR' | 'KeyS' | 'Escape'
 type ToastType = 'info' | 'success' | 'error'
@@ -28,7 +30,7 @@ export class ThemeManager {
     } else {
       // Auto theme - follow system preference
       const prefersDark = window.matchMedia(
-        '(prefers-color-scheme: dark)'
+        '(prefers-color-scheme: dark)',
       ).matches
       if (prefersDark) {
         root.classList.add('dark-theme')
@@ -65,7 +67,7 @@ export class KeyboardShortcuts {
       Space: 'Toggle timer (Start/Pause)',
       KeyR: 'Reset timer',
       KeyS: 'Toggle settings',
-      Escape: 'Close settings'
+      Escape: 'Close settings',
     }
 
     this.init()
@@ -82,8 +84,8 @@ export class KeyboardShortcuts {
         case 'KeyR':
           if (e.ctrlKey || e.metaKey) return // Don't interfere with browser refresh
           e.preventDefault()
-          if ((window as any).pomodoroTimer) {
-            ;(window as any).pomodoroTimer.reset()
+          if (window.pomodoroTimer) {
+            window.pomodoroTimer.reset()
           }
           break
 
@@ -113,7 +115,7 @@ export class KeyboardShortcuts {
 
 interface AnalyticsEvent {
   event: string
-  data: Record<string, any>
+  data: Record<string, unknown>
   timestamp: number
 }
 
@@ -127,11 +129,11 @@ export class Analytics {
     this.events = []
   }
 
-  track(event: string, data: Record<string, any> = {}): void {
+  track(event: string, data: Record<string, unknown> = {}): void {
     this.events.push({
       event,
       data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
 
     // Keep only last 100 events to avoid memory issues
@@ -151,7 +153,7 @@ export class Analytics {
     return {
       sessionDuration: Math.round(sessionDuration / 1000 / 60), // minutes
       totalEvents: this.events.length,
-      timerEvents: timerEvents.length
+      timerEvents: timerEvents.length,
     }
   }
 }
@@ -215,9 +217,9 @@ export const utils = {
   },
 
   // Debounce function for performance
-  debounce<T extends (...args: any[]) => any>(
+  debounce<T extends (...args: never[]) => unknown>(
     func: T,
-    wait: number
+    wait: number,
   ): (...args: Parameters<T>) => void {
     let timeout: number | undefined
     return function executedFunction(...args: Parameters<T>) {
@@ -228,7 +230,7 @@ export const utils = {
       clearTimeout(timeout)
       timeout = window.setTimeout(later, wait)
     }
-  }
+  },
 }
 
 // Extend window interface for global application objects
@@ -238,8 +240,8 @@ declare global {
     keyboardShortcuts?: KeyboardShortcuts
     analytics?: Analytics
     utils?: typeof utils
-    pomodoroTimer?: any
-    playTone?: any
+    pomodoroTimer?: PomodoroTimer
+    playTone?: (frequency: number, duration: number) => void
   }
 }
 
@@ -260,21 +262,18 @@ if ('serviceWorker' in navigator) {
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize theme manager
-  ;(window as any).themeManager = new ThemeManager()
+  window.themeManager = new ThemeManager()
 
   // Initialize keyboard shortcuts
-  ;(window as any).keyboardShortcuts = new KeyboardShortcuts()
+  window.keyboardShortcuts = new KeyboardShortcuts()
 
   // Initialize analytics
-  ;(window as any).analytics = new Analytics()
+  window.analytics = new Analytics()
 
   // Add global utilities
-  ;(window as any).utils = utils
+  window.utils = utils
 
   // Welcome message
   console.log('🍅 Pomodoro Timer initialized successfully!')
-  console.log(
-    'Keyboard shortcuts:',
-    (window as any).keyboardShortcuts.shortcuts
-  )
+  console.log('Keyboard shortcuts:', window.keyboardShortcuts.shortcuts)
 })

@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest'
-import type { utils } from '../src/js/app.ts'
+import type { utils } from '@js/app.ts'
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 let formatTime: typeof utils.formatTime
 let debounce: typeof utils.debounce
@@ -11,11 +11,13 @@ beforeAll(async () => {
     (() => ({
       matches: false,
       addEventListener: () => {},
-      removeEventListener: () => {}
+      removeEventListener: () => {},
     }))
-  await import('../src/js/app.ts')
+  await import('@js/app.ts')
   document.dispatchEvent(new Event('DOMContentLoaded'))
-  ;({ formatTime, debounce, showToast } = window.utils!)
+  const utils = window.utils
+  if (!utils) throw new Error('utils not initialized')
+  ;({ formatTime, debounce, showToast } = utils)
 })
 
 describe('utils.formatTime', () => {

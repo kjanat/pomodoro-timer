@@ -10,14 +10,14 @@ const urlsToCache = [
   '/js/app.js',
   '/js/audio.js',
   '/js/timer.js',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
+  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
 ]
 
 self.addEventListener('install', (event: ExtendableEvent) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(urlsToCache)
-    })
+    }),
   )
 })
 
@@ -26,7 +26,7 @@ self.addEventListener('fetch', (event: FetchEvent) => {
     caches.match(event.request).then((response) => {
       // Return cached version or fetch from network
       return response || fetch(event.request)
-    })
+    }),
   )
 })
 
@@ -39,9 +39,9 @@ self.addEventListener('activate', (event: ExtendableEvent) => {
             return caches.delete(cacheName)
           }
           return null
-        })
+        }),
       )
-    })
+    }),
   )
 })
 
