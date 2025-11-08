@@ -1,6 +1,7 @@
 #:schema https://www.schemastore.org/bunfig.json
 
 [test]
+root = "tests"
 preload = ["./happydom.ts", "./vitest-compat.ts"]
 coverage = true
 coverageThreshold = 0.8  # OR: { lines = 0.9, functions = 0.9, statements = 0.9 }
