@@ -2,7 +2,7 @@ import { describe, it, beforeEach, expect, vi } from 'vitest'
 import PomodoroTimer from '../src/js/timer.ts'
 
 function setupDOM () {
-  const ring = { style: {}, r: { baseVal: { value: 50 } } }
+  const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
   document.body.innerHTML = `
     <div id="timer-display"></div>
     <div id="current-mode"></div>
@@ -20,10 +20,10 @@ function setupDOM () {
     <input id="auto-start-focus" type="checkbox" />
     <input id="sound-enabled" type="checkbox" />
   `
-  vi.spyOn(document, 'querySelector').mockImplementation((sel) => {
+  vi.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
     if (sel === '.progress-ring__progress') return ring
     return document.body.querySelector(sel)
-  })
+  }) as any)
 }
 
 describe('PomodoroTimer additional methods', () => {
@@ -37,10 +37,10 @@ describe('PomodoroTimer additional methods', () => {
         if (key === 'pomodoro-stats') return JSON.stringify({ date: today })
         return null
       })
-    }
-    global.Notification = function () {}
-    global.Notification.permission = 'granted'
-    global.playTone = vi.fn()
+    } as any
+    ;(global as any).Notification = function () {} as any
+    ;(global as any).Notification.permission = 'granted'
+    ;(global as any).playTone = vi.fn()
   })
 
   it('executes miscellaneous methods without error', () => {

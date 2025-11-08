@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { playTone } from '../src/js/audio.ts'
 
 describe('playTone helper', () => {
-  let originalWindow
+  let originalWindow: typeof global.window
 
   beforeEach(() => {
     originalWindow = global.window
@@ -11,10 +11,11 @@ describe('playTone helper', () => {
   afterEach(() => {
     global.window = originalWindow
     // ensure a fresh AudioContext for each test
-    delete playTone.ctx
+    playTone.ctx = undefined
   })
 
   it('does nothing when window is undefined', () => {
+    // @ts-expect-error - Testing undefined window scenario
     delete global.window
     expect(() => playTone(440)).not.toThrow()
   })
@@ -39,8 +40,8 @@ describe('playTone helper', () => {
       currentTime: 0,
       state: 'running',
       resume: vi.fn()
-    }))
-    global.window = { ...global.window, AudioContext: AudioContextMock }
+    })) as any
+    ;(global.window as any).AudioContext = AudioContextMock
     expect(() => playTone(330, 0.1)).not.toThrow()
     expect(createOscillator).toHaveBeenCalled()
     expect(oscStart).toHaveBeenCalled()
@@ -66,8 +67,8 @@ describe('playTone helper', () => {
       currentTime: 0,
       state: 'suspended',
       resume
-    }))
-    global.window = { ...global.window, AudioContext: AudioContextMock }
+    })) as any
+    ;(global.window as any).AudioContext = AudioContextMock
     playTone(440)
     expect(resume).toHaveBeenCalled()
   })
