@@ -69,7 +69,9 @@ test.describe('Pomodoro Timer E2E', () => {
     await expect(settingsPanel).not.toHaveClass(/active/)
   })
 
-  test('should apply dark theme based on system preference', async ({ page }) => {
+  test('should apply dark theme based on system preference', async ({
+    page
+  }) => {
     // Check if theme can be applied (this test is simplified since there's no theme toggle in the UI yet)
     // The theme is managed via localStorage and system preferences
     const html = page.locator('html')
