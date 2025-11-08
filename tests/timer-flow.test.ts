@@ -61,7 +61,7 @@ describe('PomodoroTimer flow', () => {
     timer.state.remainingTime = 1
     timer.settings.autoStartBreaks = false
     timer.start()
-    vi.advanceTimersByTime(1000)
+    vi.advanceTimersByTime(2000)
     expect(timer.state.isRunning).toBe(false)
   })
 

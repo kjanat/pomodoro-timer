@@ -1,3 +1,5 @@
+import { TIME_SCALE } from '@js/time-config'
+
 // Extend Window interface to include webkitAudioContext for older browsers
 declare global {
   interface Window {
@@ -12,7 +14,7 @@ interface PlayToneFunction {
 
 export const playTone: PlayToneFunction = (
   frequency: number,
-  duration: number = 0.3,
+  duration: number = 0.3 * TIME_SCALE,
 ): void => {
   if (typeof window === 'undefined') return
   const AudioContextClass = (window.AudioContext ||

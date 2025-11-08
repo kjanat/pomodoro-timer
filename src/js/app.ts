@@ -1,5 +1,6 @@
 // Main application initialization and utility functions
 
+import { scaleTime } from '@js/time-config'
 import type { PomodoroTimer } from './timer'
 
 type Theme = 'dark' | 'light' | 'auto'
@@ -212,8 +213,8 @@ export const utils = {
 
     setTimeout(() => {
       toast.style.animation = 'slideInRight 0.3s ease reverse'
-      setTimeout(() => toast.remove(), 300)
-    }, 3000)
+      setTimeout(() => toast.remove(), scaleTime(300))
+    }, scaleTime(3000))
   },
 
   // Debounce function for performance
@@ -228,7 +229,7 @@ export const utils = {
         func(...args)
       }
       clearTimeout(timeout)
-      timeout = window.setTimeout(later, wait)
+      timeout = window.setTimeout(later, scaleTime(wait))
     }
   },
 }

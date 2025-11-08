@@ -1,4 +1,5 @@
 import { playTone } from '@js/audio'
+import { scaleTime } from '@js/time-config'
 
 type TimerMode = 'focus' | 'shortBreak' | 'longBreak'
 
@@ -226,7 +227,7 @@ export class PomodoroTimer {
 
     this.intervalId = window.setInterval(() => {
       this.tick()
-    }, 1000)
+    }, scaleTime(1000))
 
     this.updateUI()
   }
@@ -296,7 +297,7 @@ export class PomodoroTimer {
     // Auto-advance to next mode after short delay
     setTimeout(() => {
       this.advanceMode()
-    }, 1000)
+    }, scaleTime(1000))
   }
 
   advanceMode(): void {
@@ -467,7 +468,7 @@ export class PomodoroTimer {
     this.saveTimeout = window.setTimeout(() => {
       this.saveStats()
       this.saveTimeout = null
-    }, 5000)
+    }, scaleTime(5000))
   }
 
   clearScheduledSave(): void {
