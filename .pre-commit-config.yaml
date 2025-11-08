@@ -13,7 +13,9 @@ repos:
     hooks:
       - id: typescript-check
         name: TypeScript type check
-        entry: bun run lint
-        language: system
+        entry: tsc --noEmit
+        language: node
         types: [ts]
         pass_filenames: false
+        additional_dependencies:
+          - typescript@^5.0.0
