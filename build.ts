@@ -39,7 +39,12 @@ if (!swResult.success) {
 }
 
 // Copy manifest.json to dist
-await Bun.write('./dist/manifest.json', Bun.file('./src/manifest.json'))
+try {
+  await Bun.write('./dist/manifest.json', Bun.file('./src/manifest.json'))
+} catch (error) {
+  console.error('Failed to copy manifest.json:', error)
+  process.exit(1)
+}
 
 // Print build summary
 console.log('✓ Build completed successfully')

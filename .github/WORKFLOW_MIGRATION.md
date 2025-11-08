@@ -13,11 +13,11 @@ Your CI/CD pipeline has been upgraded with a comprehensive, optimized GitHub Act
 
 ## File Structure
 
-```
+```tree
 .github/workflows/
 ├── ci.yml          # New optimized workflow ✨
 ├── deploy.yml      # Old workflow (can be removed)
-└── README.md.md    # Complete documentation
+└── README.md       # Complete documentation
 ```
 
 ## Key Improvements
@@ -31,7 +31,7 @@ Your CI/CD pipeline has been upgraded with a comprehensive, optimized GitHub Act
 
 ### Architecture
 
-```
+```text
 Old: Sequential Execution
 ├─ Format → Lint → Test → Build → Deploy
 └─ Total: ~13 minutes
@@ -288,7 +288,7 @@ actionlint .github/workflows/ci.yml
 
 ### CI Minutes Comparison
 
-```
+```text
 Old Workflow:
 - PR: 13 min/run
 - Merge to main: 13 min/run
@@ -308,7 +308,7 @@ Savings: 160 min/week (62% reduction)
 
 ### Storage Costs
 
-```
+```text
 Artifacts:
 - Coverage reports: ~5MB × 30 days
 - Playwright reports: ~10MB × 30 days
@@ -322,7 +322,7 @@ Total: ~500MB (within free tier)
 
 ### Documentation
 
-- [Full Workflow Docs](.github/workflows/README.md.md)
+- [Full Workflow Docs](.github/workflows/README.md)
 - [GitHub Actions Syntax](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)
 - [Playwright CI Guide](https://playwright.dev/docs/ci)
 
