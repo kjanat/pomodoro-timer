@@ -7,7 +7,7 @@
   "scripts": {
     "start": "bun run --hot src/js/app.ts",
     "dev": "http-server src -p 3000 -o",
-    "build": "bun build src/index.html --outdir=dist --minify && cp src/manifest.json dist/ && cp src/sw.ts dist/sw.js",
+    "build": "bun build src/index.html --outdir=dist --minify && bun build src/sw.ts --outfile=dist/sw.js --target=browser --minify && cp src/manifest.json dist/",
     "preview": "http-server dist -p 3000 -o",
     "format": "prettier --write \"src/**/*.{ts,html,css,json}\" \"*.{ts,json,md}\" --ignore-path .gitignore",
     "lint": "tsc --noEmit",
