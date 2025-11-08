@@ -16,6 +16,14 @@ if (typeof (bunVi as any).advanceTimersByTime === 'undefined') {
   }
 }
 
+// Polyfill vi.runAllTimers for Bun (it doesn't support it natively)
+// This is a no-op in bun:test since timers run automatically with sleepSync
+if (typeof (bunVi as any).runAllTimers === 'undefined') {
+  ;(bunVi as any).runAllTimers = () => {
+    // No-op for Bun - timers are executed during advanceTimersByTime
+  }
+}
+
 // Mock the 'vitest' module to redirect imports to bun:test
 // This allows existing tests that import from 'vitest' to work with Bun
 mock.module('vitest', () => {

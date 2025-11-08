@@ -39,6 +39,7 @@ describe('PomodoroTimer flow', () => {
     timer.start()
     expect(timer.state.isRunning).toBe(true)
     vi.advanceTimersByTime(1000)
+    vi.runAllTimers()
     expect(timer.state.remainingTime).toBe(timer.state.totalTime - 1)
     timer.pause()
     expect(timer.state.isPaused).toBe(true)
@@ -60,8 +61,12 @@ describe('PomodoroTimer flow', () => {
     timer.updateProgress = () => {}
     timer.state.remainingTime = 1
     timer.settings.autoStartBreaks = false
+    timer.settings.autoStartFocus = false
     timer.start()
-    vi.advanceTimersByTime(2000)
+    vi.advanceTimersByTime(1000)
+    vi.runAllTimers()
+    vi.advanceTimersByTime(1000)
+    vi.runAllTimers()
     expect(timer.state.isRunning).toBe(false)
   })
 

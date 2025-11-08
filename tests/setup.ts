@@ -70,17 +70,13 @@ Object.defineProperty(global, 'Notification', {
 
 // Reset localStorage before each test
 beforeEach(() => {
-  // Handle both global mock and test-specific overrides
-  if (typeof localStorage?.clear === 'function') {
-    localStorage.clear()
-  }
-  // If test overrode it without clear(), restore global mock
-  if (!localStorage?.clear) {
-    Object.defineProperty(global, 'localStorage', {
-      value: globalLocalStorageMock,
-      writable: false,
-      configurable: true,
-    })
-    globalLocalStorageMock.clear()
-  }
+  // Always clear the global mock to ensure isolation
+  globalLocalStorageMock.clear()
+
+  // Restore global mock if test overrode it
+  Object.defineProperty(global, 'localStorage', {
+    value: globalLocalStorageMock,
+    writable: true,
+    configurable: true,
+  })
 })
