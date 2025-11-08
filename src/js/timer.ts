@@ -414,14 +414,11 @@ export class PomodoroTimer {
       resetBtn.disabled = false
 
       const btnText = startBtn.querySelector('.btn-text')
-      const btnIcon = startBtn.querySelector('.btn-icon')
 
       if (this.state.isPaused) {
         if (btnText) btnText.textContent = 'Resume'
-        if (btnIcon) btnIcon.textContent = '▶'
       } else {
         if (btnText) btnText.textContent = 'Start'
-        if (btnIcon) btnIcon.textContent = '▶'
       }
     }
   }
