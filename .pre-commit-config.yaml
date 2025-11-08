@@ -15,5 +15,5 @@ repos:
         name: TypeScript type check
         entry: bun run lint
         language: system
-        types: [typescript]
+        types: [ts]
         pass_filenames: false
