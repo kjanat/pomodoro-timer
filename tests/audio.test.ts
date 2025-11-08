@@ -2,21 +2,21 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { playTone } from '../src/js/audio.ts'
 
 describe('playTone helper', () => {
-  let originalWindow: typeof global.window
+  let originalWindow: typeof globalThis.window
 
   beforeEach(() => {
-    originalWindow = global.window
+    originalWindow = globalThis.window
   })
 
   afterEach(() => {
-    global.window = originalWindow
+    globalThis.window = originalWindow
     // ensure a fresh AudioContext for each test
     playTone.ctx = undefined
   })
 
   it('does nothing when window is undefined', () => {
     // @ts-expect-error - Testing undefined window scenario
-    delete global.window
+    delete globalThis.window
     expect(() => playTone(440)).not.toThrow()
   })
 
@@ -33,15 +33,17 @@ describe('playTone helper', () => {
     const gain = { connect: vi.fn(), gain: { value: 0 } }
     const createOscillator = vi.fn(() => oscillator)
     const createGain = vi.fn(() => gain)
-    const AudioContextMock = vi.fn(() => ({
-      createOscillator,
-      createGain,
-      destination: {},
-      currentTime: 0,
-      state: 'running',
-      resume: vi.fn()
-    })) as any
-    ;(global.window as any).AudioContext = AudioContextMock
+
+    // Use a proper function constructor instead of arrow function with vi.fn
+    class AudioContextMock {
+      createOscillator = createOscillator
+      createGain = createGain
+      destination = {}
+      currentTime = 0
+      state = 'running'
+      resume = vi.fn()
+    }
+    ;(globalThis.window as any).AudioContext = AudioContextMock
     expect(() => playTone(330, 0.1)).not.toThrow()
     expect(createOscillator).toHaveBeenCalled()
     expect(oscStart).toHaveBeenCalled()
@@ -60,15 +62,17 @@ describe('playTone helper', () => {
     const gain = { connect: vi.fn(), gain: { value: 0 } }
     const createOscillator = vi.fn(() => oscillator)
     const createGain = vi.fn(() => gain)
-    const AudioContextMock = vi.fn(() => ({
-      createOscillator,
-      createGain,
-      destination: {},
-      currentTime: 0,
-      state: 'suspended',
-      resume
-    })) as any
-    ;(global.window as any).AudioContext = AudioContextMock
+
+    // Use a proper function constructor instead of arrow function with vi.fn
+    class AudioContextMock {
+      createOscillator = createOscillator
+      createGain = createGain
+      destination = {}
+      currentTime = 0
+      state = 'suspended'
+      resume = resume
+    }
+    ;(globalThis.window as any).AudioContext = AudioContextMock
     playTone(440)
     expect(resume).toHaveBeenCalled()
   })

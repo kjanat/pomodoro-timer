@@ -1,7 +1,7 @@
 import { describe, it, beforeEach, expect, vi } from 'vitest'
 import PomodoroTimer from '../src/js/timer.ts'
 
-function setupFullDOM () {
+function setupFullDOM() {
   const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
   document.body.innerHTML = `
     <svg><circle class="progress-ring__progress" r="50"></circle></svg>
@@ -32,10 +32,10 @@ function setupFullDOM () {
 describe('PomodoroTimer init', () => {
   beforeEach(() => {
     setupFullDOM()
-    global.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    ;(global as any).Notification = function () {} as any
-    ;(global as any).Notification.permission = 'granted'
-    ;(global as any).playTone = vi.fn()
+    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
+    ;(globalThis as any).Notification = function () {} as any
+    ;(globalThis as any).Notification.permission = 'granted'
+    ;(globalThis as any).playTone = vi.fn()
     vi.useFakeTimers()
   })
 

@@ -1,7 +1,7 @@
 import { describe, it, beforeEach, expect, vi } from 'vitest'
 import PomodoroTimer from '../src/js/timer.ts'
 
-function setupDOM () {
+function setupDOM() {
   const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
   document.body.innerHTML = `
     <div id="timer-display"></div>
@@ -30,17 +30,18 @@ describe('PomodoroTimer additional methods', () => {
   beforeEach(() => {
     setupDOM()
     const today = new Date().toDateString()
-    global.localStorage = {
+    globalThis.localStorage = {
       setItem: vi.fn(),
       getItem: vi.fn((key) => {
-        if (key === 'pomodoro-settings') return JSON.stringify({ focusDuration: 20 })
+        if (key === 'pomodoro-settings')
+          return JSON.stringify({ focusDuration: 20 })
         if (key === 'pomodoro-stats') return JSON.stringify({ date: today })
         return null
       })
     } as any
-    ;(global as any).Notification = function () {} as any
-    ;(global as any).Notification.permission = 'granted'
-    ;(global as any).playTone = vi.fn()
+    ;(globalThis as any).Notification = function () {} as any
+    ;(globalThis as any).Notification.permission = 'granted'
+    ;(globalThis as any).playTone = vi.fn()
   })
 
   it('executes miscellaneous methods without error', () => {
@@ -56,6 +57,6 @@ describe('PomodoroTimer additional methods', () => {
     timer.loadSettings()
     timer.saveStats()
     timer.loadStats()
-    expect(global.localStorage.setItem).toHaveBeenCalled()
+    expect(globalThis.localStorage.setItem).toHaveBeenCalled()
   })
 })
