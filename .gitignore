@@ -411,3 +411,7 @@ $RECYCLE.BIN/
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
+
+# Playwright
+playwright-report/
+test-results/
