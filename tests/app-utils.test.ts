@@ -6,7 +6,13 @@ let debounce: typeof utils.debounce
 let showToast: typeof utils.showToast
 
 beforeAll(async () => {
-  window.matchMedia = window.matchMedia || (() => ({ matches: false, addEventListener: () => {}, removeEventListener: () => {} }))
+  window.matchMedia =
+    window.matchMedia ||
+    (() => ({
+      matches: false,
+      addEventListener: () => {},
+      removeEventListener: () => {}
+    }))
   await import('../src/js/app.ts')
   document.dispatchEvent(new Event('DOMContentLoaded'))
   ;({ formatTime, debounce, showToast } = window.utils!)

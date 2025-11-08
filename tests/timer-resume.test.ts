@@ -1,7 +1,7 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
 import PomodoroTimer from '../src/js/timer.ts'
 
-function setupDOM () {
+function setupDOM() {
   const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
   document.body.innerHTML = `
     <div id="timer-display"></div>

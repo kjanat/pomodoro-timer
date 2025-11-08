@@ -29,7 +29,9 @@ describe('PomodoroTimer advanced', () => {
     const timer = new PomodoroTimer({ skipInit: true })
     timer.state.completedSessions = 2
     timer.saveStats()
-    const saved = JSON.parse((global.localStorage.setItem as any).mock.calls[0][1])
+    const saved = JSON.parse(
+      (global.localStorage.setItem as any).mock.calls[0][1]
+    )
     global.localStorage.getItem = vi.fn(() => JSON.stringify(saved)) as any
 
     const timer2 = new PomodoroTimer({ skipInit: true })

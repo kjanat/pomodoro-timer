@@ -1,7 +1,7 @@
 import { describe, it, beforeEach, expect, vi } from 'vitest'
 import PomodoroTimer from '../src/js/timer.ts'
 
-function setupFullDOM () {
+function setupFullDOM() {
   const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
   document.body.innerHTML = `
     <svg><circle class="progress-ring__progress" r="50"></circle></svg>
