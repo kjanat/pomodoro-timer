@@ -6,6 +6,7 @@
 import { rm } from 'node:fs/promises'
 
 const OUT_DIR = './dist'
+const URL = 'https://pomodoro.kajkowalski.nl'
 
 // Clean output directory
 try {
@@ -26,6 +27,7 @@ const result = await Bun.build({
   minify: true,
   target: 'browser',
   sourcemap: 'linked',
+  publicPath: URL,
 })
 
 if (!result.success) {
@@ -74,6 +76,7 @@ const generateServiceWorker = async () => {
     naming: 'sw.js',
     minify: true,
     target: 'browser',
+    publicPath: URL,
   })
 
   if (!swBuild.success) {
