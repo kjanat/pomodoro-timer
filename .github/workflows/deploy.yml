@@ -23,37 +23,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: '22'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 10
+          bun-version: latest
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun install
 
       - name: Check code formatting
-        run: pnpm format
-
-      - name: Lint (fix) code
-        run: pnpm lint:fix
-        continue-on-error: true
+        run: bun run format
 
       - name: Lint code
-        run: pnpm lint
+        run: bun run lint
 
       - name: Run tests
-        run: pnpm test
+        run: bun run test:vitest
 
       - name: Build project
-        run: |
-          # Since this is a static site, just copy src to dist
-          mkdir -p dist
-          cp -r src/* dist/
+        run: bun run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

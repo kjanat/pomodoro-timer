@@ -1,23 +1,11 @@
 // Main application initialization and utility functions
 
-// PWA Service Worker Registration
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/sw.js')
-      .then((registration) => {
-        console.log('SW registered: ', registration);
-      })
-      .catch((registrationError) => {
-        console.log('SW registration failed: ', registrationError);
-      });
-  });
-}
-
 type Theme = 'dark' | 'light' | 'auto';
+type ShortcutKey = 'Space' | 'KeyR' | 'KeyS' | 'Escape';
+type ToastType = 'info' | 'success' | 'error';
 
 // Theme management
-class ThemeManager {
+export class ThemeManager {
   currentTheme: Theme;
 
   constructor() {
@@ -68,10 +56,8 @@ class ThemeManager {
   }
 }
 
-type ShortcutKey = 'Space' | 'KeyR' | 'KeyS' | 'Escape';
-
 // Keyboard shortcuts helper
-class KeyboardShortcuts {
+export class KeyboardShortcuts {
   shortcuts: Record<ShortcutKey, string>;
 
   constructor() {
@@ -132,7 +118,7 @@ interface AnalyticsEvent {
 }
 
 // Analytics helper (privacy-focused)
-class Analytics {
+export class Analytics {
   sessionStart: number;
   events: AnalyticsEvent[];
 
@@ -170,10 +156,8 @@ class Analytics {
   }
 }
 
-type ToastType = 'info' | 'success' | 'error';
-
 // Utility functions
-const utils = {
+export const utils = {
   // Format time in human readable format
   formatTime(seconds: number): string {
     const hours = Math.floor(seconds / 3600);
@@ -246,6 +230,32 @@ const utils = {
     };
   }
 };
+
+// Extend window interface for global application objects
+declare global {
+  interface Window {
+    themeManager?: ThemeManager;
+    keyboardShortcuts?: KeyboardShortcuts;
+    analytics?: Analytics;
+    utils?: typeof utils;
+    pomodoroTimer?: any;
+    playTone?: any;
+  }
+}
+
+// PWA Service Worker Registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/sw.js')
+      .then((registration) => {
+        console.log('SW registered: ', registration);
+      })
+      .catch((registrationError) => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
 
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {

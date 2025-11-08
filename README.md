@@ -1,6 +1,6 @@
 # 🍅 Focus Timer - Pomodoro Technique
 
-An impressive, modern Pomodoro timer web application built with vanilla JavaScript. Boost your productivity with the proven Pomodoro Technique in a beautifully designed interface.
+An impressive, modern Pomodoro timer web application built with TypeScript and Bun. Boost your productivity with the proven Pomodoro Technique in a beautifully designed interface.
 
 ## ✨ Features
 
@@ -52,7 +52,8 @@ Visit the live application: [https://pomodoro.kajkowalski.nl](https://pomodoro.k
 ### For Development
 
 ```bash
-# Ensure Node.js (v22 or later) is installed
+# Ensure Bun is installed (https://bun.sh)
+curl -fsSL https://bun.sh/install | bash
 
 # Clone the repository
 git clone https://github.com/kjanat/pomodoro-timer.git
@@ -61,7 +62,7 @@ git clone https://github.com/kjanat/pomodoro-timer.git
 cd pomodoro-timer
 
 # Install dependencies
-pnpm install
+bun install
 
 # Install pre-commit hooks (recommended for contributors)
 pip install pre-commit
@@ -71,7 +72,7 @@ pre-commit install
 pre-commit run --all-files
 
 # Start development server
-pnpm start
+bun run dev
 ```
 
 ## 🏗️ Project Structure
@@ -81,16 +82,18 @@ pomodoro-timer/
 ├── src/                           # Source files
 │   ├── index.html                 # Main HTML document
 │   ├── manifest.json              # PWA manifest
-│   ├── sw.js                      # Service worker for PWA
+│   ├── sw.ts                      # Service worker for PWA
 │   ├── css/
 │   │   └── styles.css             # Modern CSS with variables and animations
 │   ├── js/
-│   │   ├── app.js                 # Application initialization and utilities
-│   │   ├── audio.js               # Tone playback helper
-│   │   └── timer.js               # Core timer logic and UI management
+│   │   ├── app.ts                 # Application initialization and utilities
+│   │   ├── audio.ts               # Tone playback helper
+│   │   └── timer.ts               # Core timer logic and UI management
+├── tests/                         # Test files
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml             # GitHub Actions for automatic deployment
+├── tsconfig.json                  # TypeScript configuration
 ├── package.json                   # Project configuration
 └── README.md                      # This file
 ```
@@ -109,15 +112,16 @@ This technique helps maintain focus and prevents burnout while maximizing produc
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: Vanilla JavaScript (ES6+), HTML5, CSS3
+- **Frontend**: TypeScript, HTML5, CSS3
+- **Runtime**: Bun
 - **PWA**: Service Worker, Web App Manifest
-- **Build**: GitHub Actions for CI/CD
+- **Build**: Bun bundler, GitHub Actions for CI/CD
 - **Deployment**: GitHub Pages
-- **Package Manager**: pnpm
+- **Testing**: Vitest
 
 ## 🔊 Sound Notifications
 
-The timer uses a tiny Web Audio API helper to beep when sessions start and finish. `playTone(frequency, duration)` lives in `src/js/audio.js` and keeps a single `AudioContext` instance for efficient playback.
+The timer uses a tiny Web Audio API helper to beep when sessions start and finish. `playTone(frequency, duration)` lives in `src/js/audio.ts` and keeps a single `AudioContext` instance for efficient playback.
 
 - **Start beep**: 440&nbsp;Hz
 - **Finish beep**: 880&nbsp;Hz
@@ -125,11 +129,12 @@ The timer uses a tiny Web Audio API helper to beep when sessions start and finis
 
 ## 🌟 Key Highlights
 
-- **Zero Dependencies**: Built with pure web technologies
+- **Type-Safe**: Built with TypeScript for reliability and maintainability
 - **Lightweight**: Fast loading and minimal resource usage
 - **Modern Standards**: Uses latest web APIs and best practices
 - **Mobile-First**: Designed for all device sizes
 - **Privacy-Focused**: All data stays on your device
+- **Fully Tested**: Comprehensive test coverage with Vitest
 
 ## 🤝 Contributing
 
@@ -142,10 +147,11 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 3. Install dependencies and set up pre-commit hooks:
 
    ```bash
-   # Ensure Node.js (v22 or later) is installed
+   # Ensure Bun is installed (https://bun.sh)
+   curl -fsSL https://bun.sh/install | bash
 
    # Install project dependencies
-   pnpm install
+   bun install
 
    # Install pre-commit framework (choose one method)
    pip install pre-commit
@@ -159,10 +165,10 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
    pre-commit run --all-files
    ```
 
-- **About pre-commit hooks**: The hooks use remote Prettier and StandardJS integrations with their own Node environments:
+- **About pre-commit hooks**: The hooks use remote Prettier integration with its own Node environment:
 
-- Prettier formats supported non-JavaScript files (`.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`) using the `prettier-config-standard` shareable config
-- JavaScript files are linted and fixed with StandardJS
+- Prettier formats supported files (`.ts`, `.json`, `.md`, `.html`, `.css`, `.yml`, `.yaml`) using the `prettier-config-standard` shareable config
+- TypeScript files are type-checked with `tsc --noEmit`
 - Automatic fixes are applied where possible
 - Runs locally, on GitHub Actions, and on [pre-commit.ci](https://pre-commit.ci/)
 

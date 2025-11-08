@@ -406,3 +406,8 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/node,linux,macos,windows,visualstudiocode,python
 
 .specstory/
+
+# Non-Bun lockfiles
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
