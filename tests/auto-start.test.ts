@@ -1,5 +1,5 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.js'
+import PomodoroTimer from '../src/js/timer.ts'
 
 function setupDOM () {
   document.body.innerHTML = `
@@ -15,7 +15,7 @@ function setupDOM () {
   `
 }
 
-describe('PomodoroTimer flow', () => {
+describe('PomodoroTimer auto start', () => {
   beforeEach(() => {
     setupDOM()
     global.localStorage = { setItem: vi.fn(), getItem: vi.fn() }
@@ -23,40 +23,40 @@ describe('PomodoroTimer flow', () => {
     global.playTone = vi.fn()
   })
 
-  it('start, tick and pause', () => {
-    const timer = new PomodoroTimer({ skipInit: true })
-    timer.updateUI = () => {}
-    timer.updateProgress = () => {}
-    timer.start()
-    expect(timer.state.isRunning).toBe(true)
-    vi.advanceTimersByTime(1000)
-    expect(timer.state.remainingTime).toBe(timer.state.totalTime - 1)
-    timer.pause()
-    expect(timer.state.isPaused).toBe(true)
-  })
-
-  it('reset sets remaining time', () => {
-    const timer = new PomodoroTimer({ skipInit: true })
-    timer.updateUI = () => {}
-    timer.updateProgress = () => {}
-    timer.state.mode = 'shortBreak'
-    timer.settings.shortBreakDuration = 1
-    timer.reset()
-    expect(timer.state.remainingTime).toBe(60)
-  })
-
-  it('completes a cycle', () => {
-    const timer = new PomodoroTimer({ skipInit: true })
-    timer.updateUI = () => {}
-    timer.updateProgress = () => {}
-    timer.state.remainingTime = 1
-    timer.settings.autoStartBreaks = false
-    timer.start()
-    vi.advanceTimersByTime(1000)
-    expect(timer.state.isRunning).toBe(false)
-  })
-
   afterEach(() => {
     vi.useRealTimers()
+  })
+
+  it('automatically starts break after focus session', () => {
+    const timer = new PomodoroTimer({ skipInit: true })
+    timer.updateUI = () => {}
+    timer.updateProgress = () => {}
+    timer.settings.autoStartBreaks = true
+    timer.settings.autoStartFocus = true
+    timer.state.remainingTime = 1
+    timer.start()
+    vi.advanceTimersByTime(1000)
+    expect(timer.state.mode).toBe('focus')
+    expect(timer.state.isRunning).toBe(false)
+    vi.advanceTimersByTime(1000)
+    expect(timer.state.isRunning).toBe(true)
+    expect(timer.state.mode).toBe('shortBreak')
+  })
+
+  it('automatically starts focus after break session', () => {
+    const timer = new PomodoroTimer({ skipInit: true })
+    timer.updateUI = () => {}
+    timer.updateProgress = () => {}
+    timer.settings.autoStartBreaks = true
+    timer.settings.autoStartFocus = true
+    timer.state.mode = 'shortBreak'
+    timer.state.remainingTime = 1
+    timer.start()
+    vi.advanceTimersByTime(1000)
+    expect(timer.state.mode).toBe('shortBreak')
+    expect(timer.state.isRunning).toBe(false)
+    vi.advanceTimersByTime(1000)
+    expect(timer.state.isRunning).toBe(true)
+    expect(timer.state.mode).toBe('focus')
   })
 })

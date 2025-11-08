@@ -4,7 +4,7 @@ let ThemeManagerCls, KeyboardShortcutsCls
 
 beforeAll(async () => {
   window.matchMedia = window.matchMedia || (() => ({ matches: false, addEventListener: () => {}, removeEventListener: () => {} }))
-  await import('../src/js/app.js')
+  await import('../src/js/app.ts')
   document.dispatchEvent(new Event('DOMContentLoaded'))
   ThemeManagerCls = window.themeManager.constructor
   KeyboardShortcutsCls = window.keyboardShortcuts.constructor
