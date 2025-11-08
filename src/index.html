@@ -108,7 +108,7 @@
 
           <div class="controls">
             <button id="start-button" class="btn btn-primary">
-              <span class="btn-icon">▶</span>
+              <i data-lucide="play" class="btn-icon"></i>
               <span class="btn-text">Start</span>
             </button>
             <button
@@ -116,11 +116,11 @@
               class="btn btn-secondary"
               style="display: none"
             >
-              <span class="btn-icon">⏸</span>
+              <i data-lucide="pause" class="btn-icon"></i>
               <span class="btn-text">Pause</span>
             </button>
             <button id="reset-button" class="btn btn-outline">
-              <span class="btn-icon">↻</span>
+              <i data-lucide="rotate-ccw" class="btn-icon"></i>
               <span class="btn-text">Reset</span>
             </button>
           </div>
@@ -129,7 +129,7 @@
         <div class="settings-section">
           <div class="settings-toggle">
             <button id="settings-toggle-btn" class="settings-btn">
-              ⚙️ Settings
+              <i data-lucide="settings" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 6px;"></i>Settings
             </button>
           </div>
 
@@ -227,10 +227,10 @@
       </main>
 
       <footer class="footer">
-        <p>Built with ❤️ for productivity enthusiasts</p>
       </footer>
     </div>
 
+    <script src="js/icons.js"></script>
     <script src="js/audio.js"></script>
     <script src="js/timer.js"></script>
     <script src="js/app.js"></script>
