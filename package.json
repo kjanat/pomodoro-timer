@@ -47,5 +47,8 @@
     "prettier-config-standard": "^7.0.0",
     "typescript": "^5.9.3",
     "vitest": "~4.0.8"
+  },
+  "dependencies": {
+    "lucide": "^0.553.0"
   }
 }
