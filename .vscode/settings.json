@@ -1,0 +1,49 @@
+{
+  "editor.formatOnSave": true,
+  "bun.test.customScript": "bun run test",
+  "biome.enabled": true,
+  "biome.requireConfiguration": true,
+  "biome.suggestInstallingGlobally": false,
+  "biome.lsp.bin": {
+    "darwin": "${workspaceFolder}/node_modules/.bin/biome",
+    "linux": "${workspaceFolder}/node_modules/.bin/biome",
+    "win32": "${workspaceFolder}/node_modules/.bin/biome.exe"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit",
+    "source.action.useSortedKeys.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
+  },
+  // JavaScript
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  // TypeScript
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  // TSX (TypeScript React)
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  // JSX (optional, if you want Biome here too)
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  // JSON
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  // JSONC
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  // HTML
+  "[html]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  // CSS
+  "[css]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  }
+}
