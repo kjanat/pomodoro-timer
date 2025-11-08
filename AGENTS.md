@@ -357,7 +357,6 @@ pnpm start  # Serves on http://localhost:3000
 The project uses a comprehensive code quality setup:
 
 - **Prettier** (`^3.5.3`): Code formatting for JavaScript, HTML, CSS, JSON, and Markdown
-
   - Command: `pnpm format`
   - Configuration: Uses default Prettier settings without config files
   - Scope: `src/**/*.{js,html,css,json}` and root `*.{js,json,md}` files
