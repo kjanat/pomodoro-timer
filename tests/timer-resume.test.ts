@@ -2,7 +2,7 @@ import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
 import PomodoroTimer from '../src/js/timer.ts'
 
 function setupDOM () {
-  const ring = { style: {}, r: { baseVal: { value: 50 } } }
+  const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
   document.body.innerHTML = `
     <div id="timer-display"></div>
     <div id="current-mode"></div>
@@ -22,19 +22,19 @@ function setupDOM () {
     <input id="auto-start-focus" type="checkbox" />
     <input id="sound-enabled" type="checkbox" />
   `
-  vi.spyOn(document, 'querySelector').mockImplementation((sel) => {
+  vi.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
     if (sel === '.progress-ring__progress') return ring
     return document.body.querySelector(sel)
-  })
+  }) as any)
 }
 
 describe('PomodoroTimer resume on reload', () => {
-  let origQuerySelector
+  let origQuerySelector: typeof document.querySelector
   beforeEach(() => {
     origQuerySelector = document.querySelector.bind(document)
     setupDOM()
-    global.localStorage = { setItem: vi.fn(), getItem: vi.fn() }
-    global.playTone = vi.fn()
+    global.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
+    ;(global as any).playTone = vi.fn()
   })
   afterEach(() => {
     vi.restoreAllMocks()
@@ -43,7 +43,7 @@ describe('PomodoroTimer resume on reload', () => {
 
   it('returns true to resume when lastUpdated is missing', () => {
     const today = new Date().toDateString()
-    global.localStorage.getItem.mockReturnValueOnce(
+    ;(global.localStorage.getItem as any).mockReturnValueOnce(
       JSON.stringify({
         date: today,
         remainingTime: 1500,
@@ -60,7 +60,7 @@ describe('PomodoroTimer resume on reload', () => {
 
   it('returns true when elapsed time is less than remainingTime', () => {
     const today = new Date().toDateString()
-    global.localStorage.getItem.mockReturnValueOnce(
+    ;(global.localStorage.getItem as any).mockReturnValueOnce(
       JSON.stringify({
         date: today,
         remainingTime: 1500,
@@ -79,7 +79,7 @@ describe('PomodoroTimer resume on reload', () => {
 
   it('returns false when elapsed time exceeds remainingTime', () => {
     const today = new Date().toDateString()
-    global.localStorage.getItem.mockReturnValueOnce(
+    ;(global.localStorage.getItem as any).mockReturnValueOnce(
       JSON.stringify({
         date: today,
         remainingTime: 1500,

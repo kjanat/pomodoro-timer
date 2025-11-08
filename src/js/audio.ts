@@ -1,16 +1,21 @@
-type AudioContextType = AudioContext | typeof window.webkitAudioContext;
+// Extend Window interface to include webkitAudioContext for older browsers
+declare global {
+  interface Window {
+    webkitAudioContext?: typeof AudioContext;
+  }
+}
 
 interface PlayToneFunction {
   (frequency: number, duration?: number): void;
   ctx?: AudioContext;
 }
 
-export const playTone: PlayToneFunction = function playTone(
+export const playTone: PlayToneFunction = function (
   frequency: number,
   duration: number = 0.3
 ): void {
   if (typeof window === 'undefined') return;
-  const AudioContextClass = (window.AudioContext || (window as any).webkitAudioContext) as typeof AudioContext;
+  const AudioContextClass = (window.AudioContext || window.webkitAudioContext) as typeof AudioContext | undefined;
   if (!AudioContextClass) return;
   if (!playTone.ctx) {
     playTone.ctx = new AudioContextClass();

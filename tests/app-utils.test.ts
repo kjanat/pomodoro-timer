@@ -1,12 +1,15 @@
 import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest'
+import type { utils } from '../src/js/app.ts'
 
-let formatTime, debounce, showToast
+let formatTime: typeof utils.formatTime
+let debounce: typeof utils.debounce
+let showToast: typeof utils.showToast
 
 beforeAll(async () => {
   window.matchMedia = window.matchMedia || (() => ({ matches: false, addEventListener: () => {}, removeEventListener: () => {} }))
   await import('../src/js/app.ts')
   document.dispatchEvent(new Event('DOMContentLoaded'))
-  ;({ formatTime, debounce, showToast } = window.utils)
+  ;({ formatTime, debounce, showToast } = window.utils!)
 })
 
 describe('utils.formatTime', () => {
