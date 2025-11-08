@@ -275,6 +275,13 @@ body {
   margin-bottom: 1rem;
 }
 
+.settings-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
 .settings-btn {
   background: var(--background);
   border: none;
