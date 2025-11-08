@@ -1,8 +1,23 @@
-import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.ts'
+import PomodoroTimer from '@js/timer.ts'
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  type Mock,
+  vi,
+} from 'vitest'
+import { createMockLocalStorage } from './setup'
 
 function setupDOM() {
-  const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
+  const ring = {
+    style: {},
+    r: { baseVal: { value: 50 } },
+  } as SVGCircleElement & {
+    style: Record<string, unknown>
+    r: { baseVal: { value: number } }
+  }
   document.body.innerHTML = `
     <div id="timer-display"></div>
     <div id="current-mode"></div>
@@ -25,7 +40,7 @@ function setupDOM() {
   vi.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
     if (sel === '.progress-ring__progress') return ring
     return document.body.querySelector(sel)
-  }) as any)
+  }) as typeof document.querySelector)
 }
 
 describe('PomodoroTimer resume on reload', () => {
@@ -33,8 +48,8 @@ describe('PomodoroTimer resume on reload', () => {
   beforeEach(() => {
     origQuerySelector = document.querySelector.bind(document)
     setupDOM()
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    ;(globalThis as any).playTone = vi.fn()
+    globalThis.localStorage = createMockLocalStorage() as unknown as Storage
+    ;(globalThis as typeof globalThis & { playTone: Mock }).playTone = vi.fn()
   })
   afterEach(() => {
     vi.restoreAllMocks()
@@ -43,14 +58,16 @@ describe('PomodoroTimer resume on reload', () => {
 
   it('returns true to resume when lastUpdated is missing', () => {
     const today = new Date().toDateString()
-    ;(globalThis.localStorage.getItem as any).mockReturnValueOnce(
+    ;(
+      globalThis.localStorage.getItem as ReturnType<typeof vi.fn>
+    ).mockReturnValueOnce(
       JSON.stringify({
         date: today,
         remainingTime: 1500,
         totalTime: 1500,
         isRunning: true,
-        isPaused: false
-      })
+        isPaused: false,
+      }),
     )
     const timer = new PomodoroTimer({ skipInit: true })
     timer.setupProgressRing()
@@ -60,15 +77,17 @@ describe('PomodoroTimer resume on reload', () => {
 
   it('returns true when elapsed time is less than remainingTime', () => {
     const today = new Date().toDateString()
-    ;(globalThis.localStorage.getItem as any).mockReturnValueOnce(
+    ;(
+      globalThis.localStorage.getItem as ReturnType<typeof vi.fn>
+    ).mockReturnValueOnce(
       JSON.stringify({
         date: today,
         remainingTime: 1500,
         totalTime: 1500,
         isRunning: true,
         isPaused: false,
-        lastUpdated: Date.now() - 1000
-      })
+        lastUpdated: Date.now() - 1000,
+      }),
     )
     const timer = new PomodoroTimer({ skipInit: true })
     timer.setupProgressRing()
@@ -79,15 +98,17 @@ describe('PomodoroTimer resume on reload', () => {
 
   it('returns false when elapsed time exceeds remainingTime', () => {
     const today = new Date().toDateString()
-    ;(globalThis.localStorage.getItem as any).mockReturnValueOnce(
+    ;(
+      globalThis.localStorage.getItem as ReturnType<typeof vi.fn>
+    ).mockReturnValueOnce(
       JSON.stringify({
         date: today,
         remainingTime: 1500,
         totalTime: 1500,
         isRunning: true,
         isPaused: false,
-        lastUpdated: Date.now() - 1600 * 1000
-      })
+        lastUpdated: Date.now() - 1600 * 1000,
+      }),
     )
     const timer = new PomodoroTimer({ skipInit: true })
     timer.setupProgressRing()

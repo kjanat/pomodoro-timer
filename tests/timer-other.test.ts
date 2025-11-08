@@ -1,8 +1,15 @@
-import { describe, it, beforeEach, expect, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.ts'
+import PomodoroTimer from '@js/timer.ts'
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest'
+import { createMockLocalStorage } from './setup'
 
 function setupDOM() {
-  const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
+  const ring = {
+    style: {},
+    r: { baseVal: { value: 50 } },
+  } as SVGCircleElement & {
+    style: Record<string, unknown>
+    r: { baseVal: { value: number } }
+  }
   document.body.innerHTML = `
     <div id="timer-display"></div>
     <div id="current-mode"></div>
@@ -23,25 +30,20 @@ function setupDOM() {
   vi.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
     if (sel === '.progress-ring__progress') return ring
     return document.body.querySelector(sel)
-  }) as any)
+  }) as typeof document.querySelector)
 }
 
 describe('PomodoroTimer additional methods', () => {
   beforeEach(() => {
     setupDOM()
     const today = new Date().toDateString()
-    globalThis.localStorage = {
-      setItem: vi.fn(),
-      getItem: vi.fn((key) => {
-        if (key === 'pomodoro-settings')
-          return JSON.stringify({ focusDuration: 20 })
-        if (key === 'pomodoro-stats') return JSON.stringify({ date: today })
-        return null
-      })
-    } as any
-    ;(globalThis as any).Notification = function () {} as any
-    ;(globalThis as any).Notification.permission = 'granted'
-    ;(globalThis as any).playTone = vi.fn()
+    globalThis.localStorage = createMockLocalStorage((key) => {
+      if (key === 'pomodoro-settings')
+        return JSON.stringify({ focusDuration: 20 })
+      if (key === 'pomodoro-stats') return JSON.stringify({ date: today })
+      return null
+    }) as unknown as Storage
+    ;(globalThis as typeof globalThis & { playTone: Mock }).playTone = vi.fn()
   })
 
   it('executes miscellaneous methods without error', () => {

@@ -1,15 +1,13 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.ts'
-import { playTone } from '../src/js/audio.ts'
+import { playTone } from '@js/audio.ts'
+import PomodoroTimer from '@js/timer.ts'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { createMockLocalStorage } from './setup'
 
 describe('PomodoroTimer core logic', () => {
   let originalWindow: typeof globalThis.window
   beforeEach(() => {
     originalWindow = globalThis.window
-    globalThis.localStorage = {
-      setItem: vi.fn(),
-      getItem: vi.fn()
-    } as any
+    globalThis.localStorage = createMockLocalStorage() as unknown as Storage
   })
 
   afterEach(() => {
@@ -48,7 +46,7 @@ describe('PomodoroTimer core logic', () => {
       start: oscStart,
       stop: oscStop,
       frequency: { value: 0 },
-      type: ''
+      type: '',
     }
     const gain = { connect: vi.fn(), gain: { value: 0 } }
     const createOscillator = vi.fn(() => oscillator)
@@ -61,7 +59,11 @@ describe('PomodoroTimer core logic', () => {
       destination = {}
       currentTime = 0
     }
-    ;(globalThis.window as any).AudioContext = AudioContextMock
+    ;(
+      globalThis.window as unknown as Window & {
+        AudioContext: typeof AudioContextMock
+      }
+    ).AudioContext = AudioContextMock
     expect(() => playTone(440, 0.1)).not.toThrow()
     expect(createOscillator).toHaveBeenCalled()
     expect(oscStart).toHaveBeenCalled()

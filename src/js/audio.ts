@@ -10,10 +10,10 @@ interface PlayToneFunction {
   ctx?: AudioContext
 }
 
-export const playTone: PlayToneFunction = function (
+export const playTone: PlayToneFunction = (
   frequency: number,
-  duration: number = 0.3
-): void {
+  duration: number = 0.3,
+): void => {
   if (typeof window === 'undefined') return
   const AudioContextClass = (window.AudioContext ||
     window.webkitAudioContext) as typeof AudioContext | undefined
@@ -45,5 +45,5 @@ export const playTone: PlayToneFunction = function (
 }
 
 if (typeof window !== 'undefined') {
-  ;(window as any).playTone = playTone
+  ;(window as Window & { playTone: typeof playTone }).playTone = playTone
 }

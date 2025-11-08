@@ -1,5 +1,14 @@
-import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.ts'
+import PomodoroTimer from '@js/timer.ts'
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  type Mock,
+  vi,
+} from 'vitest'
+import { createMockLocalStorage } from './setup'
 
 function setupDOM() {
   document.body.innerHTML = `
@@ -18,9 +27,9 @@ function setupDOM() {
 describe('PomodoroTimer auto start', () => {
   beforeEach(() => {
     setupDOM()
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
+    globalThis.localStorage = createMockLocalStorage() as unknown as Storage
     vi.useFakeTimers()
-    ;(globalThis as any).playTone = vi.fn()
+    ;(globalThis as typeof globalThis & { playTone: Mock }).playTone = vi.fn()
   })
 
   afterEach(() => {

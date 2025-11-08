@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { playTone } from '../src/js/audio.ts'
+import { playTone } from '@js/audio.ts'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('playTone helper', () => {
   let originalWindow: typeof globalThis.window
@@ -28,7 +28,7 @@ describe('playTone helper', () => {
       start: oscStart,
       stop: oscStop,
       frequency: { value: 0 },
-      type: ''
+      type: '',
     }
     const gain = { connect: vi.fn(), gain: { value: 0 } }
     const createOscillator = vi.fn(() => oscillator)
@@ -43,7 +43,11 @@ describe('playTone helper', () => {
       state = 'running'
       resume = vi.fn()
     }
-    ;(globalThis.window as any).AudioContext = AudioContextMock
+    ;(
+      globalThis.window as unknown as {
+        AudioContext: typeof AudioContextMock
+      }
+    ).AudioContext = AudioContextMock
     expect(() => playTone(330, 0.1)).not.toThrow()
     expect(createOscillator).toHaveBeenCalled()
     expect(oscStart).toHaveBeenCalled()
@@ -57,7 +61,7 @@ describe('playTone helper', () => {
       start: vi.fn(),
       stop: vi.fn(),
       frequency: { value: 0 },
-      type: ''
+      type: '',
     }
     const gain = { connect: vi.fn(), gain: { value: 0 } }
     const createOscillator = vi.fn(() => oscillator)
@@ -72,7 +76,11 @@ describe('playTone helper', () => {
       state = 'suspended'
       resume = resume
     }
-    ;(globalThis.window as any).AudioContext = AudioContextMock
+    ;(
+      globalThis.window as unknown as {
+        AudioContext: typeof AudioContextMock
+      }
+    ).AudioContext = AudioContextMock
     playTone(440)
     expect(resume).toHaveBeenCalled()
   })

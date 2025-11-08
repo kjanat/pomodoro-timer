@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 test.describe('Auto-start feature E2E', () => {
   test.beforeEach(async ({ page }) => {
@@ -6,7 +6,7 @@ test.describe('Auto-start feature E2E', () => {
   })
 
   test('should auto-start break after focus session completes', async ({
-    page
+    page,
   }) => {
     const settingsButton = page.locator('#settings-toggle-btn')
     const focusDurationInput = page.locator('#focus-duration')
@@ -52,7 +52,7 @@ test.describe('Auto-start feature E2E', () => {
   })
 
   test('should NOT auto-start break when feature is disabled', async ({
-    page
+    page,
   }) => {
     const settingsButton = page.locator('#settings-toggle-btn')
     const focusDurationInput = page.locator('#focus-duration')
@@ -89,13 +89,13 @@ test.describe('Auto-start feature E2E', () => {
   })
 
   test('should auto-start focus after break session completes', async ({
-    page
+    page,
   }) => {
     const settingsButton = page.locator('#settings-toggle-btn')
     const shortBreakInput = page.locator('#short-break-duration')
     const autoStartFocusCheckbox = page.locator('#auto-start-focus')
     const currentMode = page.locator('#current-mode')
-    const timeDisplay = page.locator('#timer-display')
+    const _timeDisplay = page.locator('#timer-display')
 
     // Open settings
     await settingsButton.click()
@@ -115,7 +115,11 @@ test.describe('Auto-start feature E2E', () => {
 
     // Manually switch to short break mode by evaluating JavaScript
     await page.evaluate(() => {
-      const timer = (window as any).pomodoroTimer
+      const timer = (
+        window as Window & {
+          pomodoroTimer: { setMode: (mode: string) => void }
+        }
+      ).pomodoroTimer
       timer.setMode('shortBreak')
     })
 

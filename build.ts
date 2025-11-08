@@ -3,12 +3,14 @@
 // Build script for Pomodoro Timer
 // Uses Bun's native HTML bundler and service worker compilation
 
+export {}
+
 const result = await Bun.build({
   entrypoints: ['./src/index.html'],
   outdir: './dist',
   minify: true,
   target: 'browser',
-  sourcemap: 'linked'
+  sourcemap: 'linked',
 })
 
 if (!result.success) {
@@ -25,7 +27,7 @@ const swResult = await Bun.build({
   outdir: './dist',
   naming: '[name].[ext]', // Keep as sw.js
   minify: true,
-  target: 'browser'
+  target: 'browser',
 })
 
 if (!swResult.success) {

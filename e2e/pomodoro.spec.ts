@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 test.describe('Pomodoro Timer E2E', () => {
   test.beforeEach(async ({ page }) => {
@@ -69,11 +69,11 @@ test.describe('Pomodoro Timer E2E', () => {
   })
 
   test('should apply dark theme based on system preference', async ({
-    page
+    page,
   }) => {
     // Check if theme can be applied (this test is simplified since there's no theme toggle in the UI yet)
     // The theme is managed via localStorage and system preferences
-    const html = page.locator('html')
+    const _html = page.locator('html')
 
     // Set theme via localStorage
     await page.evaluate(() => {
@@ -95,7 +95,7 @@ test.describe('Pomodoro Timer E2E', () => {
   test('should use keyboard shortcuts', async ({ page }) => {
     const timeDisplay = page.locator('#timer-display')
     const startButton = page.locator('#start-button')
-    const pauseButton = page.locator('#pause-button')
+    const _pauseButton = page.locator('#pause-button')
 
     // Press Space to start (note: Space key might not work for buttons, so we'll test KeyR and KeyS)
     // Press KeyR to reset (ensure timer is at initial state)

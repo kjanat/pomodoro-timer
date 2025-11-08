@@ -1,5 +1,5 @@
-import { describe, it, beforeEach, beforeAll, expect } from 'vitest'
-import type { ThemeManager, KeyboardShortcuts } from '../src/js/app.ts'
+import type { KeyboardShortcuts, ThemeManager } from '@js/app.ts'
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 let ThemeManagerCls: typeof ThemeManager
 let KeyboardShortcutsCls: typeof KeyboardShortcuts
@@ -10,12 +10,15 @@ beforeAll(async () => {
     (() => ({
       matches: false,
       addEventListener: () => {},
-      removeEventListener: () => {}
+      removeEventListener: () => {},
     }))
-  await import('../src/js/app.ts')
+  await import('@js/app.ts')
   document.dispatchEvent(new Event('DOMContentLoaded'))
-  ThemeManagerCls = window.themeManager!.constructor as typeof ThemeManager
-  KeyboardShortcutsCls = window.keyboardShortcuts!
+  if (!window.themeManager) throw new Error('themeManager not initialized')
+  if (!window.keyboardShortcuts)
+    throw new Error('keyboardShortcuts not initialized')
+  ThemeManagerCls = window.themeManager.constructor as typeof ThemeManager
+  KeyboardShortcutsCls = window.keyboardShortcuts
     .constructor as typeof KeyboardShortcuts
 })
 
@@ -41,11 +44,11 @@ describe('KeyboardShortcuts panel helpers', () => {
     const ks = new KeyboardShortcutsCls()
     ks.toggleSettings()
     expect(
-      document.getElementById('settings-panel')!.classList.contains('active')
+      document.getElementById('settings-panel')?.classList.contains('active'),
     ).toBe(true)
     ks.closeSettings()
     expect(
-      document.getElementById('settings-panel')!.classList.contains('active')
+      document.getElementById('settings-panel')?.classList.contains('active'),
     ).toBe(false)
   })
 })

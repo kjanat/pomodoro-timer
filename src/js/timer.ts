@@ -58,7 +58,7 @@ export class PomodoroTimer {
       totalTime: 25 * 60,
       sessionCount: 1,
       completedSessions: 0,
-      totalFocusTime: 0
+      totalFocusTime: 0,
     }
 
     this.settings = {
@@ -68,7 +68,7 @@ export class PomodoroTimer {
       longBreakInterval: 4,
       autoStartBreaks: true,
       autoStartFocus: true,
-      soundEnabled: true
+      soundEnabled: true,
     }
 
     if (!options.skipInit) {
@@ -129,7 +129,8 @@ export class PomodoroTimer {
       .getElementById('focus-duration')
       ?.addEventListener('change', (e) => {
         this.settings.focusDuration = parseInt(
-          (e.target as HTMLInputElement).value
+          (e.target as HTMLInputElement).value,
+          10,
         )
         this.saveSettings()
         if (this.state.mode === 'focus' && !this.state.isRunning) {
@@ -141,7 +142,8 @@ export class PomodoroTimer {
       .getElementById('short-break-duration')
       ?.addEventListener('change', (e) => {
         this.settings.shortBreakDuration = parseInt(
-          (e.target as HTMLInputElement).value
+          (e.target as HTMLInputElement).value,
+          10,
         )
         this.saveSettings()
       })
@@ -150,7 +152,8 @@ export class PomodoroTimer {
       .getElementById('long-break-duration')
       ?.addEventListener('change', (e) => {
         this.settings.longBreakDuration = parseInt(
-          (e.target as HTMLInputElement).value
+          (e.target as HTMLInputElement).value,
+          10,
         )
         this.saveSettings()
       })
@@ -159,7 +162,8 @@ export class PomodoroTimer {
       .getElementById('long-break-interval')
       ?.addEventListener('change', (e) => {
         this.settings.longBreakInterval = parseInt(
-          (e.target as HTMLInputElement).value
+          (e.target as HTMLInputElement).value,
+          10,
         )
         this.saveSettings()
       })
@@ -393,13 +397,13 @@ export class PomodoroTimer {
 
   updateButtons(): void {
     const startBtn = document.getElementById(
-      'start-button'
+      'start-button',
     ) as HTMLButtonElement | null
     const pauseBtn = document.getElementById(
-      'pause-button'
+      'pause-button',
     ) as HTMLButtonElement | null
     const resetBtn = document.getElementById(
-      'reset-button'
+      'reset-button',
     ) as HTMLButtonElement | null
 
     if (!startBtn || !pauseBtn || !resetBtn) return
@@ -443,7 +447,7 @@ export class PomodoroTimer {
       document.getElementById('completed-sessions')
     if (completedSessionsElement) {
       completedSessionsElement.textContent = String(
-        this.state.completedSessions
+        this.state.completedSessions,
       )
     }
 
@@ -484,7 +488,7 @@ export class PomodoroTimer {
 
         new Notification(`${modeText} Complete!`, {
           body: message,
-          icon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍅</text></svg>'
+          icon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍅</text></svg>',
         })
       } else if (Notification.permission !== 'denied') {
         Notification.requestPermission()
@@ -500,25 +504,25 @@ export class PomodoroTimer {
 
     // Update UI inputs
     const focusDurationInput = document.getElementById(
-      'focus-duration'
+      'focus-duration',
     ) as HTMLInputElement
     const shortBreakInput = document.getElementById(
-      'short-break-duration'
+      'short-break-duration',
     ) as HTMLInputElement
     const longBreakInput = document.getElementById(
-      'long-break-duration'
+      'long-break-duration',
     ) as HTMLInputElement
     const longBreakIntervalInput = document.getElementById(
-      'long-break-interval'
+      'long-break-interval',
     ) as HTMLInputElement
     const autoStartBreaksInput = document.getElementById(
-      'auto-start-breaks'
+      'auto-start-breaks',
     ) as HTMLInputElement
     const autoStartFocusInput = document.getElementById(
-      'auto-start-focus'
+      'auto-start-focus',
     ) as HTMLInputElement
     const soundEnabledInput = document.getElementById(
-      'sound-enabled'
+      'sound-enabled',
     ) as HTMLInputElement
 
     if (focusDurationInput)
@@ -601,7 +605,7 @@ export class PomodoroTimer {
       totalTime: this.state.totalTime,
       isRunning: this.state.isRunning,
       isPaused: this.state.isPaused,
-      lastUpdated: Date.now()
+      lastUpdated: Date.now(),
     }
 
     localStorage.setItem('pomodoro-stats', JSON.stringify(stats))
@@ -611,7 +615,7 @@ export class PomodoroTimer {
 // Initialize timer when DOM is loaded (browser only)
 if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', () => {
-    ;(window as any).pomodoroTimer = new PomodoroTimer()
+    window.pomodoroTimer = new PomodoroTimer()
 
     // Request notification permission
     if ('Notification' in window && Notification.permission === 'default') {

@@ -1,32 +1,40 @@
-import { describe, it, beforeEach, expect, vi } from 'vitest'
-import { ThemeManager } from '../src/js/app.ts'
+import { ThemeManager } from '@js/app.ts'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('ThemeManager', () => {
   let themeManager: ThemeManager
-  let mockMatchMedia: any
+  let mockMatchMedia: {
+    matches: boolean
+    addEventListener: ReturnType<typeof vi.fn>
+    removeEventListener: ReturnType<typeof vi.fn>
+    trigger: (matches: boolean) => void
+  }
 
   beforeEach(() => {
-    // Clear localStorage
-    localStorage.clear()
-
     // Clear theme classes
     document.documentElement.className = ''
 
     // Setup matchMedia mock
-    const listeners: Array<(e: any) => void> = []
+    const listeners: Array<(e: { matches: boolean }) => void> = []
     mockMatchMedia = {
       matches: false,
-      addEventListener: vi.fn((event: string, callback: any) => {
-        listeners.push(callback)
-      }),
+      addEventListener: vi.fn(
+        (_event: string, callback: (e: { matches: boolean }) => void) => {
+          listeners.push(callback)
+        },
+      ),
       removeEventListener: vi.fn(),
       trigger: (matches: boolean) => {
         mockMatchMedia.matches = matches
-        listeners.forEach((cb) => cb({ matches }))
-      }
+        for (const cb of listeners) {
+          cb({ matches })
+        }
+      },
     }
 
-    window.matchMedia = vi.fn(() => mockMatchMedia) as any
+    window.matchMedia = vi.fn(
+      () => mockMatchMedia,
+    ) as unknown as typeof window.matchMedia
   })
 
   it('initializes with auto theme by default', () => {
@@ -56,7 +64,7 @@ describe('ThemeManager', () => {
     themeManager.setTheme('light')
 
     expect(document.documentElement.classList.contains('dark-theme')).toBe(
-      false
+      false,
     )
     expect(localStorage.getItem('theme')).toBe('light')
   })
@@ -75,7 +83,7 @@ describe('ThemeManager', () => {
     themeManager.setTheme('auto')
 
     expect(document.documentElement.classList.contains('dark-theme')).toBe(
-      false
+      false,
     )
   })
 
@@ -85,7 +93,7 @@ describe('ThemeManager', () => {
     themeManager.setTheme('auto')
 
     expect(document.documentElement.classList.contains('dark-theme')).toBe(
-      false
+      false,
     )
 
     // Simulate system theme change to dark
@@ -99,7 +107,7 @@ describe('ThemeManager', () => {
     themeManager.setTheme('light')
 
     expect(document.documentElement.classList.contains('dark-theme')).toBe(
-      false
+      false,
     )
 
     // Simulate system theme change to dark
@@ -107,7 +115,7 @@ describe('ThemeManager', () => {
 
     // Should still be light
     expect(document.documentElement.classList.contains('dark-theme')).toBe(
-      false
+      false,
     )
   })
 
@@ -119,13 +127,13 @@ describe('ThemeManager', () => {
 
     themeManager.setTheme('light')
     expect(document.documentElement.classList.contains('dark-theme')).toBe(
-      false
+      false,
     )
 
     themeManager.setTheme('auto')
     // mockMatchMedia.matches is false by default
     expect(document.documentElement.classList.contains('dark-theme')).toBe(
-      false
+      false,
     )
   })
 
