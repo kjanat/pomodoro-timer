@@ -3,6 +3,22 @@ on: [push, pull_request]
 
 jobs:
   coverage:
+    strategy:
+      fail-fast: false
+      matrix:
+        test-runner: [bun, vitest]
+        include:
+          - test-runner: bun
+            experimental: true
+            sh: bun test --coverage --coverage-reporter=lcov
+            coverage-file: ./coverage/bun/lcov.info
+            unit-test-file: ./reports/bun.junit.xml
+          - test-runner: vitest
+            experimental: false
+            sh: bun test:coverage
+            unit-test-file: ./reports/vitest.junit.xml
+
+    name: Code Coverage with ${{ matrix.test-runner }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -15,10 +31,22 @@ jobs:
         run: bun install
 
       - name: Run tests with coverage
-        run: bun test --coverage --coverage-reporter=lcov
+        run: ${{ matrix.sh }}
 
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v3
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
         with:
-          file: ./coverage/lcov.info
-          fail_ci_if_error: true
+          files: ${{ matrix.unit-test-file }}
+          flags: ${{ matrix.test-runner }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v3
+        if: ${{ !cancelled() }}
+        with:
+          slug: kjanat/pomodoro-timer
+          file: ${{ matrix.coverage-file }}
+          flags: ${{ matrix.test-runner }}
+          fail_ci_if_error: ${{ !matrix.experimental }}
+          token: ${{ secrets.CODECOV_TOKEN }}

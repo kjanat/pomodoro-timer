@@ -12,11 +12,18 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./tests/setup.ts'],
-    exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**'],
+    reporters: process.env.CI
+      ? [
+          'github-actions',
+          ['junit', { outputFile: './reports/vitest.junit.xml' }],
+          'tree',
+        ]
+      : ['default', 'html'],
     coverage: {
+      enabled: true,
       provider: 'v8',
-      reporter: ['text', 'html'],
       include: ['src/js/**/*.ts'],
     },
+    exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**'],
   },
 })

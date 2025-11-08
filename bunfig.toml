@@ -1,11 +1,18 @@
-#:schema https://www.schemastore.org/bunfig.json
+## ###:schema https://www.schemastore.org/bunfig.json
+# Schema temporarily disabled due to bunfig.toml schema validation issue
 
 [test]
+# Test discovery
 root = "tests"
 preload = ["./happydom.ts", "./vitest-compat.ts"]
+# Execution settings
+# timeout = 10000
+# smol = true
+# Coverage configuration
 coverage = true
-coverageThreshold = 0.8  # OR: { lines = 0.9, functions = 0.9, statements = 0.9 }
-coverageReporter = ["text", "lcov"]  # default ["text"]
+coverageReporter = ["text", "lcov"]
+coverageDir = "./coverage/bun"
+coverageThreshold = { lines = 0.85, functions = 0.90, statements = 0.80 }
 # Note: E2E tests in e2e/ should use 'bun run test:e2e' (Playwright), not 'bun test'
 # bun test will pick them up but they'll fail - use test pattern matching instead
 coveragePathIgnorePatterns = [
@@ -14,3 +21,7 @@ coveragePathIgnorePatterns = [
   "vitest-compat.ts",
   "tests/setup.ts"
 ]
+
+# Reporter configuration
+[test.reporter]
+junit = "./reports/bun.junit.xml"

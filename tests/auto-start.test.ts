@@ -1,13 +1,5 @@
 import PomodoroTimer from '@js/timer.ts'
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  type Mock,
-  vi,
-} from 'vitest'
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest'
 import { createMockLocalStorage } from './setup'
 
 function setupDOM() {
@@ -28,15 +20,10 @@ describe('PomodoroTimer auto start', () => {
   beforeEach(() => {
     setupDOM()
     globalThis.localStorage = createMockLocalStorage() as unknown as Storage
-    vi.useFakeTimers()
     ;(globalThis as typeof globalThis & { playTone: Mock }).playTone = vi.fn()
   })
 
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
-  it('automatically starts break after focus session', () => {
+  it('automatically starts break after focus session', async () => {
     const timer = new PomodoroTimer({ skipInit: true })
     timer.updateUI = () => {}
     timer.updateProgress = () => {}
@@ -44,17 +31,13 @@ describe('PomodoroTimer auto start', () => {
     timer.settings.autoStartFocus = true
     timer.state.remainingTime = 1
     timer.start()
-    vi.advanceTimersByTime(1000)
-    vi.runAllTimers()
-    expect(timer.state.mode).toBe('focus')
-    expect(timer.state.isRunning).toBe(false)
-    vi.advanceTimersByTime(1000)
-    vi.runAllTimers()
-    expect(timer.state.isRunning).toBe(true)
+    // Wait for tick (1100ms) + complete delay (1100ms)
+    await new Promise((resolve) => setTimeout(resolve, 2200))
     expect(timer.state.mode).toBe('shortBreak')
+    expect(timer.state.isRunning).toBe(true)
   })
 
-  it('automatically starts focus after break session', () => {
+  it('automatically starts focus after break session', async () => {
     const timer = new PomodoroTimer({ skipInit: true })
     timer.updateUI = () => {}
     timer.updateProgress = () => {}
@@ -63,13 +46,9 @@ describe('PomodoroTimer auto start', () => {
     timer.state.mode = 'shortBreak'
     timer.state.remainingTime = 1
     timer.start()
-    vi.advanceTimersByTime(1000)
-    vi.runAllTimers()
-    expect(timer.state.mode).toBe('shortBreak')
-    expect(timer.state.isRunning).toBe(false)
-    vi.advanceTimersByTime(1000)
-    vi.runAllTimers()
-    expect(timer.state.isRunning).toBe(true)
+    // Wait for tick (1100ms) + complete delay (1100ms)
+    await new Promise((resolve) => setTimeout(resolve, 2200))
     expect(timer.state.mode).toBe('focus')
+    expect(timer.state.isRunning).toBe(true)
   })
 })

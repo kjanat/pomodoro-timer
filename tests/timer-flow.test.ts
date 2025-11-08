@@ -1,13 +1,5 @@
 import PomodoroTimer from '@js/timer.ts'
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  type Mock,
-  vi,
-} from 'vitest'
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest'
 import { createMockLocalStorage } from './setup'
 
 function setupDOM() {
@@ -28,18 +20,16 @@ describe('PomodoroTimer flow', () => {
   beforeEach(() => {
     setupDOM()
     globalThis.localStorage = createMockLocalStorage() as unknown as Storage
-    vi.useFakeTimers()
     ;(globalThis as typeof globalThis & { playTone: Mock }).playTone = vi.fn()
   })
 
-  it('start, tick and pause', () => {
+  it('start, tick and pause', async () => {
     const timer = new PomodoroTimer({ skipInit: true })
     timer.updateUI = () => {}
     timer.updateProgress = () => {}
     timer.start()
     expect(timer.state.isRunning).toBe(true)
-    vi.advanceTimersByTime(1000)
-    vi.runAllTimers()
+    await new Promise((resolve) => setTimeout(resolve, 1100))
     expect(timer.state.remainingTime).toBe(timer.state.totalTime - 1)
     timer.pause()
     expect(timer.state.isPaused).toBe(true)
@@ -55,7 +45,7 @@ describe('PomodoroTimer flow', () => {
     expect(timer.state.remainingTime).toBe(60)
   })
 
-  it('completes a cycle', () => {
+  it('completes a cycle', async () => {
     const timer = new PomodoroTimer({ skipInit: true })
     timer.updateUI = () => {}
     timer.updateProgress = () => {}
@@ -63,14 +53,8 @@ describe('PomodoroTimer flow', () => {
     timer.settings.autoStartBreaks = false
     timer.settings.autoStartFocus = false
     timer.start()
-    vi.advanceTimersByTime(1000)
-    vi.runAllTimers()
-    vi.advanceTimersByTime(1000)
-    vi.runAllTimers()
+    // Need 1100ms for tick + 1100ms for complete's advanceMode delay
+    await new Promise((resolve) => setTimeout(resolve, 2200))
     expect(timer.state.isRunning).toBe(false)
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
   })
 })

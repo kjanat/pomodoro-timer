@@ -418,3 +418,13 @@ test-results/
 
 # Serena
 /.serena/
+
+# Test results and coverage reports
+coverage/
+reports/
+*.junit.xml
+junit.xml
+vitest.coverage.json
+lcov.info
+bunfig.toml
+html/

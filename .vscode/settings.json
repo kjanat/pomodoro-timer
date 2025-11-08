@@ -1,6 +1,6 @@
 {
   "editor.formatOnSave": true,
-  "bun.test.customScript": "bun run test",
+  // "bun.test.customScript": "bun run test",
   "biome.enabled": true,
   "biome.requireConfiguration": true,
   "biome.suggestInstallingGlobally": false,

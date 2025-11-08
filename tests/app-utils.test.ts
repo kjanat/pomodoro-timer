@@ -51,42 +51,33 @@ describe('utils.formatTime', () => {
 })
 
 describe('utils.debounce', () => {
-  it('debounces multiple calls', () => {
-    vi.useFakeTimers()
+  it('debounces multiple calls', async () => {
     const fn = vi.fn()
     const debounced = debounce(fn, 100)
     debounced()
     debounced()
-    vi.advanceTimersByTime(50)
+    await new Promise((resolve) => setTimeout(resolve, 50))
     debounced()
-    vi.advanceTimersByTime(100)
-    vi.runAllTimers()
+    await new Promise((resolve) => setTimeout(resolve, 150))
     expect(fn).toHaveBeenCalledTimes(1)
-    vi.useRealTimers()
   })
 
-  it('passes arguments to debounced function', () => {
-    vi.useFakeTimers()
+  it('passes arguments to debounced function', async () => {
     const fn = vi.fn()
     const debounced = debounce(fn, 100)
     debounced('arg1', 'arg2', 123)
-    vi.advanceTimersByTime(100)
-    vi.runAllTimers()
+    await new Promise((resolve) => setTimeout(resolve, 150))
     expect(fn).toHaveBeenCalledWith('arg1', 'arg2', 123)
-    vi.useRealTimers()
   })
 
-  it('executes function after wait time', () => {
-    vi.useFakeTimers()
+  it('executes function after wait time', async () => {
     const fn = vi.fn()
     const debounced = debounce(fn, 200)
     debounced()
-    vi.advanceTimersByTime(199)
+    await new Promise((resolve) => setTimeout(resolve, 199))
     expect(fn).not.toHaveBeenCalled()
-    vi.advanceTimersByTime(1)
-    vi.runAllTimers()
+    await new Promise((resolve) => setTimeout(resolve, 50))
     expect(fn).toHaveBeenCalledTimes(1)
-    vi.useRealTimers()
   })
 })
 
@@ -100,19 +91,13 @@ describe('utils.showToast', () => {
     }
   })
 
-  it('creates and removes a toast element', () => {
-    vi.useFakeTimers()
+  it('creates and removes a toast element', async () => {
     showToast('hi', 'success')
-    // Force synchronous DOM update
     const toast = document.querySelector('.toast-success')
     expect(toast).toBeTruthy()
     expect(toast?.textContent).toBe('hi')
-    vi.advanceTimersByTime(3000)
-    vi.runAllTimers()
-    vi.advanceTimersByTime(300)
-    vi.runAllTimers()
+    await new Promise((resolve) => setTimeout(resolve, 3400))
     expect(document.querySelector('.toast-success')).toBeNull()
-    vi.useRealTimers()
   })
 
   it('creates info toast by default', () => {

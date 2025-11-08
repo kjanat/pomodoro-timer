@@ -62,7 +62,14 @@ class NotificationMock {
   ) {}
 }
 
+// Set on both global and globalThis to ensure all contexts have it
 Object.defineProperty(global, 'Notification', {
+  value: NotificationMock,
+  writable: true,
+  configurable: true,
+})
+
+Object.defineProperty(globalThis, 'Notification', {
   value: NotificationMock,
   writable: true,
   configurable: true,
