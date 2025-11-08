@@ -1,0 +1,15 @@
+#:schema https://www.schemastore.org/bunfig.json
+
+[test]
+preload = ["./happydom.ts", "./vitest-compat.ts"]
+coverage = true
+coverageThreshold = 0.8  # OR: { lines = 0.9, functions = 0.9, statements = 0.9 }
+coverageReporter = ["text", "lcov"]  # default ["text"]
+# Note: E2E tests in e2e/ should use 'bun run test:e2e' (Playwright), not 'bun test'
+# bun test will pick them up but they'll fail - use test pattern matching instead
+coveragePathIgnorePatterns = [
+  "e2e/**",
+  "happydom.ts",
+  "vitest-compat.ts",
+  "tests/setup.ts"
+]
