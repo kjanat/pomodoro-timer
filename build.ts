@@ -11,13 +11,18 @@ const OUT_DIR = './dist'
 try {
   await rm(OUT_DIR, { recursive: true })
   console.log(`✓ Cleaned output directory: ${OUT_DIR}`)
-} catch {
+} catch (error) {
   // Ignore if directory does not exist
+  if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+    // Directory doesn't exist, which is fine
+  } else {
+    throw error
+  }
 }
 
 const result = await Bun.build({
   entrypoints: ['./src/index.html'],
-  outdir: './dist',
+  outdir: OUT_DIR,
   minify: true,
   target: 'browser',
   sourcemap: 'linked',
@@ -59,13 +64,13 @@ const generateServiceWorker = async () => {
     .replace('__PRECACHE_MANIFEST__ as string[]', JSON.stringify(precacheFiles))
 
   // Write temporary TS file for transpilation
-  const tempSwPath = './dist/sw.temp.ts'
+  const tempSwPath = `${OUT_DIR}/sw.temp.ts`
   await Bun.write(tempSwPath, swCode)
 
   // Transpile to JS using Bun.build
   const swBuild = await Bun.build({
     entrypoints: [tempSwPath],
-    outdir: './dist',
+    outdir: OUT_DIR,
     naming: 'sw.js',
     minify: true,
     target: 'browser',
@@ -91,7 +96,7 @@ console.log(`  Precaching ${precacheFiles.length} files`)
 
 // Copy manifest.json to dist
 try {
-  await Bun.write('./dist/manifest.json', Bun.file('./src/manifest.json'))
+  await Bun.write(`${OUT_DIR}/manifest.json`, Bun.file('./src/manifest.json'))
 } catch (error) {
   console.error('Failed to copy manifest.json:', error)
   process.exit(1)
@@ -106,6 +111,6 @@ for (const output of result.outputs) {
 }
 
 // Show SW size
-const swFile = Bun.file('./dist/sw.js')
+const swFile = Bun.file(`${OUT_DIR}/sw.js`)
 const swSize = (swFile.size / 1024).toFixed(2)
-console.log(`  ${process.cwd()}/dist/sw.js (${swSize} KB)`)
+console.log(`  ${process.cwd()}/${OUT_DIR}/sw.js (${swSize} KB)`)
