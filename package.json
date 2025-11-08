@@ -7,7 +7,7 @@
   "scripts": {
     "start": "bun run --hot src/js/app.ts",
     "dev": "http-server src -p 3000 -o",
-    "build": "bun build src/js/app.ts --outdir=dist/js --target=browser && cp -r src/css dist/ && cp src/index.html dist/ && cp src/manifest.json dist/ && cp src/sw.ts dist/sw.js",
+    "build": "bun build src/js/icons.ts --outdir=dist/js --target=browser && bun build src/js/audio.ts --outdir=dist/js --target=browser && bun build src/js/timer.ts --outdir=dist/js --target=browser && bun build src/js/app.ts --outdir=dist/js --target=browser && cp -r src/css dist/ && cp src/index.html dist/ && cp src/manifest.json dist/ && cp src/sw.ts dist/sw.js",
     "preview": "http-server dist -p 3000 -o",
     "format": "prettier --write \"src/**/*.{ts,html,css,json}\" \"*.{ts,json,md}\" --ignore-path .gitignore",
     "lint": "tsc --noEmit",
@@ -47,5 +47,8 @@
     "prettier-config-standard": "^7.0.0",
     "typescript": "^5.9.3",
     "vitest": "~4.0.8"
+  },
+  "dependencies": {
+    "lucide": "^0.553.0"
   }
 }
