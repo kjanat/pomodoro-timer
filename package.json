@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "bun run --hot src/js/app.ts",
-    "dev": "http-server src -p 3000 -o",
+    "dev": "bun --hot src/index.html",
     "build": "bun run build.ts",
-    "preview": "http-server dist -p 3000 -o",
+    "preview": "bun dist/index.html",
     "format": "prettier --write \"src/**/*.{ts,html,css,json}\" \"*.{ts,json,md}\" --ignore-path .gitignore",
     "lint": "tsc --noEmit",
     "lint:fix": "tsc --noEmit",
