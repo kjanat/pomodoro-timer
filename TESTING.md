@@ -17,11 +17,11 @@ The project now includes comprehensive testing with both unit tests and end-to-e
 
 ### Coverage by File
 
-| File | Statements | Branches | Functions | Lines | Uncovered Lines |
-|------|------------|----------|-----------|-------|-----------------|
-| app.ts | 95.55% | 96.96% | 88.46% | 95.4% | 248-255 (Service Worker) |
-| audio.ts | 88.88% | 86.66% | 50% | 88% | 28, 41-42 |
-| timer.ts | 84.15% | 63.57% | 75% | 85.01% | Various edge cases |
+| File     | Statements | Branches | Functions | Lines  | Uncovered Lines          |
+| -------- | ---------- | -------- | --------- | ------ | ------------------------ |
+| app.ts   | 95.55%     | 96.96%   | 88.46%    | 95.4%  | 248-255 (Service Worker) |
+| audio.ts | 88.88%     | 86.66%   | 50%       | 88%    | 28, 41-42                |
+| timer.ts | 84.15%     | 63.57%   | 75%       | 85.01% | Various edge cases       |
 
 ## Running Tests
 
@@ -94,7 +94,7 @@ The unit tests are organized by functionality:
 
 6. **theme-shortcuts.test.ts** - Integration tests for themes and shortcuts
 
-7. **timer*.test.ts** - Timer functionality tests
+7. **timer\*.test.ts** - Timer functionality tests
    - Timer initialization
    - Start/pause/reset
    - Mode transitions
@@ -139,12 +139,14 @@ Playwright E2E tests verify the complete user experience:
 ## Improvements Made
 
 ### Before
+
 - 28 tests
 - 80.54% statement coverage
 - 61.3% branch coverage
 - app.ts: 66.66% coverage
 
 ### After
+
 - 66 tests (+135% increase)
 - 87.03% statement coverage (+6.49%)
 - 70.85% branch coverage (+9.55%)
@@ -174,6 +176,7 @@ Playwright E2E tests verify the complete user experience:
 ## Coverage Goals
 
 The only significant uncovered code is:
+
 - **Lines 248-255 in app.ts**: Service Worker registration (hard to test in jsdom)
 - **Lines 28, 41-42 in audio.ts**: Specific audio edge cases
 - **Various edge cases in timer.ts**: Complex timer state transitions
@@ -191,6 +194,7 @@ These represent legitimate edge cases that would require additional mocking comp
 ## Continuous Integration
 
 Tests are designed to run in CI environments:
+
 - Vitest runs in CI mode automatically
 - Playwright includes retry logic for E2E tests
 - Coverage reports can be uploaded to coverage services
@@ -198,14 +202,18 @@ Tests are designed to run in CI environments:
 ## Troubleshooting
 
 ### Tests fail with "document is not defined"
+
 - Make sure vitest.config.ts has `environment: 'jsdom'`
 
 ### Playwright can't find browsers
+
 - Run: `npx playwright install`
 
 ### Coverage not showing
+
 - Run: `npm run test:coverage` instead of `npm test`
 
 ### E2E tests timeout
+
 - Increase timeout in playwright.config.ts
 - Check if http-server starts properly on port 3000

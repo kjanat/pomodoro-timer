@@ -55,7 +55,9 @@ describe('ThemeManager', () => {
     themeManager = new ThemeManager()
     themeManager.setTheme('light')
 
-    expect(document.documentElement.classList.contains('dark-theme')).toBe(false)
+    expect(document.documentElement.classList.contains('dark-theme')).toBe(
+      false
+    )
     expect(localStorage.getItem('theme')).toBe('light')
   })
 
@@ -72,7 +74,9 @@ describe('ThemeManager', () => {
     themeManager = new ThemeManager()
     themeManager.setTheme('auto')
 
-    expect(document.documentElement.classList.contains('dark-theme')).toBe(false)
+    expect(document.documentElement.classList.contains('dark-theme')).toBe(
+      false
+    )
   })
 
   it('listens for system theme changes when in auto mode', () => {
@@ -80,7 +84,9 @@ describe('ThemeManager', () => {
     themeManager = new ThemeManager()
     themeManager.setTheme('auto')
 
-    expect(document.documentElement.classList.contains('dark-theme')).toBe(false)
+    expect(document.documentElement.classList.contains('dark-theme')).toBe(
+      false
+    )
 
     // Simulate system theme change to dark
     mockMatchMedia.trigger(true)
@@ -92,13 +98,17 @@ describe('ThemeManager', () => {
     themeManager = new ThemeManager()
     themeManager.setTheme('light')
 
-    expect(document.documentElement.classList.contains('dark-theme')).toBe(false)
+    expect(document.documentElement.classList.contains('dark-theme')).toBe(
+      false
+    )
 
     // Simulate system theme change to dark
     mockMatchMedia.trigger(true)
 
     // Should still be light
-    expect(document.documentElement.classList.contains('dark-theme')).toBe(false)
+    expect(document.documentElement.classList.contains('dark-theme')).toBe(
+      false
+    )
   })
 
   it('switches between themes correctly', () => {
@@ -108,11 +118,15 @@ describe('ThemeManager', () => {
     expect(document.documentElement.classList.contains('dark-theme')).toBe(true)
 
     themeManager.setTheme('light')
-    expect(document.documentElement.classList.contains('dark-theme')).toBe(false)
+    expect(document.documentElement.classList.contains('dark-theme')).toBe(
+      false
+    )
 
     themeManager.setTheme('auto')
     // mockMatchMedia.matches is false by default
-    expect(document.documentElement.classList.contains('dark-theme')).toBe(false)
+    expect(document.documentElement.classList.contains('dark-theme')).toBe(
+      false
+    )
   })
 
   it('persists theme changes to localStorage', () => {

@@ -5,11 +5,18 @@ let ThemeManagerCls: typeof ThemeManager
 let KeyboardShortcutsCls: typeof KeyboardShortcuts
 
 beforeAll(async () => {
-  window.matchMedia = window.matchMedia || (() => ({ matches: false, addEventListener: () => {}, removeEventListener: () => {} }))
+  window.matchMedia =
+    window.matchMedia ||
+    (() => ({
+      matches: false,
+      addEventListener: () => {},
+      removeEventListener: () => {}
+    }))
   await import('../src/js/app.ts')
   document.dispatchEvent(new Event('DOMContentLoaded'))
   ThemeManagerCls = window.themeManager!.constructor as typeof ThemeManager
-  KeyboardShortcutsCls = window.keyboardShortcuts!.constructor as typeof KeyboardShortcuts
+  KeyboardShortcutsCls = window.keyboardShortcuts!
+    .constructor as typeof KeyboardShortcuts
 })
 
 describe('ThemeManager', () => {
@@ -33,8 +40,12 @@ describe('KeyboardShortcuts panel helpers', () => {
   it('toggles and closes panel', () => {
     const ks = new KeyboardShortcutsCls()
     ks.toggleSettings()
-    expect(document.getElementById('settings-panel')!.classList.contains('active')).toBe(true)
+    expect(
+      document.getElementById('settings-panel')!.classList.contains('active')
+    ).toBe(true)
     ks.closeSettings()
-    expect(document.getElementById('settings-panel')!.classList.contains('active')).toBe(false)
+    expect(
+      document.getElementById('settings-panel')!.classList.contains('active')
+    ).toBe(false)
   })
 })
