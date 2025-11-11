@@ -46,8 +46,8 @@ describe('Analytics', () => {
 
     expect(analytics.events).toHaveLength(100)
     // Should keep the last 100 events (50-149)
-    expect(analytics.events[0].event).toBe('event_50')
-    expect(analytics.events[99].event).toBe('event_149')
+    expect(analytics.events[0]!.event).toBe('event_50')
+    expect(analytics.events[99]!.event).toBe('event_149')
   })
 
   it('returns session summary with correct data', () => {

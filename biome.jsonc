@@ -7,19 +7,27 @@
     "defaultBranch": "master"
   },
   "files": {
+    "includes": [
+      "**",
+      "!!test-results",
+      "!!coverage",
+      "!!dist",
+      "!!html",
+      "!!playwright-report"
+    ],
     "ignoreUnknown": false
   },
   "formatter": {
     "enabled": true,
+    "attributePosition": "auto",
+    "bracketSameLine": false,
+    "bracketSpacing": true,
+    "expand": "auto",
     "formatWithErrors": false,
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
     "lineWidth": 80,
-    "attributePosition": "auto",
-    "bracketSameLine": false,
-    "bracketSpacing": true,
-    "expand": "auto",
     "useEditorconfig": true
   },
   "linter": {
@@ -34,15 +42,15 @@
   },
   "javascript": {
     "formatter": {
+      "arrowParentheses": "always",
+      "attributePosition": "auto",
+      "bracketSameLine": false,
+      "bracketSpacing": true,
       "jsxQuoteStyle": "double",
       "quoteProperties": "asNeeded",
-      "trailingCommas": "all",
-      "semicolons": "asNeeded",
-      "arrowParentheses": "always",
-      "bracketSameLine": false,
       "quoteStyle": "single",
-      "attributePosition": "auto",
-      "bracketSpacing": true
+      "semicolons": "asNeeded",
+      "trailingCommas": "all"
     }
   },
   "html": {
@@ -51,15 +59,36 @@
       "selfCloseVoidElements": "always"
     }
   },
+  "json": {
+    "parser": {
+      "allowComments": true
+    },
+    "formatter": {
+      "trailingCommas": "none"
+    }
+  },
   "assist": {
     "enabled": true,
     "actions": {
       "source": {
         "recommended": true,
+        "organizeImports": "on",
         "useSortedAttributes": "on",
-        "useSortedProperties": "on",
-        "organizeImports": "on"
+        "useSortedProperties": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["tests/**", "e2e/**"],
+      "linter": {
+        "enabled": true,
+        "rules": {
+          "style": {
+            "noNonNullAssertion": "off"
+          }
+        }
+      }
+    }
+  ]
 }

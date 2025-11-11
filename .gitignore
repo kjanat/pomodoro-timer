@@ -428,3 +428,6 @@ vitest.coverage.json
 lcov.info
 bunfig.toml
 html/
+
+**/internal/
+gg

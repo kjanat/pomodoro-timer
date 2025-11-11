@@ -3,6 +3,17 @@
 
 import { vi as bunVi, mock } from 'bun:test'
 import { IS_BUN_TEST, scaleTime } from '@js/time-config'
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  test,
+  vi,
+} from 'vitest'
 
 // Polyfill vi.advanceTimersByTime for Bun (it doesn't support it natively)
 // In bun:test, this waits using real scaled timers

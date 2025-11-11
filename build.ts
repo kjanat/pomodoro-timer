@@ -6,7 +6,7 @@
 import { rm } from 'node:fs/promises'
 
 const OUT_DIR = './dist'
-const URL = 'https://pomodoro.kajkowalski.nl'
+const URL = process.env.CI ? 'https://pomodoro.kajkowalski.nl' : undefined
 
 // Clean output directory
 try {

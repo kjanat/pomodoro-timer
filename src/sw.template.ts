@@ -4,6 +4,7 @@ declare const self: ServiceWorkerGlobalScope
 
 // __CACHE_NAME__ and __PRECACHE_MANIFEST__ will be injected at build time
 const CACHE_NAME = '__CACHE_NAME__'
+// @ts-expect-error: __PRECACHE_MANIFEST__ is injected at build time
 const PRECACHE_MANIFEST = __PRECACHE_MANIFEST__ as string[]
 
 // Runtime cache for external resources
