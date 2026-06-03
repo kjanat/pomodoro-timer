@@ -1,5 +1,5 @@
-import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.ts'
+import { describe, it, beforeEach, afterEach, expect, jest } from 'bun:test'
+import PomodoroTimer from '#js/timer'
 
 function setupDOM() {
   const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
@@ -14,7 +14,7 @@ function setupDOM() {
     <div id="total-focus-time"></div>
   `
   const origQuerySelector = document.querySelector.bind(document)
-  vi.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
+  jest.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
     if (sel === '.progress-ring__progress') return ring
     return origQuerySelector(sel)
   }) as any)
@@ -23,13 +23,13 @@ function setupDOM() {
 
 describe('PomodoroTimer UI updates', () => {
   beforeEach(() => {
-    vi.restoreAllMocks()
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
+    jest.restoreAllMocks()
+    globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any
     ;(globalThis as any).Notification = { permission: 'granted' } as any
     setupDOM()
   })
   afterEach(() => {
-    vi.restoreAllMocks()
+    jest.restoreAllMocks()
   })
 
   it('updateUI updates DOM', () => {

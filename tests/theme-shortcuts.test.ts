@@ -1,5 +1,5 @@
-import { describe, it, beforeEach, beforeAll, expect } from 'vitest'
-import type { ThemeManager, KeyboardShortcuts } from '../src/js/app.ts'
+import { describe, it, beforeEach, beforeAll, expect } from 'bun:test'
+import type { ThemeManager, KeyboardShortcuts } from '#js/app'
 
 let ThemeManagerCls: typeof ThemeManager
 let KeyboardShortcutsCls: typeof KeyboardShortcuts
@@ -12,7 +12,7 @@ beforeAll(async () => {
       addEventListener: () => {},
       removeEventListener: () => {}
     }))
-  await import('../src/js/app.ts')
+  await import('#js/app')
   document.dispatchEvent(new Event('DOMContentLoaded'))
   ThemeManagerCls = window.themeManager!.constructor as typeof ThemeManager
   KeyboardShortcutsCls = window.keyboardShortcuts!

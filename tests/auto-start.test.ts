@@ -1,5 +1,5 @@
-import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.ts'
+import { describe, it, beforeEach, afterEach, expect, jest } from 'bun:test'
+import PomodoroTimer from '#js/timer'
 
 function setupDOM() {
   document.body.innerHTML = `
@@ -18,13 +18,13 @@ function setupDOM() {
 describe('PomodoroTimer auto start', () => {
   beforeEach(() => {
     setupDOM()
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    vi.useFakeTimers()
-    ;(globalThis as any).playTone = vi.fn()
+    globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any
+    jest.useFakeTimers()
+    ;(globalThis as any).playTone = jest.fn()
   })
 
   afterEach(() => {
-    vi.useRealTimers()
+    jest.useRealTimers()
   })
 
   it('automatically starts break after focus session', () => {
@@ -35,10 +35,10 @@ describe('PomodoroTimer auto start', () => {
     timer.settings.autoStartFocus = true
     timer.state.remainingTime = 1
     timer.start()
-    vi.advanceTimersByTime(1000)
+    jest.advanceTimersByTime(1000)
     expect(timer.state.mode).toBe('focus')
     expect(timer.state.isRunning).toBe(false)
-    vi.advanceTimersByTime(1000)
+    jest.advanceTimersByTime(1000)
     expect(timer.state.isRunning).toBe(true)
     expect(timer.state.mode).toBe('shortBreak')
   })
@@ -52,11 +52,11 @@ describe('PomodoroTimer auto start', () => {
     timer.state.mode = 'shortBreak'
     timer.state.remainingTime = 1
     timer.start()
-    vi.advanceTimersByTime(1000)
+    jest.advanceTimersByTime(1000)
     expect(timer.state.mode).toBe('shortBreak')
     expect(timer.state.isRunning).toBe(false)
-    vi.advanceTimersByTime(1000)
+    jest.advanceTimersByTime(1000)
     expect(timer.state.isRunning).toBe(true)
-    expect(timer.state.mode).toBe('focus')
+    expect(timer.state.mode as string).toBe('focus')
   })
 })

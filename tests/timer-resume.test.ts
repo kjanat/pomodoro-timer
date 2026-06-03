@@ -1,5 +1,5 @@
-import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.ts'
+import { describe, it, beforeEach, afterEach, expect, jest } from 'bun:test'
+import PomodoroTimer from '#js/timer'
 
 function setupDOM() {
   const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
@@ -22,7 +22,7 @@ function setupDOM() {
     <input id="auto-start-focus" type="checkbox" />
     <input id="sound-enabled" type="checkbox" />
   `
-  vi.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
+  jest.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
     if (sel === '.progress-ring__progress') return ring
     return document.body.querySelector(sel)
   }) as any)
@@ -33,11 +33,11 @@ describe('PomodoroTimer resume on reload', () => {
   beforeEach(() => {
     origQuerySelector = document.querySelector.bind(document)
     setupDOM()
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    ;(globalThis as any).playTone = vi.fn()
+    globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any
+    ;(globalThis as any).playTone = jest.fn()
   })
   afterEach(() => {
-    vi.restoreAllMocks()
+    jest.restoreAllMocks()
     document.querySelector = origQuerySelector
   })
 
@@ -54,7 +54,7 @@ describe('PomodoroTimer resume on reload', () => {
     )
     const timer = new PomodoroTimer({ skipInit: true })
     timer.setupProgressRing()
-    const resume = timer.loadStats()
+    const { resume } = timer.loadStats()
     expect(resume).toBe(true)
   })
 
@@ -72,12 +72,12 @@ describe('PomodoroTimer resume on reload', () => {
     )
     const timer = new PomodoroTimer({ skipInit: true })
     timer.setupProgressRing()
-    const resume = timer.loadStats()
+    const { resume } = timer.loadStats()
     expect(resume).toBe(true)
     expect(timer.state.remainingTime).toBe(1499)
   })
 
-  it('returns false when elapsed time exceeds remainingTime', () => {
+  it('flags expired (not resume) when elapsed time exceeds remainingTime', () => {
     const today = new Date().toDateString()
     ;(globalThis.localStorage.getItem as any).mockReturnValueOnce(
       JSON.stringify({
@@ -91,15 +91,16 @@ describe('PomodoroTimer resume on reload', () => {
     )
     const timer = new PomodoroTimer({ skipInit: true })
     timer.setupProgressRing()
-    const resume = timer.loadStats()
+    const { resume, expired } = timer.loadStats()
     expect(resume).toBe(false)
+    expect(expired).toBe(true)
     expect(timer.state.isRunning).toBe(false)
   })
 
   it('calls saveStats on beforeunload', () => {
     const timer = new PomodoroTimer({ skipInit: true })
     timer.bindEvents()
-    vi.spyOn(timer, 'saveStats')
+    jest.spyOn(timer, 'saveStats')
     window.dispatchEvent(new Event('beforeunload'))
     expect(timer.saveStats).toHaveBeenCalled()
   })

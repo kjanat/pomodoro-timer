@@ -1,5 +1,5 @@
-import { describe, it, beforeEach, expect, vi } from 'vitest'
-import { ThemeManager } from '../src/js/app.ts'
+import { describe, it, beforeEach, expect, jest } from 'bun:test'
+import { ThemeManager } from '#js/app'
 
 describe('ThemeManager', () => {
   let themeManager: ThemeManager
@@ -16,17 +16,17 @@ describe('ThemeManager', () => {
     const listeners: Array<(e: any) => void> = []
     mockMatchMedia = {
       matches: false,
-      addEventListener: vi.fn((event: string, callback: any) => {
+      addEventListener: jest.fn((event: string, callback: any) => {
         listeners.push(callback)
       }),
-      removeEventListener: vi.fn(),
+      removeEventListener: jest.fn(),
       trigger: (matches: boolean) => {
         mockMatchMedia.matches = matches
         listeners.forEach((cb) => cb({ matches }))
       }
     }
 
-    window.matchMedia = vi.fn(() => mockMatchMedia) as any
+    window.matchMedia = jest.fn(() => mockMatchMedia) as any
   })
 
   it('initializes with auto theme by default', () => {

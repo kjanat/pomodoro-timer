@@ -12,14 +12,9 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["vitest/globals"],
-    "jsx": "preserve",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@js/*": ["./src/js/*"],
-      "@tests/*": ["./tests/*"]
-    }
+    "types": ["bun"],
+    "jsx": "preserve"
   },
-  "include": ["src/**/*", "tests/**/*"],
+  "include": ["src/**/*", "tests/**/*", "scripts/**/*"],
   "exclude": ["node_modules", "dist"]
 }

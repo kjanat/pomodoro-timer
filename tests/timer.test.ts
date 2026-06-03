@@ -1,20 +1,23 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import PomodoroTimer from '../src/js/timer.ts'
-import { playTone } from '../src/js/audio.ts'
+import { describe, it, expect, beforeEach, afterEach, jest } from 'bun:test'
+import PomodoroTimer from '#js/timer'
+import { playTone } from '#js/audio'
 
 describe('PomodoroTimer core logic', () => {
   let originalWindow: typeof globalThis.window
   beforeEach(() => {
     originalWindow = globalThis.window
     globalThis.localStorage = {
-      setItem: vi.fn(),
-      getItem: vi.fn()
+      setItem: jest.fn(),
+      getItem: jest.fn()
     } as any
+    // Clear cached AudioContext up front. bun shares module state across files
+    // (vitest isolated per file), so a real ctx created by another test would
+    // otherwise leak in and the mock below would never be instantiated.
+    playTone.ctx = undefined
   })
 
   afterEach(() => {
     globalThis.window = originalWindow
-    // clear cached AudioContext so each test starts fresh
     playTone.ctx = undefined
   })
 
@@ -41,20 +44,20 @@ describe('PomodoroTimer core logic', () => {
   })
 
   it('playTone creates and runs oscillator', () => {
-    const oscStart = vi.fn()
-    const oscStop = vi.fn()
+    const oscStart = jest.fn()
+    const oscStop = jest.fn()
     const oscillator = {
-      connect: vi.fn(),
+      connect: jest.fn(),
       start: oscStart,
       stop: oscStop,
       frequency: { value: 0 },
       type: ''
     }
-    const gain = { connect: vi.fn(), gain: { value: 0 } }
-    const createOscillator = vi.fn(() => oscillator)
-    const createGain = vi.fn(() => gain)
+    const gain = { connect: jest.fn(), gain: { value: 0 } }
+    const createOscillator = jest.fn(() => oscillator)
+    const createGain = jest.fn(() => gain)
 
-    // Use a proper function constructor instead of arrow function with vi.fn
+    // Use a proper function constructor instead of arrow function with jest.fn
     class AudioContextMock {
       createOscillator = createOscillator
       createGain = createGain
