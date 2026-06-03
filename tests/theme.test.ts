@@ -1,5 +1,5 @@
 import { describe, it, beforeEach, expect, jest } from 'bun:test'
-import { ThemeManager } from '../src/js/app.ts'
+import { ThemeManager } from '#js/app'
 
 describe('ThemeManager', () => {
   let themeManager: ThemeManager

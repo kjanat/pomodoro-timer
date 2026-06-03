@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, jest } from 'bun:test'
-import PomodoroTimer from '../src/js/timer.ts'
-import { playTone } from '../src/js/audio.ts'
+import PomodoroTimer from '#js/timer'
+import { playTone } from '#js/audio'
 
 describe('PomodoroTimer core logic', () => {
   let originalWindow: typeof globalThis.window

@@ -220,4 +220,4 @@ Tests are designed to run in CI environments:
 ### E2E tests timeout
 
 - Increase timeout in playwright.config.ts
-- Check if http-server starts properly on port 3000
+- Check that the dev server (`bun run dev`) starts properly on port 3000

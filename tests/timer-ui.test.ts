@@ -1,5 +1,5 @@
 import { describe, it, beforeEach, afterEach, expect, jest } from 'bun:test'
-import PomodoroTimer from '../src/js/timer.ts'
+import PomodoroTimer from '#js/timer'
 
 function setupDOM() {
   const ring = { style: {}, r: { baseVal: { value: 50 } } } as any

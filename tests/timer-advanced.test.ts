@@ -1,5 +1,5 @@
 import { describe, it, expect, jest, beforeEach } from 'bun:test'
-import PomodoroTimer from '../src/js/timer.ts'
+import PomodoroTimer from '#js/timer'
 
 describe('PomodoroTimer advanced', () => {
   beforeEach(() => {

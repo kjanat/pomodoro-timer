@@ -43,14 +43,18 @@ pomodoro-timer/
 - **Frontend**: Pure vanilla JavaScript (ES6+), no external frameworks
 - **Styling**: CSS3 with custom properties, flexbox, and grid
 - **PWA**: Service Worker + Web App Manifest
-- **Build Tool**: GitHub Actions for CI/CD
-- **Development Server**: http-server (secure, no vulnerabilities)
-- **Package Manager**: pnpm
+- **Build Tool**: Bun (`bun build ./src/index.html`); GitHub Actions for CI/CD
+- **Development Server**: Bun's built-in dev server (`bun ./src/index.html`),
+  with a small `Bun.serve` static server (`scripts/serve-dist.ts`) for `preview`
+- **Package Manager**: Bun
 - **Hosting**: GitHub Pages (static hosting)
 
 ## Security Notes
 
-**Recent Security Fix (June 2025)**: Replaced `live-server` with `http-server` to resolve CVE-2024-4068 (High severity vulnerability in transitive dependency `braces`). The new setup provides the same functionality without security risks.
+The dev/preview servers are now Bun's built-in server (no third-party static
+server dependency). Previously `live-server` was replaced with `http-server`
+to resolve CVE-2024-4068; `http-server` has since been removed entirely in favor
+of Bun.
 
 ## Core Components
 

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, beforeEach, jest } from 'bun:test'
-import type { utils } from '../src/js/app.ts'
+import type { utils } from '#js/app'
 
 let formatTime: typeof utils.formatTime
 let debounce: typeof utils.debounce
@@ -13,7 +13,7 @@ beforeAll(async () => {
       addEventListener: () => {},
       removeEventListener: () => {}
     }))
-  await import('../src/js/app.ts')
+  await import('#js/app')
   document.dispatchEvent(new Event('DOMContentLoaded'))
   ;({ formatTime, debounce, showToast } = window.utils!)
 })

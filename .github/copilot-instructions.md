@@ -7,7 +7,7 @@ globs: *
 
 ## TECH STACK
 
-When selecting a development server, prefer actively maintained options without known vulnerabilities. For static sites, `http-server` is preferred over `live-server` due to security concerns (CVE-2024-4068). Prettier version `^3.5.3` should be used for code formatting. StandardJS version `^17.1.2` should be used for JavaScript linting.
+For dev and preview, use Bun's built-in server (`bun ./src/index.html` for dev, a small `Bun.serve` script for preview) rather than a third-party static server like `http-server` or `live-server`. Prettier is used for code formatting (see the `prettier` devDependency).
 
 ## PROJECT DOCUMENTATION & CONTEXT SYSTEM
 

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, jest } from 'bun:test'
-import { Analytics } from '../src/js/app.ts'
+import { Analytics } from '#js/app'
 
 describe('Analytics', () => {
   let analytics: Analytics

@@ -1,5 +1,5 @@
 import { describe, it, beforeEach, beforeAll, expect, jest } from 'bun:test'
-import { KeyboardShortcuts } from '../src/js/app.ts'
+import { KeyboardShortcuts } from '#js/app'
 
 describe('KeyboardShortcuts event handling', () => {
   let shortcuts: KeyboardShortcuts

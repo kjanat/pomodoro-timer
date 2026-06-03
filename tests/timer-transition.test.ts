@@ -9,8 +9,8 @@ import {
   mock,
   type Mock
 } from 'bun:test'
-import PomodoroTimer from '../src/js/timer.ts'
-import { playTone } from '../src/js/audio.ts'
+import PomodoroTimer from '#js/timer'
+import { playTone } from '#js/audio'
 
 // Capture the real implementation before mocking. bun's mock.module is global
 // and persists across files (vitest's vi.mock was per-file), so we restore it in
@@ -20,10 +20,10 @@ const realPlayTone = playTone
 // Mock the audio module so we can count tone calls. timer.ts imports it via the
 // '#js/audio' subpath import, which resolves to the same file, so this
 // intercepts both.
-mock.module('../src/js/audio.ts', () => ({ playTone: jest.fn() }))
+mock.module('#js/audio', () => ({ playTone: jest.fn() }))
 
 afterAll(() => {
-  mock.module('../src/js/audio.ts', () => ({ playTone: realPlayTone }))
+  mock.module('#js/audio', () => ({ playTone: realPlayTone }))
 })
 
 function setupDOM() {

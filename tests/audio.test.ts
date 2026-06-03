@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, jest } from 'bun:test'
-import { playTone } from '../src/js/audio.ts'
+import { playTone } from '#js/audio'
 
 describe('playTone helper', () => {
   let originalWindow: typeof globalThis.window
