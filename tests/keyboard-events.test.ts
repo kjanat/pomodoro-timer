@@ -1,5 +1,5 @@
-import { describe, it, beforeEach, beforeAll, expect, vi } from 'vitest'
-import { KeyboardShortcuts } from '../src/js/app.ts'
+import { describe, it, beforeEach, beforeAll, expect, jest } from 'bun:test'
+import { KeyboardShortcuts } from '#js/app'
 
 describe('KeyboardShortcuts event handling', () => {
   let shortcuts: KeyboardShortcuts
@@ -8,7 +8,7 @@ describe('KeyboardShortcuts event handling', () => {
   beforeAll(() => {
     // Create the instance once to set up event listeners
     mockTimer = {
-      reset: vi.fn()
+      reset: jest.fn()
     }
     ;(window as any).pomodoroTimer = mockTimer
   })
@@ -93,7 +93,7 @@ describe('KeyboardShortcuts event handling', () => {
 
   it('ignores shortcuts when typing in input fields', () => {
     const input = document.createElement('input')
-    input.matches = () => true // Mock matches to return true for input
+    input.matches = (() => true) as unknown as Element['matches'] // Mock matches to return true for input
     document.body.appendChild(input)
 
     const event = new KeyboardEvent('keydown', {
@@ -114,7 +114,7 @@ describe('KeyboardShortcuts event handling', () => {
 
   it('ignores shortcuts when typing in textarea', () => {
     const textarea = document.createElement('textarea')
-    textarea.matches = () => true // Mock matches to return true for textarea
+    textarea.matches = (() => true) as unknown as Element['matches'] // Mock matches to return true for textarea
     document.body.appendChild(textarea)
 
     const event = new KeyboardEvent('keydown', {
@@ -136,7 +136,7 @@ describe('KeyboardShortcuts event handling', () => {
 
   it('ignores shortcuts when typing in select', () => {
     const select = document.createElement('select')
-    select.matches = () => true // Mock matches to return true for select
+    select.matches = (() => true) as unknown as Element['matches'] // Mock matches to return true for select
     document.body.appendChild(select)
 
     const event = new KeyboardEvent('keydown', {

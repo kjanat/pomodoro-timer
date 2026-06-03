@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import PomodoroTimer from '../src/js/timer.ts'
+import { describe, it, expect, jest, beforeEach } from 'bun:test'
+import PomodoroTimer from '#js/timer'
 
 describe('PomodoroTimer advanced', () => {
   beforeEach(() => {
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    ;(globalThis as any).playTone = vi.fn()
+    globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any
+    ;(globalThis as any).playTone = jest.fn()
   })
 
   it('advanceMode cycles correctly', () => {
@@ -18,11 +18,11 @@ describe('PomodoroTimer advanced', () => {
     timer.state.mode = 'focus'
     timer.state.completedSessions = 4
     timer.advanceMode()
-    expect(timer.state.mode).toBe('longBreak')
+    expect(timer.state.mode as string).toBe('longBreak')
 
     timer.state.mode = 'shortBreak'
     timer.advanceMode()
-    expect(timer.state.mode).toBe('focus')
+    expect(timer.state.mode as string).toBe('focus')
   })
 
   it('saveStats and loadStats round trip', () => {
@@ -32,7 +32,9 @@ describe('PomodoroTimer advanced', () => {
     const saved = JSON.parse(
       (globalThis.localStorage.setItem as any).mock.calls[0][1]
     )
-    globalThis.localStorage.getItem = vi.fn(() => JSON.stringify(saved)) as any
+    globalThis.localStorage.getItem = jest.fn(() =>
+      JSON.stringify(saved)
+    ) as any
 
     const timer2 = new PomodoroTimer({ skipInit: true })
     timer2.loadStats()

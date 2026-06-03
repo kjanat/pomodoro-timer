@@ -8,12 +8,10 @@ The project now includes comprehensive testing with both unit tests and end-to-e
 
 ### Test Statistics
 
-- **Total Unit Tests**: 66 tests across 15 test files
-- **Overall Code Coverage**: 87.03%
-  - Statement Coverage: 87.03%
-  - Branch Coverage: 70.85%
-  - Function Coverage: 79.16%
-  - Line Coverage: 87.59%
+- **Total Unit Tests**: 70 tests across 16 test files
+- **Test runner**: `bun test` (Bun's built-in Jest-compatible runner) with
+  [happy-dom](https://github.com/capricorn86/happy-dom) for DOM APIs
+- **Overall Code Coverage**: ~94% line coverage (`bun test --coverage`)
 
 ### Coverage by File
 
@@ -25,39 +23,39 @@ The project now includes comprehensive testing with both unit tests and end-to-e
 
 ## Running Tests
 
-### Unit Tests (Vitest)
+### Unit Tests (`bun test`)
 
 ```bash
 # Run all unit tests
-npm test
+bun test
 
 # Run tests in watch mode
-npm run test:watch
+bun run test:watch
 
 # Run tests with coverage report
-npm run test:coverage
+bun run test:coverage
 ```
 
 ### E2E Tests (Playwright)
 
 ```bash
 # Run E2E tests
-npm run test:e2e
+bun run test:e2e
 
 # Run E2E tests with UI
-npm run test:e2e:ui
+bun run test:e2e:ui
 
 # Run E2E tests in headed mode (see browser)
-npm run test:e2e:headed
+bun run test:e2e:headed
 
 # Install Playwright browsers (first time only)
-npx playwright install
+bunx playwright install
 ```
 
 ### Run All Tests
 
 ```bash
-npm run test:all
+bun run test:all
 ```
 
 ## Test Structure
@@ -122,12 +120,16 @@ Playwright E2E tests verify the complete user experience:
 
 ## Test Configuration
 
-### Vitest Configuration (`vitest.config.ts`)
+### Bun test configuration (`bunfig.toml` + `happydom.ts`)
 
-- Environment: jsdom
-- Coverage provider: v8
-- Excluded from tests: node_modules, dist, e2e
-- Path aliases: @, @js, @tests
+- Runner: `bun test` (configured via `[test]` in `bunfig.toml`)
+- DOM environment: happy-dom, registered in the `happydom.ts` preload (replaces
+  vitest's jsdom). The preload also resets shared globals (`localStorage`,
+  `Notification`) between tests, since `bun test` runs all files in one process.
+- Test root: `tests/` (so the Playwright `e2e/` specs are not picked up)
+- Coverage: built into `bun test --coverage`
+- Path aliases (`#js/*`, `#tests/*`): defined as package.json `imports` subpath
+  imports and resolved by Bun, tsc (bundler resolution), and the bundler alike
 
 ### Playwright Configuration (`playwright.config.ts`)
 
@@ -168,16 +170,17 @@ Playwright E2E tests verify the complete user experience:
    - Real browser testing with Playwright
    - Multi-viewport testing
 
-4. **Fixed Issues**:
-   - Updated AudioContext mocking for Vitest 4.x
-   - Fixed package.json dependency conflicts
-   - Corrected test command to use Vitest instead of Bun
+4. **Migrated test runner to `bun test`**:
+   - Replaced vitest/jsdom with `bun test` + happy-dom (`@happy-dom/global-registrator`)
+   - `vi.*` → `jest.*`; `vi.mock` → `mock.module` (restored in `afterAll` so it
+     doesn't leak across files); fake timers via `jest.useFakeTimers()`
+   - Removed `vitest`, `@vitest/coverage-v8`, and `jsdom` dependencies
 
 ## Coverage Goals
 
 The only significant uncovered code is:
 
-- **Lines 248-255 in app.ts**: Service Worker registration (hard to test in jsdom)
+- **Lines 248-255 in app.ts**: Service Worker registration (environment-specific)
 - **Lines 28, 41-42 in audio.ts**: Specific audio edge cases
 - **Various edge cases in timer.ts**: Complex timer state transitions
 
@@ -185,8 +188,8 @@ These represent legitimate edge cases that would require additional mocking comp
 
 ## Best Practices
 
-1. **Run tests before committing**: `npm test`
-2. **Check coverage regularly**: `npm run test:coverage`
+1. **Run tests before committing**: `bun test`
+2. **Check coverage regularly**: `bun run test:coverage`
 3. **Test new features**: Add unit tests for new functionality
 4. **E2E for user flows**: Use Playwright for critical user journeys
 5. **Keep tests fast**: Unit tests complete in ~5 seconds
@@ -195,7 +198,7 @@ These represent legitimate edge cases that would require additional mocking comp
 
 Tests are designed to run in CI environments:
 
-- Vitest runs in CI mode automatically
+- `bun test` runs headlessly in CI (see `.github/workflows/deploy.yml`)
 - Playwright includes retry logic for E2E tests
 - Coverage reports can be uploaded to coverage services
 
@@ -203,17 +206,18 @@ Tests are designed to run in CI environments:
 
 ### Tests fail with "document is not defined"
 
-- Make sure vitest.config.ts has `environment: 'jsdom'`
+- Make sure `bunfig.toml` has `[test] preload = ["./happydom.ts"]` so happy-dom
+  registers the DOM globals before the suite runs
 
 ### Playwright can't find browsers
 
-- Run: `npx playwright install`
+- Run: `bunx playwright install`
 
 ### Coverage not showing
 
-- Run: `npm run test:coverage` instead of `npm test`
+- Run: `bun run test:coverage` (or `bun test --coverage`)
 
 ### E2E tests timeout
 
 - Increase timeout in playwright.config.ts
-- Check if http-server starts properly on port 3000
+- Check that the dev server (`bun run dev`) starts properly on port 3000
