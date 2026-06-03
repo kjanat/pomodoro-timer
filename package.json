@@ -34,7 +34,7 @@
     "url": "https://github.com/kjanat/pomodoro-timer.git"
   },
   "homepage": "https://pomodoro.kajkowalski.nl",
-  "packageManager": "bun@latest",
+  "packageManager": "bun@1.3.11",
   "prettier": "prettier-config-standard",
   "devDependencies": {
     "@playwright/test": "^1.60.0",
