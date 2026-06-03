@@ -631,6 +631,9 @@ body {
 
   .timer-section {
     margin-bottom: 0;
+    /* Pair with the stats' margin-top:auto below to split the spare space
+       above and below, vertically centering the timer group. */
+    margin-top: auto;
   }
 
   .timer-mode {
