@@ -411,3 +411,9 @@ $RECYCLE.BIN/
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
+
+# Playwright e2e artifacts
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
