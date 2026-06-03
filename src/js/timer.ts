@@ -50,6 +50,7 @@ export class PomodoroTimer {
   completeTimeout: number | null = null
   transitioning: boolean = false
   beforeUnloadHandler: (() => void) | null = null
+  settingsToastTimeout: number | null = null
 
   constructor(options: TimerOptions = {}) {
     this.state = {
@@ -122,13 +123,35 @@ export class PomodoroTimer {
       .getElementById('reset-button')
       ?.addEventListener('click', () => this.reset())
 
-    // Settings toggle
+    // Settings dialog: toggle button opens/closes; close button and clicks on
+    // the backdrop close it. <dialog> handles Esc and focus-return natively.
     document
       .getElementById('settings-toggle-btn')
       ?.addEventListener('click', () => {
-        const panel = document.getElementById('settings-panel')
-        panel?.classList.toggle('active')
+        if (this.isSettingsOpen()) {
+          this.closeSettings()
+        } else {
+          this.openSettings()
+        }
       })
+
+    document
+      .getElementById('settings-close-btn')
+      ?.addEventListener('click', () => this.closeSettings())
+
+    const settingsDialog = this.getSettingsDialog()
+    // A click whose target is the dialog itself lands on the backdrop/padding,
+    // not the content — treat it as a request to dismiss.
+    settingsDialog?.addEventListener('click', (e) => {
+      if (e.target === settingsDialog) this.closeSettings()
+    })
+    // Keep the toggle's aria-expanded in sync however the dialog is closed
+    // (Esc, backdrop, close button, or the S shortcut).
+    settingsDialog?.addEventListener('close', () => {
+      document
+        .getElementById('settings-toggle-btn')
+        ?.setAttribute('aria-expanded', 'false')
+    })
 
     // Settings inputs
     document
@@ -245,6 +268,7 @@ export class PomodoroTimer {
     }, 1000)
 
     this.updateUI()
+    this.announce(`${this.getModeText()} started`)
   }
 
   pause(): void {
@@ -259,6 +283,7 @@ export class PomodoroTimer {
     this.clearScheduledSave()
     this.saveStats()
     this.updateUI()
+    this.announce('Timer paused')
   }
 
   reset(): void {
@@ -277,6 +302,7 @@ export class PomodoroTimer {
 
     this.saveStats()
     this.updateUI()
+    this.announce(`${this.getModeText()} reset`)
   }
 
   tick(): void {
@@ -310,6 +336,11 @@ export class PomodoroTimer {
 
     // Show notification
     this.showNotification()
+    this.announce(
+      this.state.mode === 'focus'
+        ? 'Focus session complete — time for a break'
+        : 'Break complete — back to focus'
+    )
 
     // Block start/Space until advanceMode() runs, so the just-finished timer
     // can't be restarted during the delay.
@@ -582,6 +613,67 @@ export class PomodoroTimer {
 
   saveSettings(): void {
     localStorage.setItem('pomodoro-settings', JSON.stringify(this.settings))
+    this.notifySettingsSaved()
+  }
+
+  // --- Settings dialog helpers -------------------------------------------
+  // Use the native <dialog> when available; fall back to toggling the `open`
+  // attribute under engines (e.g. HappyDOM in tests) that lack showModal().
+
+  getSettingsDialog(): HTMLDialogElement | null {
+    return document.getElementById('settings-panel') as HTMLDialogElement | null
+  }
+
+  isSettingsOpen(): boolean {
+    const dialog = this.getSettingsDialog()
+    return !!dialog && (dialog.open || dialog.hasAttribute('open'))
+  }
+
+  openSettings(): void {
+    const dialog = this.getSettingsDialog()
+    if (!dialog) return
+    if (typeof dialog.showModal === 'function') {
+      if (!dialog.open) dialog.showModal()
+    } else {
+      dialog.setAttribute('open', '')
+    }
+    document
+      .getElementById('settings-toggle-btn')
+      ?.setAttribute('aria-expanded', 'true')
+  }
+
+  closeSettings(): void {
+    const dialog = this.getSettingsDialog()
+    if (!dialog) return
+    if (typeof dialog.close === 'function' && dialog.open) {
+      dialog.close()
+    } else {
+      dialog.removeAttribute('open')
+    }
+    document
+      .getElementById('settings-toggle-btn')
+      ?.setAttribute('aria-expanded', 'false')
+  }
+
+  // Announce mode changes / completion to screen readers via the polite live
+  // region. Deliberately not used for the per-second countdown.
+  announce(message: string): void {
+    const status = document.getElementById('timer-status')
+    if (status) status.textContent = message
+  }
+
+  // Debounced, non-intrusive confirmation that a setting was persisted. Only
+  // schedules when the toast utility is present (i.e. the real browser app).
+  notifySettingsSaved(): void {
+    const showToast = (window as any).utils?.showToast
+    if (typeof showToast !== 'function') return
+    if (this.settingsToastTimeout !== null) {
+      clearTimeout(this.settingsToastTimeout)
+    }
+    this.settingsToastTimeout = window.setTimeout(() => {
+      this.settingsToastTimeout = null
+      showToast('Settings saved', 'success')
+    }, 500)
   }
 
   loadStats(): { resume: boolean; expired: boolean } {

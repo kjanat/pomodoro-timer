@@ -101,13 +101,39 @@ export class KeyboardShortcuts {
   }
 
   toggleSettings(): void {
-    const settingsPanel = document.getElementById('settings-panel')
-    settingsPanel?.classList.toggle('active')
+    const dialog = document.getElementById(
+      'settings-panel'
+    ) as HTMLDialogElement | null
+    if (!dialog) return
+    const isOpen = dialog.open || dialog.hasAttribute('open')
+    if (isOpen) {
+      this.closeSettings()
+      return
+    }
+    if (typeof dialog.showModal === 'function') {
+      dialog.showModal()
+    } else {
+      // Fallback for engines without <dialog> support (e.g. HappyDOM in tests).
+      dialog.setAttribute('open', '')
+    }
+    document
+      .getElementById('settings-toggle-btn')
+      ?.setAttribute('aria-expanded', 'true')
   }
 
   closeSettings(): void {
-    const settingsPanel = document.getElementById('settings-panel')
-    settingsPanel?.classList.remove('active')
+    const dialog = document.getElementById(
+      'settings-panel'
+    ) as HTMLDialogElement | null
+    if (!dialog) return
+    if (typeof dialog.close === 'function' && dialog.open) {
+      dialog.close()
+    } else {
+      dialog.removeAttribute('open')
+    }
+    document
+      .getElementById('settings-toggle-btn')
+      ?.setAttribute('aria-expanded', 'false')
   }
 }
 

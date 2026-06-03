@@ -86,7 +86,12 @@
           </div>
 
           <div class="timer-circle">
-            <svg class="progress-ring" width="280" height="280">
+            <svg
+              class="progress-ring"
+              width="280"
+              height="280"
+              aria-hidden="true"
+            >
               <circle
                 class="progress-ring__background"
                 cx="140"
@@ -101,13 +106,35 @@
               ></circle>
             </svg>
             <div class="timer-content">
-              <div id="timer-display" class="timer-display">25:00</div>
+              <div
+                id="timer-display"
+                class="timer-display"
+                role="timer"
+                aria-label="Time remaining"
+              >
+                25:00
+              </div>
               <div id="timer-label" class="timer-label">minutes</div>
             </div>
           </div>
 
+          <!-- Polite live region: announces mode changes and completion to
+               screen readers, not the per-second countdown. -->
+          <div
+            id="timer-status"
+            class="sr-only"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          ></div>
+
           <div class="controls">
-            <button id="start-button" class="btn btn-primary">
+            <button
+              id="start-button"
+              class="btn btn-primary"
+              aria-label="Start timer"
+              aria-keyshortcuts="Space"
+            >
               <i data-lucide="play" class="btn-icon"></i>
               <span class="btn-text">Start</span>
             </button>
@@ -115,11 +142,18 @@
               id="pause-button"
               class="btn btn-secondary"
               style="display: none"
+              aria-label="Pause timer"
+              aria-keyshortcuts="Space"
             >
               <i data-lucide="pause" class="btn-icon"></i>
               <span class="btn-text">Pause</span>
             </button>
-            <button id="reset-button" class="btn btn-outline">
+            <button
+              id="reset-button"
+              class="btn btn-outline"
+              aria-label="Reset timer"
+              aria-keyshortcuts="R"
+            >
               <i data-lucide="rotate-ccw" class="btn-icon"></i>
               <span class="btn-text">Reset</span>
             </button>
@@ -128,13 +162,35 @@
 
         <div class="settings-section">
           <div class="settings-toggle">
-            <button id="settings-toggle-btn" class="settings-btn">
+            <button
+              id="settings-toggle-btn"
+              class="settings-btn"
+              aria-haspopup="dialog"
+              aria-controls="settings-panel"
+              aria-expanded="false"
+              aria-keyshortcuts="S"
+            >
               <i data-lucide="settings" class="settings-icon"></i>
               Settings
             </button>
           </div>
 
-          <div id="settings-panel" class="settings-panel">
+          <dialog
+            id="settings-panel"
+            class="settings-panel"
+            aria-labelledby="settings-title"
+          >
+            <div class="settings-header">
+              <h2 id="settings-title" class="settings-title">Settings</h2>
+              <button
+                id="settings-close-btn"
+                class="settings-close"
+                aria-label="Close settings"
+              >
+                <i data-lucide="x"></i>
+              </button>
+            </div>
+
             <div class="settings-grid">
               <div class="setting-item">
                 <label for="focus-duration">Focus Duration</label>
@@ -145,6 +201,7 @@
                     value="25"
                     min="1"
                     max="60"
+                    inputmode="numeric"
                   />
                   <span class="input-suffix">min</span>
                 </div>
@@ -159,6 +216,7 @@
                     value="5"
                     min="1"
                     max="30"
+                    inputmode="numeric"
                   />
                   <span class="input-suffix">min</span>
                 </div>
@@ -173,6 +231,7 @@
                     value="15"
                     min="1"
                     max="60"
+                    inputmode="numeric"
                   />
                   <span class="input-suffix">min</span>
                 </div>
@@ -187,6 +246,7 @@
                     value="4"
                     min="2"
                     max="10"
+                    inputmode="numeric"
                   />
                   <span class="input-suffix">sessions</span>
                 </div>
@@ -209,7 +269,13 @@
                 <label for="sound-enabled">Sound notifications</label>
               </div>
             </div>
-          </div>
+
+            <p class="shortcut-hint">
+              Shortcuts:
+              <kbd>Space</kbd> start/pause · <kbd>R</kbd> reset ·
+              <kbd>S</kbd> settings · <kbd>Esc</kbd> close
+            </p>
+          </dialog>
         </div>
 
         <div class="stats-section">

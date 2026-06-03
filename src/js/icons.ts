@@ -1,5 +1,5 @@
 // Icon initialization using Lucide
-import { createIcons, Play, Pause, RotateCcw, Settings, Timer } from 'lucide'
+import { createIcons, Play, Pause, RotateCcw, Settings, Timer, X } from 'lucide'
 
 export function initializeIcons(): void {
   createIcons({
@@ -8,7 +8,14 @@ export function initializeIcons(): void {
       Pause,
       RotateCcw,
       Settings,
-      Timer
+      Timer,
+      X
+    },
+    // Icons are decorative; their buttons carry accessible names via
+    // aria-label. Hide the SVGs from assistive tech and the tab order.
+    attrs: {
+      'aria-hidden': 'true',
+      focusable: 'false'
     }
   })
 }
