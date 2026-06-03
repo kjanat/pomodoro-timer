@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, expect, vi } from 'vitest'
+import { describe, it, beforeEach, expect, jest } from 'bun:test'
 import PomodoroTimer from '../src/js/timer.ts'
 
 function setupDOM() {
@@ -20,7 +20,7 @@ function setupDOM() {
     <input id="auto-start-focus" type="checkbox" />
     <input id="sound-enabled" type="checkbox" />
   `
-  vi.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
+  jest.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
     if (sel === '.progress-ring__progress') return ring
     return document.body.querySelector(sel)
   }) as any)
@@ -31,8 +31,8 @@ describe('PomodoroTimer additional methods', () => {
     setupDOM()
     const today = new Date().toDateString()
     globalThis.localStorage = {
-      setItem: vi.fn(),
-      getItem: vi.fn((key) => {
+      setItem: jest.fn(),
+      getItem: jest.fn((key) => {
         if (key === 'pomodoro-settings')
           return JSON.stringify({ focusDuration: 20 })
         if (key === 'pomodoro-stats') return JSON.stringify({ date: today })
@@ -41,7 +41,7 @@ describe('PomodoroTimer additional methods', () => {
     } as any
     ;(globalThis as any).Notification = function () {} as any
     ;(globalThis as any).Notification.permission = 'granted'
-    ;(globalThis as any).playTone = vi.fn()
+    ;(globalThis as any).playTone = jest.fn()
   })
 
   it('executes miscellaneous methods without error', () => {

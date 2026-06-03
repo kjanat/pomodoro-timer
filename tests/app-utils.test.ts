@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeAll, beforeEach, jest } from 'bun:test'
 import type { utils } from '../src/js/app.ts'
 
 let formatTime: typeof utils.formatTime
@@ -50,38 +50,38 @@ describe('utils.formatTime', () => {
 
 describe('utils.debounce', () => {
   it('debounces multiple calls', () => {
-    vi.useFakeTimers()
-    const fn = vi.fn()
+    jest.useFakeTimers()
+    const fn = jest.fn()
     const debounced = debounce(fn, 100)
     debounced()
     debounced()
-    vi.advanceTimersByTime(50)
+    jest.advanceTimersByTime(50)
     debounced()
-    vi.advanceTimersByTime(100)
+    jest.advanceTimersByTime(100)
     expect(fn).toHaveBeenCalledTimes(1)
-    vi.useRealTimers()
+    jest.useRealTimers()
   })
 
   it('passes arguments to debounced function', () => {
-    vi.useFakeTimers()
-    const fn = vi.fn()
+    jest.useFakeTimers()
+    const fn = jest.fn()
     const debounced = debounce(fn, 100)
     debounced('arg1', 'arg2', 123)
-    vi.advanceTimersByTime(100)
+    jest.advanceTimersByTime(100)
     expect(fn).toHaveBeenCalledWith('arg1', 'arg2', 123)
-    vi.useRealTimers()
+    jest.useRealTimers()
   })
 
   it('executes function after wait time', () => {
-    vi.useFakeTimers()
-    const fn = vi.fn()
+    jest.useFakeTimers()
+    const fn = jest.fn()
     const debounced = debounce(fn, 200)
     debounced()
-    vi.advanceTimersByTime(199)
+    jest.advanceTimersByTime(199)
     expect(fn).not.toHaveBeenCalled()
-    vi.advanceTimersByTime(1)
+    jest.advanceTimersByTime(1)
     expect(fn).toHaveBeenCalledTimes(1)
-    vi.useRealTimers()
+    jest.useRealTimers()
   })
 })
 
@@ -96,13 +96,13 @@ describe('utils.showToast', () => {
   })
 
   it('creates and removes a toast element', () => {
-    vi.useFakeTimers()
+    jest.useFakeTimers()
     showToast('hi', 'success')
     const toast = document.querySelector('.toast-success')
     expect(toast).toBeTruthy()
-    vi.advanceTimersByTime(3300)
+    jest.advanceTimersByTime(3300)
     expect(document.querySelector('.toast-success')).toBeNull()
-    vi.useRealTimers()
+    jest.useRealTimers()
   })
 
   it('creates info toast by default', () => {

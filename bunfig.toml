@@ -1,0 +1,8 @@
+[test]
+# Register happy-dom globals (document/window) before the suite, replacing
+# vitest's jsdom environment.
+preload = ["./happydom.ts"]
+# Only the unit tests under tests/ use bun:test. The Playwright e2e specs run
+# via `bun run test:e2e`.
+root = "tests"
+coverageSkipTestFiles = true

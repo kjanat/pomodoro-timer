@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, beforeAll, expect } from 'vitest'
+import { describe, it, beforeEach, beforeAll, expect } from 'bun:test'
 import type { ThemeManager, KeyboardShortcuts } from '../src/js/app.ts'
 
 let ThemeManagerCls: typeof ThemeManager

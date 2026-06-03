@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
+import { describe, it, beforeEach, afterEach, expect, jest } from 'bun:test'
 import PomodoroTimer from '../src/js/timer.ts'
 
 function setupDOM() {
@@ -22,7 +22,7 @@ function setupDOM() {
     <input id="auto-start-focus" type="checkbox" />
     <input id="sound-enabled" type="checkbox" />
   `
-  vi.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
+  jest.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
     if (sel === '.progress-ring__progress') return ring
     return document.body.querySelector(sel)
   }) as any)
@@ -33,11 +33,11 @@ describe('PomodoroTimer resume on reload', () => {
   beforeEach(() => {
     origQuerySelector = document.querySelector.bind(document)
     setupDOM()
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    ;(globalThis as any).playTone = vi.fn()
+    globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any
+    ;(globalThis as any).playTone = jest.fn()
   })
   afterEach(() => {
-    vi.restoreAllMocks()
+    jest.restoreAllMocks()
     document.querySelector = origQuerySelector
   })
 
@@ -100,7 +100,7 @@ describe('PomodoroTimer resume on reload', () => {
   it('calls saveStats on beforeunload', () => {
     const timer = new PomodoroTimer({ skipInit: true })
     timer.bindEvents()
-    vi.spyOn(timer, 'saveStats')
+    jest.spyOn(timer, 'saveStats')
     window.dispatchEvent(new Event('beforeunload'))
     expect(timer.saveStats).toHaveBeenCalled()
   })

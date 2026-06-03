@@ -1,10 +1,29 @@
-import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
+import {
+  describe,
+  it,
+  beforeEach,
+  afterEach,
+  afterAll,
+  expect,
+  jest,
+  mock,
+  type Mock
+} from 'bun:test'
 import PomodoroTimer from '../src/js/timer.ts'
 import { playTone } from '../src/js/audio.ts'
 
+// Capture the real implementation before mocking. bun's mock.module is global
+// and persists across files (vitest's vi.mock was per-file), so we restore it in
+// afterAll to keep the mock from leaking into other test files.
+const realPlayTone = playTone
+
 // Mock the audio module so we can count tone calls. timer.ts imports it via the
 // '@js/audio' alias, which resolves to the same file, so this intercepts both.
-vi.mock('../src/js/audio.ts', () => ({ playTone: vi.fn() }))
+mock.module('../src/js/audio.ts', () => ({ playTone: jest.fn() }))
+
+afterAll(() => {
+  mock.module('../src/js/audio.ts', () => ({ playTone: realPlayTone }))
+})
 
 function setupDOM() {
   document.body.innerHTML = `
@@ -23,13 +42,13 @@ function setupDOM() {
 describe('PomodoroTimer completion transition', () => {
   beforeEach(() => {
     setupDOM()
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    vi.useFakeTimers()
-    ;(globalThis as any).playTone = vi.fn()
+    globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any
+    jest.useFakeTimers()
+    ;(globalThis as any).playTone = jest.fn()
   })
 
   afterEach(() => {
-    vi.useRealTimers()
+    jest.useRealTimers()
   })
 
   it('reset() cancels a pending auto-advance', () => {
@@ -41,13 +60,13 @@ describe('PomodoroTimer completion transition', () => {
     timer.start()
 
     // Session completes; advance is now scheduled but hasn't fired.
-    vi.advanceTimersByTime(1000)
+    jest.advanceTimersByTime(1000)
     expect(timer.state.mode).toBe('focus')
     expect(timer.transitioning).toBe(true)
 
     // Reset during the transition window must cancel the pending advance.
     timer.reset()
-    vi.advanceTimersByTime(1000)
+    jest.advanceTimersByTime(1000)
 
     expect(timer.transitioning).toBe(false)
     expect(timer.state.mode).toBe('focus')
@@ -63,7 +82,7 @@ describe('PomodoroTimer completion transition', () => {
     timer.state.remainingTime = 1
     timer.start()
 
-    vi.advanceTimersByTime(1000)
+    jest.advanceTimersByTime(1000)
     expect(timer.transitioning).toBe(true)
     expect(timer.state.isRunning).toBe(false)
 
@@ -72,12 +91,12 @@ describe('PomodoroTimer completion transition', () => {
     expect(timer.state.isRunning).toBe(false)
 
     // After the advance fires, Space works normally again.
-    vi.advanceTimersByTime(1000)
+    jest.advanceTimersByTime(1000)
     expect(timer.transitioning).toBe(false)
   })
 
   it('does not double-beep on auto-advance (start tone suppressed)', () => {
-    vi.mocked(playTone).mockClear()
+    ;(playTone as unknown as Mock<typeof playTone>).mockClear()
     const timer = new PomodoroTimer({ skipInit: true })
     timer.updateUI = () => {}
     timer.updateProgress = () => {}
@@ -86,8 +105,8 @@ describe('PomodoroTimer completion transition', () => {
     timer.start() // user-initiated start: one 440Hz tone
     expect(playTone).toHaveBeenCalledTimes(1)
 
-    vi.advanceTimersByTime(1000) // complete(): one 880Hz tone
-    vi.advanceTimersByTime(1000) // advanceMode → start(false): no tone
+    jest.advanceTimersByTime(1000) // complete(): one 880Hz tone
+    jest.advanceTimersByTime(1000) // advanceMode → start(false): no tone
     // 1 start + 1 complete = 2 tones total, not 3.
     expect(playTone).toHaveBeenCalledTimes(2)
   })
@@ -96,19 +115,19 @@ describe('PomodoroTimer completion transition', () => {
 describe('PomodoroTimer expired-session resume', () => {
   beforeEach(() => {
     setupDOM()
-    vi.useFakeTimers()
-    ;(globalThis as any).playTone = vi.fn()
+    jest.useFakeTimers()
+    ;(globalThis as any).playTone = jest.fn()
   })
 
   afterEach(() => {
-    vi.useRealTimers()
+    jest.useRealTimers()
   })
 
   it('flags expired without running complete() during loadStats', () => {
     const today = new Date().toDateString()
     globalThis.localStorage = {
-      setItem: vi.fn(),
-      getItem: vi.fn().mockReturnValue(
+      setItem: jest.fn(),
+      getItem: jest.fn().mockReturnValue(
         JSON.stringify({
           date: today,
           completedSessions: 2,
@@ -123,7 +142,7 @@ describe('PomodoroTimer expired-session resume', () => {
     } as any
 
     const timer = new PomodoroTimer({ skipInit: true })
-    const completeSpy = vi.spyOn(timer, 'complete')
+    const completeSpy = jest.spyOn(timer, 'complete')
 
     const { resume, expired } = timer.loadStats()
 

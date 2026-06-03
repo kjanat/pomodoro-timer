@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest'
+import { describe, it, beforeEach, afterEach, expect, jest } from 'bun:test'
 import PomodoroTimer from '../src/js/timer.ts'
 
 function setupDOM() {
@@ -18,9 +18,9 @@ function setupDOM() {
 describe('PomodoroTimer flow', () => {
   beforeEach(() => {
     setupDOM()
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
-    vi.useFakeTimers()
-    ;(globalThis as any).playTone = vi.fn()
+    globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any
+    jest.useFakeTimers()
+    ;(globalThis as any).playTone = jest.fn()
   })
 
   it('start, tick and pause', () => {
@@ -29,7 +29,7 @@ describe('PomodoroTimer flow', () => {
     timer.updateProgress = () => {}
     timer.start()
     expect(timer.state.isRunning).toBe(true)
-    vi.advanceTimersByTime(1000)
+    jest.advanceTimersByTime(1000)
     expect(timer.state.remainingTime).toBe(timer.state.totalTime - 1)
     timer.pause()
     expect(timer.state.isPaused).toBe(true)
@@ -52,11 +52,11 @@ describe('PomodoroTimer flow', () => {
     timer.state.remainingTime = 1
     timer.settings.autoStartBreaks = false
     timer.start()
-    vi.advanceTimersByTime(1000)
+    jest.advanceTimersByTime(1000)
     expect(timer.state.isRunning).toBe(false)
   })
 
   afterEach(() => {
-    vi.useRealTimers()
+    jest.useRealTimers()
   })
 })

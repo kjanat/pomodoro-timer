@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, expect, vi } from 'vitest'
+import { describe, it, beforeEach, expect, jest } from 'bun:test'
 import PomodoroTimer from '../src/js/timer.ts'
 
 function setupFullDOM() {
@@ -23,7 +23,7 @@ function setupFullDOM() {
     <div id="completed-sessions"></div>
     <div id="total-focus-time"></div>
   `
-  vi.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
+  jest.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
     if (sel === '.progress-ring__progress') return ring
     return document.body.querySelector(sel)
   }) as any)
@@ -32,17 +32,17 @@ function setupFullDOM() {
 describe('PomodoroTimer init', () => {
   beforeEach(() => {
     setupFullDOM()
-    globalThis.localStorage = { setItem: vi.fn(), getItem: vi.fn() } as any
+    globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any
     ;(globalThis as any).Notification = function () {} as any
     ;(globalThis as any).Notification.permission = 'granted'
-    ;(globalThis as any).playTone = vi.fn()
-    vi.useFakeTimers()
+    ;(globalThis as any).playTone = jest.fn()
+    jest.useFakeTimers()
   })
 
   it('initializes and handles clicks', () => {
     const timer = new PomodoroTimer()
     document.getElementById('start-button')!.dispatchEvent(new Event('click'))
-    vi.advanceTimersByTime(1000)
+    jest.advanceTimersByTime(1000)
     document.getElementById('pause-button')!.dispatchEvent(new Event('click'))
     document.getElementById('reset-button')!.dispatchEvent(new Event('click'))
     expect(timer.state.isRunning).toBe(false)

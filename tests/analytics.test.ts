@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, jest } from 'bun:test'
 import { Analytics } from '../src/js/app.ts'
 
 describe('Analytics', () => {

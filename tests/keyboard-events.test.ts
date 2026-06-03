@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, beforeAll, expect, vi } from 'vitest'
+import { describe, it, beforeEach, beforeAll, expect, jest } from 'bun:test'
 import { KeyboardShortcuts } from '../src/js/app.ts'
 
 describe('KeyboardShortcuts event handling', () => {
@@ -8,7 +8,7 @@ describe('KeyboardShortcuts event handling', () => {
   beforeAll(() => {
     // Create the instance once to set up event listeners
     mockTimer = {
-      reset: vi.fn()
+      reset: jest.fn()
     }
     ;(window as any).pomodoroTimer = mockTimer
   })
