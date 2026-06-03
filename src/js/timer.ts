@@ -1,4 +1,4 @@
-import { playTone } from '@js/audio'
+import { playTone } from '#js/audio'
 
 type TimerMode = 'focus' | 'shortBreak' | 'longBreak'
 

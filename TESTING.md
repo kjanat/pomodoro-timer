@@ -128,7 +128,8 @@ Playwright E2E tests verify the complete user experience:
   `Notification`) between tests, since `bun test` runs all files in one process.
 - Test root: `tests/` (so the Playwright `e2e/` specs are not picked up)
 - Coverage: built into `bun test --coverage`
-- Path aliases (`@`, `@js`, `@tests`): resolved from `tsconfig.json` `paths`
+- Path aliases (`#js/*`, `#tests/*`): defined as package.json `imports` subpath
+  imports and resolved by Bun, tsc (bundler resolution), and the bundler alike
 
 ### Playwright Configuration (`playwright.config.ts`)
 

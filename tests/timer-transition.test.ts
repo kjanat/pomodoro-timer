@@ -18,7 +18,8 @@ import { playTone } from '../src/js/audio.ts'
 const realPlayTone = playTone
 
 // Mock the audio module so we can count tone calls. timer.ts imports it via the
-// '@js/audio' alias, which resolves to the same file, so this intercepts both.
+// '#js/audio' subpath import, which resolves to the same file, so this
+// intercepts both.
 mock.module('../src/js/audio.ts', () => ({ playTone: jest.fn() }))
 
 afterAll(() => {

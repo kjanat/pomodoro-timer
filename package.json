@@ -4,6 +4,10 @@
   "description": "An impressive Pomodoro timer application to enhance productivity.",
   "main": "src/js/app.ts",
   "type": "module",
+  "imports": {
+    "#js/*": "./src/js/*.ts",
+    "#tests/*": "./tests/*.ts"
+  },
   "scripts": {
     "start": "bun run --hot src/js/app.ts",
     "dev": "http-server src -p 3000 -o",

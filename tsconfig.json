@@ -13,12 +13,7 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "types": ["bun"],
-    "jsx": "preserve",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@js/*": ["./src/js/*"],
-      "@tests/*": ["./tests/*"]
-    }
+    "jsx": "preserve"
   },
   "include": ["src/**/*", "tests/**/*"],
   "exclude": ["node_modules", "dist"]
