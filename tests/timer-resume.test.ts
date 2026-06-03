@@ -54,7 +54,7 @@ describe('PomodoroTimer resume on reload', () => {
     )
     const timer = new PomodoroTimer({ skipInit: true })
     timer.setupProgressRing()
-    const resume = timer.loadStats()
+    const { resume } = timer.loadStats()
     expect(resume).toBe(true)
   })
 
@@ -72,12 +72,12 @@ describe('PomodoroTimer resume on reload', () => {
     )
     const timer = new PomodoroTimer({ skipInit: true })
     timer.setupProgressRing()
-    const resume = timer.loadStats()
+    const { resume } = timer.loadStats()
     expect(resume).toBe(true)
     expect(timer.state.remainingTime).toBe(1499)
   })
 
-  it('returns false when elapsed time exceeds remainingTime', () => {
+  it('flags expired (not resume) when elapsed time exceeds remainingTime', () => {
     const today = new Date().toDateString()
     ;(globalThis.localStorage.getItem as any).mockReturnValueOnce(
       JSON.stringify({
@@ -91,8 +91,9 @@ describe('PomodoroTimer resume on reload', () => {
     )
     const timer = new PomodoroTimer({ skipInit: true })
     timer.setupProgressRing()
-    const resume = timer.loadStats()
+    const { resume, expired } = timer.loadStats()
     expect(resume).toBe(false)
+    expect(expired).toBe(true)
     expect(timer.state.isRunning).toBe(false)
   })
 

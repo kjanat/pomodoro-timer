@@ -47,6 +47,8 @@ export class PomodoroTimer {
   progressRing: SVGCircleElement | null = null
   circumference: number = 0
   saveTimeout: number | null = null
+  completeTimeout: number | null = null
+  transitioning: boolean = false
   beforeUnloadHandler: (() => void) | null = null
 
   constructor(options: TimerOptions = {}) {
@@ -79,10 +81,14 @@ export class PomodoroTimer {
   init(): void {
     this.setupProgressRing()
     this.loadSettings()
-    const resume = this.loadStats()
+    const { resume, expired } = this.loadStats()
     this.updateUI()
     this.bindEvents()
-    if (resume) {
+    if (expired) {
+      // The persisted session ran out while the page was closed. Run the
+      // completion flow now that handlers and UI are fully wired.
+      this.complete()
+    } else if (resume) {
       this.start()
     }
   }
@@ -197,18 +203,30 @@ export class PomodoroTimer {
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
-      if (e.code === 'Space' && !(e.target as HTMLElement).matches('input')) {
+      if (e.code !== 'Space') return
+      // Ignore Space while typing in a form control.
+      if (
+        e.target instanceof HTMLElement &&
+        e.target.matches('input, textarea, select')
+      ) {
+        return
+      }
+      // Ignore Space during the post-completion transition window so it can't
+      // restart a just-finished timer before advanceMode() runs.
+      if (this.transitioning) {
         e.preventDefault()
-        if (this.state.isRunning) {
-          this.pause()
-        } else {
-          this.start()
-        }
+        return
+      }
+      e.preventDefault()
+      if (this.state.isRunning) {
+        this.pause()
+      } else {
+        this.start()
       }
     })
   }
 
-  start(): void {
+  start(userInitiated: boolean = true): void {
     if (this.state.isRunning) return
 
     this.state.isRunning = true
@@ -216,7 +234,9 @@ export class PomodoroTimer {
     this.clearScheduledSave()
     this.saveStats()
 
-    if (this.settings.soundEnabled) {
+    // Only chirp on a user-initiated start. Auto-advance already plays the
+    // completion tone, so starting the next session would double-beep.
+    if (userInitiated && this.settings.soundEnabled) {
       playTone(440)
     }
 
@@ -235,6 +255,7 @@ export class PomodoroTimer {
     if (this.intervalId !== null) {
       clearInterval(this.intervalId)
     }
+    this.clearScheduledAdvance()
     this.clearScheduledSave()
     this.saveStats()
     this.updateUI()
@@ -246,6 +267,7 @@ export class PomodoroTimer {
     if (this.intervalId !== null) {
       clearInterval(this.intervalId)
     }
+    this.clearScheduledAdvance()
     this.clearScheduledSave()
 
     // Reset to current mode's duration
@@ -289,13 +311,28 @@ export class PomodoroTimer {
     // Show notification
     this.showNotification()
 
-    // Auto-advance to next mode after short delay
-    setTimeout(() => {
+    // Block start/Space until advanceMode() runs, so the just-finished timer
+    // can't be restarted during the delay.
+    this.transitioning = true
+
+    // Auto-advance to next mode after short delay. Keep the handle so pause()
+    // and reset() can cancel a pending advance.
+    this.completeTimeout = window.setTimeout(() => {
+      this.completeTimeout = null
       this.advanceMode()
     }, 1000)
   }
 
+  clearScheduledAdvance(): void {
+    if (this.completeTimeout !== null) {
+      clearTimeout(this.completeTimeout)
+      this.completeTimeout = null
+    }
+    this.transitioning = false
+  }
+
   advanceMode(): void {
+    this.transitioning = false
     if (this.state.mode === 'focus') {
       // Check if it's time for a long break
       if (
@@ -308,7 +345,7 @@ export class PomodoroTimer {
       }
 
       if (this.settings.autoStartBreaks) {
-        this.start()
+        this.start(false)
       }
     } else {
       // Coming back from any break
@@ -316,12 +353,13 @@ export class PomodoroTimer {
       this.setMode('focus')
 
       if (this.settings.autoStartFocus) {
-        this.start()
+        this.start(false)
       }
     }
   }
 
   setMode(mode: TimerMode): void {
+    this.clearScheduledAdvance()
     this.state.mode = mode
     const duration = this.getModeDuration(mode)
     this.state.remainingTime = duration * 60
@@ -546,10 +584,11 @@ export class PomodoroTimer {
     localStorage.setItem('pomodoro-settings', JSON.stringify(this.settings))
   }
 
-  loadStats(): boolean {
+  loadStats(): { resume: boolean; expired: boolean } {
     const today = new Date().toDateString()
     const saved = localStorage.getItem('pomodoro-stats')
     let resume = false
+    let expired = false
 
     if (saved) {
       const stats: SavedStats = JSON.parse(saved)
@@ -574,8 +613,11 @@ export class PomodoroTimer {
             const elapsed = Math.floor((Date.now() - stats.lastUpdated) / 1000)
             this.state.remainingTime -= elapsed
             if (this.state.remainingTime <= 0) {
+              // Session expired while away. Defer complete() until init() has
+              // finished wiring up the UI/handlers — don't run it mid-load.
               this.state.remainingTime = 0
-              this.complete()
+              this.state.isRunning = false
+              expired = true
             } else {
               resume = true
             }
@@ -586,7 +628,7 @@ export class PomodoroTimer {
       }
     }
 
-    return resume
+    return { resume, expired }
   }
 
   saveStats(): void {
