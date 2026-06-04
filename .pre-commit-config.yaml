@@ -25,14 +25,14 @@ repos:
       - id: prettier
         files: 'package\.json$'
         additional_dependencies:
-          - prettier@3.6.2
-          - prettier-plugin-packagejson@2.5.19
+          - prettier@latest
+          - "@kjanat/prettier-config@latest"
   - repo: https://github.com/biomejs/pre-commit
-    rev: "v2.3.4"
+    rev: "v2.4.16"
     hooks:
       - id: biome-check
   - repo: https://github.com/tombi-toml/tombi-pre-commit
-    rev: v0.6.42
+    rev: v1.1.1
     hooks:
       - id: tombi-format
       - id: tombi-lint

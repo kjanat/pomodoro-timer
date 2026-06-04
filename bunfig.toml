@@ -1,4 +1,5 @@
-## ###:schema https://www.schemastore.org/bunfig.json
+#:schema https://schemastore.org/bunfig.json
+
 # Schema temporarily disabled due to bunfig.toml schema validation issue
 
 [test]
