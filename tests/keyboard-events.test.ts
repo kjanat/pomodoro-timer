@@ -75,20 +75,20 @@ describe('KeyboardShortcuts event handling', () => {
 
     // Test the method directly
     shortcuts.toggleSettings()
-    expect(settingsPanel.classList.contains('active')).toBe(true)
+    expect(settingsPanel.hasAttribute('open')).toBe(true)
 
     // Toggle again
     shortcuts.toggleSettings()
-    expect(settingsPanel.classList.contains('active')).toBe(false)
+    expect(settingsPanel.hasAttribute('open')).toBe(false)
   })
 
   it('closes settings when Escape is pressed', () => {
     const settingsPanel = document.getElementById('settings-panel')!
-    settingsPanel.classList.add('active')
+    settingsPanel.setAttribute('open', '')
 
     // Test the method directly
     shortcuts.closeSettings()
-    expect(settingsPanel.classList.contains('active')).toBe(false)
+    expect(settingsPanel.hasAttribute('open')).toBe(false)
   })
 
   it('ignores shortcuts when typing in input fields', () => {
@@ -131,7 +131,7 @@ describe('KeyboardShortcuts event handling', () => {
 
     // Settings should not toggle when typing in textarea
     const settingsPanel = document.getElementById('settings-panel')!
-    expect(settingsPanel.classList.contains('active')).toBe(false)
+    expect(settingsPanel.hasAttribute('open')).toBe(false)
   })
 
   it('ignores shortcuts when typing in select', () => {
@@ -150,12 +150,12 @@ describe('KeyboardShortcuts event handling', () => {
     })
 
     const settingsPanel = document.getElementById('settings-panel')!
-    settingsPanel.classList.add('active')
+    settingsPanel.setAttribute('open', '')
 
     document.dispatchEvent(event)
 
-    // Settings should still be active since shortcut was ignored
-    expect(settingsPanel.classList.contains('active')).toBe(true)
+    // Settings should still be open since shortcut was ignored
+    expect(settingsPanel.hasAttribute('open')).toBe(true)
   })
 
   it('handles missing settings panel gracefully', () => {
