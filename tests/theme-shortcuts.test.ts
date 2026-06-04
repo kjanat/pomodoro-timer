@@ -35,17 +35,17 @@ describe('ThemeManager', () => {
 
 describe('KeyboardShortcuts panel helpers', () => {
   beforeEach(() => {
-    document.body.innerHTML = '<div id="settings-panel" class=""></div>'
+    document.body.innerHTML = '<div id="settings-panel"></div>'
   })
   it('toggles and closes panel', () => {
     const ks = new KeyboardShortcutsCls()
     ks.toggleSettings()
     expect(
-      document.getElementById('settings-panel')!.classList.contains('active')
+      document.getElementById('settings-panel')!.hasAttribute('open')
     ).toBe(true)
     ks.closeSettings()
     expect(
-      document.getElementById('settings-panel')!.classList.contains('active')
+      document.getElementById('settings-panel')!.hasAttribute('open')
     ).toBe(false)
   })
 })

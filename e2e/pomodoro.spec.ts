@@ -58,14 +58,17 @@ test.describe('Pomodoro Timer E2E', () => {
   test('should open and close settings', async ({ page }) => {
     const settingsButton = page.locator('#settings-toggle-btn')
     const settingsPanel = page.locator('#settings-panel')
+    const closeButton = page.locator('#settings-close-btn')
 
-    // Open settings
+    // Open settings (native <dialog> modal)
     await settingsButton.click()
-    await expect(settingsPanel).toHaveClass(/active/)
+    await expect(settingsPanel).toHaveJSProperty('open', true)
+    await expect(settingsButton).toHaveAttribute('aria-expanded', 'true')
 
-    // Close settings
-    await settingsButton.click()
-    await expect(settingsPanel).not.toHaveClass(/active/)
+    // Close via the dialog's close button (the toggle is behind the backdrop)
+    await closeButton.click()
+    await expect(settingsPanel).toHaveJSProperty('open', false)
+    await expect(settingsButton).toHaveAttribute('aria-expanded', 'false')
   })
 
   test('should apply dark theme based on system preference', async ({
@@ -115,11 +118,11 @@ test.describe('Pomodoro Timer E2E', () => {
     // Press KeyS to open settings
     await page.keyboard.press('KeyS')
     const settingsPanel = page.locator('#settings-panel')
-    await expect(settingsPanel).toHaveClass(/active/)
+    await expect(settingsPanel).toHaveJSProperty('open', true)
 
-    // Press Escape to close settings
+    // Press Escape to close settings (native <dialog> handles Escape)
     await page.keyboard.press('Escape')
-    await expect(settingsPanel).not.toHaveClass(/active/)
+    await expect(settingsPanel).toHaveJSProperty('open', false)
   })
 
   test('should save settings to localStorage', async ({ page }) => {
@@ -161,7 +164,8 @@ test.describe('Pomodoro Timer E2E', () => {
     await settingsButton.click()
     await focusDurationInput.fill('0.1')
     await focusDurationInput.blur()
-    await settingsButton.click()
+    // Close the modal (the toggle is behind the backdrop while it's open)
+    await page.keyboard.press('Escape')
 
     // Start timer
     await startButton.click()
