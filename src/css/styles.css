@@ -626,14 +626,15 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+    /* Center all the content as one block; `safe` falls back to top-aligned
+       when the screen is too short, so nothing ever clips. */
+    justify-content: safe center;
+    gap: 1.5rem;
     padding: 1rem 1.25rem 1.25rem;
   }
 
   .timer-section {
     margin-bottom: 0;
-    /* Pair with the stats' margin-top:auto below to split the spare space
-       above and below, vertically centering the timer group. */
-    margin-top: auto;
   }
 
   .timer-mode {
@@ -644,9 +645,10 @@ body {
     margin: 0.4rem auto;
   }
 
-  /* Size the ring to the smaller of width/height so it never overflows. */
+  /* Hero ring: bigger of the two viewport axes, capped by height so the
+     whole block still fits on short phones. */
   .progress-ring {
-    width: min(60vw, 34vh);
+    width: min(72vw, 34vh);
   }
 
   .timer-display {
@@ -676,12 +678,9 @@ body {
     grid-template-columns: 1fr 1fr;
   }
 
-  /* Compact stats, pinned to the bottom as a footer so any spare vertical
-     space collapses into one place instead of floating the controls. */
+  /* Compact stats; spacing handled by the column gap above. */
   .stats-section {
     margin-bottom: 0;
-    margin-top: auto;
-    padding-top: 1.25rem;
   }
 
   .stats-section h3 {
