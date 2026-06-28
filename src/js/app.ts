@@ -73,8 +73,13 @@ export class KeyboardShortcuts {
 
   init(): void {
     document.addEventListener('keydown', (e) => {
-      // Don't trigger shortcuts when typing in inputs
-      if ((e.target as HTMLElement).matches('input, textarea, select')) {
+      // Don't trigger shortcuts when typing in inputs. Guard with `instanceof`
+      // because keydown can target non-Element nodes (e.g. document for
+      // synthetic events), which have no `matches()` — mirrors timer.ts.
+      if (
+        e.target instanceof HTMLElement &&
+        e.target.matches('input, textarea, select')
+      ) {
         return
       }
 
