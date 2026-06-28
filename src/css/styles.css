@@ -64,6 +64,11 @@ body {
   line-height: 1.6;
   padding: 20px;
   overflow-x: hidden;
+  /* Center the timer card vertically; `safe` falls back to top-aligned when
+     the card is taller than the viewport so nothing ever clips. */
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
 }
 
 /* App Layout */
