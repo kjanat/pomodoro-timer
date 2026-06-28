@@ -65,7 +65,7 @@ body {
   padding: 20px;
   overflow-x: hidden;
   /* Center the timer card vertically; `safe` falls back to top-aligned when
-     the card is taller than the viewport so nothing ever clips. */
+	the card is taller than the viewport so nothing ever clips. */
   display: flex;
   flex-direction: column;
   justify-content: safe center;
@@ -166,7 +166,7 @@ body {
 .progress-ring {
   transform: rotate(-90deg);
   /* Scale down on narrow phones so the ring never overflows. The SVG's
-     internal geometry (r=130) is unchanged, so the progress math holds. */
+	internal geometry (r=130) is unchanged, so the progress math holds. */
   width: min(280px, 72vw);
   height: auto;
 }
@@ -385,7 +385,7 @@ body {
   color: var(--text-primary);
   box-shadow: var(--shadow-lg);
   /* The global `* { margin: 0 }` reset clobbers the UA stylesheet's
-     `margin: auto` that centers a modal <dialog>; restore it here. */
+	`margin: auto` that centers a modal <dialog>; restore it here. */
   inset: 0;
   margin: auto;
 }
@@ -632,7 +632,7 @@ body {
     display: flex;
     flex-direction: column;
     /* Center all the content as one block; `safe` falls back to top-aligned
-       when the screen is too short, so nothing ever clips. */
+		when the screen is too short, so nothing ever clips. */
     justify-content: safe center;
     gap: 1.5rem;
     padding: 1rem 1.25rem 1.25rem;
@@ -651,7 +651,7 @@ body {
   }
 
   /* Hero ring: bigger of the two viewport axes, capped by height so the
-     whole block still fits on short phones. */
+	whole block still fits on short phones. */
   .progress-ring {
     width: min(72vw, 34vh);
   }
@@ -702,7 +702,7 @@ body {
   }
 
   /* Settings become a bottom sheet: full-width, pinned to the bottom,
-     within thumb reach, sliding up from the bottom edge. */
+	within thumb reach, sliding up from the bottom edge. */
   .settings-panel {
     width: 100%;
     max-width: 100%;
@@ -767,7 +767,7 @@ body {
   }
 
   /* Calm the header so the warm gradient doesn't clash with the cold slate
-     surface in dark mode. */
+	surface in dark mode. */
   .header {
     background: linear-gradient(135deg, #9b2c20, #c0392b);
   }

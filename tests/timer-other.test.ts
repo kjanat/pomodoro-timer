@@ -1,9 +1,9 @@
-import { describe, it, beforeEach, expect, jest } from 'bun:test'
-import PomodoroTimer from '#js/timer'
+import PomodoroTimer from '#js/timer';
+import { beforeEach, describe, expect, it, jest } from 'bun:test';
 
 function setupDOM() {
-  const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
-  document.body.innerHTML = `
+	const ring = { style: {}, r: { baseVal: { value: 50 } } } as any;
+	document.body.innerHTML = `
     <div id="timer-display"></div>
     <div id="current-mode"></div>
     <div id="session-count"></div>
@@ -19,44 +19,47 @@ function setupDOM() {
     <input id="auto-start-breaks" type="checkbox" />
     <input id="auto-start-focus" type="checkbox" />
     <input id="sound-enabled" type="checkbox" />
-  `
-  jest.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
-    if (sel === '.progress-ring__progress') return ring
-    return document.body.querySelector(sel)
-  }) as any)
+  `;
+	jest.spyOn(document, 'querySelector').mockImplementation(
+		((sel: string) => {
+			if (sel === '.progress-ring__progress') return ring;
+			return document.body.querySelector(sel);
+		}) as any,
+	);
 }
 
 describe('PomodoroTimer additional methods', () => {
-  beforeEach(() => {
-    setupDOM()
-    const today = new Date().toDateString()
-    globalThis.localStorage = {
-      setItem: jest.fn(),
-      getItem: jest.fn((key) => {
-        if (key === 'pomodoro-settings')
-          return JSON.stringify({ focusDuration: 20 })
-        if (key === 'pomodoro-stats') return JSON.stringify({ date: today })
-        return null
-      })
-    } as any
-    ;(globalThis as any).Notification = function () {} as any
-    ;(globalThis as any).Notification.permission = 'granted'
-    ;(globalThis as any).playTone = jest.fn()
-  })
+	beforeEach(() => {
+		setupDOM();
+		const today = new Date().toDateString();
+		globalThis.localStorage = {
+			setItem: jest.fn(),
+			getItem: jest.fn((key) => {
+				if (key === 'pomodoro-settings') {
+					return JSON.stringify({ focusDuration: 20 });
+				}
+				if (key === 'pomodoro-stats') return JSON.stringify({ date: today });
+				return null;
+			}),
+		} as any;
+		(globalThis as any).Notification = function() {} as any;
+		(globalThis as any).Notification.permission = 'granted';
+		(globalThis as any).playTone = jest.fn();
+	});
 
-  it('executes miscellaneous methods without error', () => {
-    const timer = new PomodoroTimer({ skipInit: true })
-    timer.setupProgressRing()
-    timer.updateDisplay()
-    timer.updateModeText()
-    timer.updateButtons()
-    timer.updateProgressRingColor()
-    timer.updateStats()
-    timer.showNotification()
-    timer.saveSettings()
-    timer.loadSettings()
-    timer.saveStats()
-    timer.loadStats()
-    expect(globalThis.localStorage.setItem).toHaveBeenCalled()
-  })
-})
+	it('executes miscellaneous methods without error', () => {
+		const timer = new PomodoroTimer({ skipInit: true });
+		timer.setupProgressRing();
+		timer.updateDisplay();
+		timer.updateModeText();
+		timer.updateButtons();
+		timer.updateProgressRingColor();
+		timer.updateStats();
+		timer.showNotification();
+		timer.saveSettings();
+		timer.loadSettings();
+		timer.saveStats();
+		timer.loadStats();
+		expect(globalThis.localStorage.setItem).toHaveBeenCalled();
+	});
+});

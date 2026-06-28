@@ -1,8 +1,8 @@
-import { describe, it, beforeEach, afterEach, expect, jest } from 'bun:test'
-import PomodoroTimer from '#js/timer'
+import PomodoroTimer from '#js/timer';
+import { afterEach, beforeEach, describe, expect, it, jest } from 'bun:test';
 
 function setupDOM() {
-  document.body.innerHTML = `
+	document.body.innerHTML = `
     <svg><circle class="progress-ring__progress" r="50"></circle></svg>
     <div id="timer-display"></div>
     <div id="current-mode"></div>
@@ -12,51 +12,51 @@ function setupDOM() {
     <button id="reset-button"></button>
     <div id="completed-sessions"></div>
     <div id="total-focus-time"></div>
-  `
+  `;
 }
 
 describe('PomodoroTimer flow', () => {
-  beforeEach(() => {
-    setupDOM()
-    globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any
-    jest.useFakeTimers()
-    ;(globalThis as any).playTone = jest.fn()
-  })
+	beforeEach(() => {
+		setupDOM();
+		globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any;
+		jest.useFakeTimers();
+		(globalThis as any).playTone = jest.fn();
+	});
 
-  it('start, tick and pause', () => {
-    const timer = new PomodoroTimer({ skipInit: true })
-    timer.updateUI = () => {}
-    timer.updateProgress = () => {}
-    timer.start()
-    expect(timer.state.isRunning).toBe(true)
-    jest.advanceTimersByTime(1000)
-    expect(timer.state.remainingTime).toBe(timer.state.totalTime - 1)
-    timer.pause()
-    expect(timer.state.isPaused).toBe(true)
-  })
+	it('start, tick and pause', () => {
+		const timer = new PomodoroTimer({ skipInit: true });
+		timer.updateUI = () => {};
+		timer.updateProgress = () => {};
+		timer.start();
+		expect(timer.state.isRunning).toBe(true);
+		jest.advanceTimersByTime(1000);
+		expect(timer.state.remainingTime).toBe(timer.state.totalTime - 1);
+		timer.pause();
+		expect(timer.state.isPaused).toBe(true);
+	});
 
-  it('reset sets remaining time', () => {
-    const timer = new PomodoroTimer({ skipInit: true })
-    timer.updateUI = () => {}
-    timer.updateProgress = () => {}
-    timer.state.mode = 'shortBreak'
-    timer.settings.shortBreakDuration = 1
-    timer.reset()
-    expect(timer.state.remainingTime).toBe(60)
-  })
+	it('reset sets remaining time', () => {
+		const timer = new PomodoroTimer({ skipInit: true });
+		timer.updateUI = () => {};
+		timer.updateProgress = () => {};
+		timer.state.mode = 'shortBreak';
+		timer.settings.shortBreakDuration = 1;
+		timer.reset();
+		expect(timer.state.remainingTime).toBe(60);
+	});
 
-  it('completes a cycle', () => {
-    const timer = new PomodoroTimer({ skipInit: true })
-    timer.updateUI = () => {}
-    timer.updateProgress = () => {}
-    timer.state.remainingTime = 1
-    timer.settings.autoStartBreaks = false
-    timer.start()
-    jest.advanceTimersByTime(1000)
-    expect(timer.state.isRunning).toBe(false)
-  })
+	it('completes a cycle', () => {
+		const timer = new PomodoroTimer({ skipInit: true });
+		timer.updateUI = () => {};
+		timer.updateProgress = () => {};
+		timer.state.remainingTime = 1;
+		timer.settings.autoStartBreaks = false;
+		timer.start();
+		jest.advanceTimersByTime(1000);
+		expect(timer.state.isRunning).toBe(false);
+	});
 
-  afterEach(() => {
-    jest.useRealTimers()
-  })
-})
+	afterEach(() => {
+		jest.useRealTimers();
+	});
+});

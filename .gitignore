@@ -417,3 +417,6 @@ playwright-report/
 test-results/
 blob-report/
 playwright/.cache/
+docs/
+gg/
+html/

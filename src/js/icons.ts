@@ -1,5 +1,5 @@
 // Icon initialization using Lucide
-import { createIcons, Play, Pause, RotateCcw, Settings, Timer, X } from 'lucide'
+import { createIcons, Pause, Play, RotateCcw, Settings, Timer, X } from 'lucide'
 
 export function initializeIcons(): void {
   createIcons({

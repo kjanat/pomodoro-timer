@@ -1,9 +1,9 @@
-import { describe, it, beforeEach, afterEach, expect, jest } from 'bun:test'
-import PomodoroTimer from '#js/timer'
+import PomodoroTimer from '#js/timer';
+import { afterEach, beforeEach, describe, expect, it, jest } from 'bun:test';
 
 function setupDOM() {
-  const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
-  document.body.innerHTML = `
+	const ring = { style: {}, r: { baseVal: { value: 50 } } } as any;
+	document.body.innerHTML = `
     <div id="timer-display"></div>
     <div id="current-mode"></div>
     <div id="session-count"></div>
@@ -21,87 +21,89 @@ function setupDOM() {
     <input id="auto-start-breaks" type="checkbox" />
     <input id="auto-start-focus" type="checkbox" />
     <input id="sound-enabled" type="checkbox" />
-  `
-  jest.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
-    if (sel === '.progress-ring__progress') return ring
-    return document.body.querySelector(sel)
-  }) as any)
+  `;
+	jest.spyOn(document, 'querySelector').mockImplementation(
+		((sel: string) => {
+			if (sel === '.progress-ring__progress') return ring;
+			return document.body.querySelector(sel);
+		}) as any,
+	);
 }
 
 describe('PomodoroTimer resume on reload', () => {
-  let origQuerySelector: typeof document.querySelector
-  beforeEach(() => {
-    origQuerySelector = document.querySelector.bind(document)
-    setupDOM()
-    globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any
-    ;(globalThis as any).playTone = jest.fn()
-  })
-  afterEach(() => {
-    jest.restoreAllMocks()
-    document.querySelector = origQuerySelector
-  })
+	let origQuerySelector: typeof document.querySelector;
+	beforeEach(() => {
+		origQuerySelector = document.querySelector.bind(document);
+		setupDOM();
+		globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any;
+		(globalThis as any).playTone = jest.fn();
+	});
+	afterEach(() => {
+		jest.restoreAllMocks();
+		document.querySelector = origQuerySelector;
+	});
 
-  it('returns true to resume when lastUpdated is missing', () => {
-    const today = new Date().toDateString()
-    ;(globalThis.localStorage.getItem as any).mockReturnValueOnce(
-      JSON.stringify({
-        date: today,
-        remainingTime: 1500,
-        totalTime: 1500,
-        isRunning: true,
-        isPaused: false
-      })
-    )
-    const timer = new PomodoroTimer({ skipInit: true })
-    timer.setupProgressRing()
-    const { resume } = timer.loadStats()
-    expect(resume).toBe(true)
-  })
+	it('returns true to resume when lastUpdated is missing', () => {
+		const today = new Date().toDateString();
+		(globalThis.localStorage.getItem as any).mockReturnValueOnce(
+			JSON.stringify({
+				date: today,
+				remainingTime: 1500,
+				totalTime: 1500,
+				isRunning: true,
+				isPaused: false,
+			}),
+		);
+		const timer = new PomodoroTimer({ skipInit: true });
+		timer.setupProgressRing();
+		const { resume } = timer.loadStats();
+		expect(resume).toBe(true);
+	});
 
-  it('returns true when elapsed time is less than remainingTime', () => {
-    const today = new Date().toDateString()
-    ;(globalThis.localStorage.getItem as any).mockReturnValueOnce(
-      JSON.stringify({
-        date: today,
-        remainingTime: 1500,
-        totalTime: 1500,
-        isRunning: true,
-        isPaused: false,
-        lastUpdated: Date.now() - 1000
-      })
-    )
-    const timer = new PomodoroTimer({ skipInit: true })
-    timer.setupProgressRing()
-    const { resume } = timer.loadStats()
-    expect(resume).toBe(true)
-    expect(timer.state.remainingTime).toBe(1499)
-  })
+	it('returns true when elapsed time is less than remainingTime', () => {
+		const today = new Date().toDateString();
+		(globalThis.localStorage.getItem as any).mockReturnValueOnce(
+			JSON.stringify({
+				date: today,
+				remainingTime: 1500,
+				totalTime: 1500,
+				isRunning: true,
+				isPaused: false,
+				lastUpdated: Date.now() - 1000,
+			}),
+		);
+		const timer = new PomodoroTimer({ skipInit: true });
+		timer.setupProgressRing();
+		const { resume } = timer.loadStats();
+		expect(resume).toBe(true);
+		expect(timer.state.remainingTime).toBe(1499);
+	});
 
-  it('flags expired (not resume) when elapsed time exceeds remainingTime', () => {
-    const today = new Date().toDateString()
-    ;(globalThis.localStorage.getItem as any).mockReturnValueOnce(
-      JSON.stringify({
-        date: today,
-        remainingTime: 1500,
-        totalTime: 1500,
-        isRunning: true,
-        isPaused: false,
-        lastUpdated: Date.now() - 1600 * 1000
-      })
-    )
-    const timer = new PomodoroTimer({ skipInit: true })
-    timer.setupProgressRing()
-    const { resume, expired } = timer.loadStats()
-    expect(resume).toBe(false)
-    expect(expired).toBe(true)
-    expect(timer.state.isRunning).toBe(false)
-  })
+	it('flags expired (not resume) when elapsed time exceeds remainingTime', () => {
+		const today = new Date().toDateString();
+		(globalThis.localStorage.getItem as any).mockReturnValueOnce(
+			JSON.stringify({
+				date: today,
+				remainingTime: 1500,
+				totalTime: 1500,
+				isRunning: true,
+				isPaused: false,
+				lastUpdated: Date.now() - 1600 * 1000,
+			}),
+		);
+		const timer = new PomodoroTimer({ skipInit: true });
+		timer.setupProgressRing();
+		const { resume, expired } = timer.loadStats();
+		expect(resume).toBe(false);
+		expect(expired).toBe(true);
+		expect(timer.state.isRunning).toBe(false);
+	});
 
-  it('calls saveStats on beforeunload', () => {
-    const timer = new PomodoroTimer({ skipInit: true })
-    timer.bindEvents()
-    jest.spyOn(timer, 'saveStats')
-    window.dispatchEvent(new Event('beforeunload'))
-    expect(timer.saveStats).toHaveBeenCalled()
-  })
-})
+	it('calls saveStats on beforeunload', () => {
+		const timer = new PomodoroTimer({ skipInit: true });
+		timer.bindEvents();
+		jest.spyOn(timer, 'saveStats');
+		window.dispatchEvent(new Event('beforeunload'));
+		expect(timer.saveStats).toHaveBeenCalled();
+	});
+});

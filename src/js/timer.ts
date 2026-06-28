@@ -590,20 +590,27 @@ export class PomodoroTimer {
       'sound-enabled'
     ) as HTMLInputElement
 
-    if (focusDurationInput)
+    if (focusDurationInput) {
       focusDurationInput.value = String(this.settings.focusDuration)
-    if (shortBreakInput)
+    }
+    if (shortBreakInput) {
       shortBreakInput.value = String(this.settings.shortBreakDuration)
-    if (longBreakInput)
+    }
+    if (longBreakInput) {
       longBreakInput.value = String(this.settings.longBreakDuration)
-    if (longBreakIntervalInput)
+    }
+    if (longBreakIntervalInput) {
       longBreakIntervalInput.value = String(this.settings.longBreakInterval)
-    if (autoStartBreaksInput)
+    }
+    if (autoStartBreaksInput) {
       autoStartBreaksInput.checked = this.settings.autoStartBreaks
-    if (autoStartFocusInput)
+    }
+    if (autoStartFocusInput) {
       autoStartFocusInput.checked = this.settings.autoStartFocus
-    if (soundEnabledInput)
+    }
+    if (soundEnabledInput) {
       soundEnabledInput.checked = this.settings.soundEnabled
+    }
 
     // Apply current settings
     const duration = this.getModeDuration(this.state.mode)

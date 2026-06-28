@@ -1,9 +1,9 @@
-import { describe, it, beforeEach, afterEach, expect, jest } from 'bun:test'
-import PomodoroTimer from '#js/timer'
+import PomodoroTimer from '#js/timer';
+import { afterEach, beforeEach, describe, expect, it, jest } from 'bun:test';
 
 function setupDOM() {
-  const ring = { style: {}, r: { baseVal: { value: 50 } } } as any
-  document.body.innerHTML = `
+	const ring = { style: {}, r: { baseVal: { value: 50 } } } as any;
+	document.body.innerHTML = `
     <div id="timer-display"></div>
     <div id="current-mode"></div>
     <div id="session-count"></div>
@@ -12,32 +12,34 @@ function setupDOM() {
     <button id="reset-button"></button>
     <div id="completed-sessions"></div>
     <div id="total-focus-time"></div>
-  `
-  const origQuerySelector = document.querySelector.bind(document)
-  jest.spyOn(document, 'querySelector').mockImplementation(((sel: string) => {
-    if (sel === '.progress-ring__progress') return ring
-    return origQuerySelector(sel)
-  }) as any)
-  return ring
+  `;
+	const origQuerySelector = document.querySelector.bind(document);
+	jest.spyOn(document, 'querySelector').mockImplementation(
+		((sel: string) => {
+			if (sel === '.progress-ring__progress') return ring;
+			return origQuerySelector(sel);
+		}) as any,
+	);
+	return ring;
 }
 
 describe('PomodoroTimer UI updates', () => {
-  beforeEach(() => {
-    jest.restoreAllMocks()
-    globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any
-    ;(globalThis as any).Notification = { permission: 'granted' } as any
-    setupDOM()
-  })
-  afterEach(() => {
-    jest.restoreAllMocks()
-  })
+	beforeEach(() => {
+		jest.restoreAllMocks();
+		globalThis.localStorage = { setItem: jest.fn(), getItem: jest.fn() } as any;
+		(globalThis as any).Notification = { permission: 'granted' } as any;
+		setupDOM();
+	});
+	afterEach(() => {
+		jest.restoreAllMocks();
+	});
 
-  it('updateUI updates DOM', () => {
-    const timer = new PomodoroTimer({ skipInit: true })
-    timer.setupProgressRing()
-    timer.updateUI()
-    expect(document.getElementById('current-mode')!.textContent).toBe(
-      'Focus Time'
-    )
-  })
-})
+	it('updateUI updates DOM', () => {
+		const timer = new PomodoroTimer({ skipInit: true });
+		timer.setupProgressRing();
+		timer.updateUI();
+		expect(document.getElementById('current-mode')!.textContent).toBe(
+			'Focus Time',
+		);
+	});
+});

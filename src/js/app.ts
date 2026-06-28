@@ -290,17 +290,10 @@ if ('serviceWorker' in navigator) {
 
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize theme manager
-  ;(window as any).themeManager = new ThemeManager()
-
-  // Initialize keyboard shortcuts
-  ;(window as any).keyboardShortcuts = new KeyboardShortcuts()
-
-  // Initialize analytics
-  ;(window as any).analytics = new Analytics()
-
-  // Add global utilities
-  ;(window as any).utils = utils
+  ;(window as any).themeManager = new ThemeManager() // Initialize theme manager
+  ;(window as any).keyboardShortcuts = new KeyboardShortcuts() // Initialize keyboard shortcuts
+  ;(window as any).analytics = new Analytics() // Initialize analytics
+  ;(window as any).utils = utils // Add global utilities
 
   // Welcome message
   console.log('🍅 Pomodoro Timer initialized successfully!')
